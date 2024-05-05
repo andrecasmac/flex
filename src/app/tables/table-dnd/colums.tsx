@@ -38,12 +38,10 @@ export const columns: ColumnDef<ProductsT>[] = [
     id: "drag-handle",
     // header: "Move",
     cell: ({ row }) => <RowDragHandleCell rowId={row.id} />,
-    size: 10,
   },
   {
     accessorKey: "name",
     header: "Name",
-    size: 10,
   },
   {
     accessorKey: "description",
@@ -52,7 +50,6 @@ export const columns: ColumnDef<ProductsT>[] = [
   {
     accessorKey: "price",
     header: "Price",
-    size: 10,
   },
   {
     id: "actions",

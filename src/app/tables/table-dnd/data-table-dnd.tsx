@@ -64,7 +64,7 @@ const DraggableRow = ({ row }: { row: Row<ProductsT> }) => {
     // connect row ref to dnd-kit, apply important styles
     <TableRow ref={setNodeRef} style={style}>
       {row.getVisibleCells().map((cell) => (
-        <TableCell key={cell.id} style={{ width: cell.column.getSize() }}>
+        <TableCell key={cell.id}>
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </TableCell>
       ))}
@@ -147,9 +147,9 @@ export function DataTable({ columns, dataT }: DataTableProps) {
                 strategy={verticalListSortingStrategy}
               >
                 {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <DraggableRow key={row.id} row={row} />
-                  ))
+                  table
+                    .getRowModel()
+                    .rows.map((row) => <DraggableRow key={row.id} row={row} />)
                 ) : (
                   <TableRow>
                     <TableCell
