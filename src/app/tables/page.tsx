@@ -1,64 +1,27 @@
 import { Button } from "@/components/ui/button";
 
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
 export default function Page() {
   return (
-    <main className="flex flex-col min-h-screen items-center w-[100%] mx-auto pt-28 ">
-      <div className="py-10">
+    <main className="flex min-h-screen justify-center w-[100%] mx-auto pt-28">
+      <div className="py-10 flex gap-x-4">
         <Button
-          variant="outline"
-          size="sm"
-          className="rounded-2xl bg-turquesa border-turquesaOscuro text-white hover:border-turquesaOscuro hover:text-turquesaOscuro active:scale-95 transition-all"
+          asChild
+          variant="default"
+          size="lg"
+          className="rounded-2xl text-white active:scale-95 transition-all"
         >
-          aaa
+          <a href="tables/table">Tabla normal</a>
         </Button>
-      </div>
 
-      <div className="w-[80%] overflow-hidden rounded-xl">
-        <Table>
-          <TableHeader className=" bg-turquesa dark:bg-cyan-950">
-            <TableRow className="">
-              <TableHead className="w-[200px]">Invoice</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Method</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">INV001</TableCell>
-              <TableCell>Paid</TableCell>
-              <TableCell>Credit Card</TableCell>
-              <TableCell className="text-right">$250.00</TableCell>
-            </TableRow>
-
-            <TableRow className=" bg-neutral-400/10">
-              <TableCell className="font-medium">INV001</TableCell>
-              <TableCell>Paid</TableCell>
-              <TableCell>Credit Card</TableCell>
-              <TableCell className="text-right">$250.00</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell className="font-medium">INV001</TableCell>
-              <TableCell>Paid</TableCell>
-              <TableCell>Credit Card</TableCell>
-              <TableCell className="text-right">$250.00</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+        <Button
+          asChild
+          variant="default"
+          size="lg"
+          className="rounded-2xl text-white active:scale-95 transition-all"
+        >
+          <a href="tables/table-dnd">Tabla drag and drop</a>
+        </Button>
       </div>
     </main>
   );
 }
-
-
