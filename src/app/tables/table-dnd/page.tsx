@@ -7,10 +7,8 @@ export default async function Table() {
   const data: ProductsT[] = await getTable();
 
   return (
-    <main className="pt-10 flex align-middle justify-center">
-      <div className="w-[80%] block items-center">
-        <DataTable columns={columns} dataT={data} />
-      </div>
-    </main>
+    <div className="w-[85%]">
+      <DataTable columns={columns} dataT={data} />
+    </div>
   );
 }
