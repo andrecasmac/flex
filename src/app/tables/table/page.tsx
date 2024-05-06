@@ -9,8 +9,8 @@ export default async function Table() {
   const data = await getTable();
 
   return (
-    <main className="flex align-middle justify-center">
-      <div className="pt-32 w-[80%] block items-center">
+    <main className="pt-10 flex align-middle justify-center">
+      <div className="w-[80%] block items-center">
         <DataTable columns={columns} data={data} />
       </div>
     </main>

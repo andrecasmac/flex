@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 
 export default function Page() {
   return (
-    <main className="flex min-h-screen justify-center w-[100%] mx-auto pt-28">
-      <div className="py-10 flex gap-x-4">
+    <div>
+      <div className="pt-10 flex gap-x-4">
         <Button
           asChild
           variant="default"
@@ -22,6 +22,6 @@ export default function Page() {
           <a href="tables/table-dnd">Tabla drag and drop</a>
         </Button>
       </div>
-    </main>
+    </div>
   );
 }
