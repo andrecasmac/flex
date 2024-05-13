@@ -8,7 +8,7 @@ export default function Home() {
         size="lg"
         className="rounded-2xl text-white active:scale-95 transition-all"
       >
-        <a href="/tables">Tablas</a>
+        <a href="/examples">Examples</a>
       </Button>
     </main>
   );

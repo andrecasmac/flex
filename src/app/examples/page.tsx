@@ -9,16 +9,7 @@ export default function Page() {
         size="lg"
         className="rounded-2xl text-white active:scale-95 transition-all"
       >
-        <a href="tables/table">Tabla normal</a>
-      </Button>
-
-      <Button
-        asChild
-        variant="default"
-        size="lg"
-        className="rounded-2xl text-white active:scale-95 transition-all"
-      >
-        <a href="tables/table-dnd">Tabla drag and drop</a>
+        <a href="/examples/tables">Tablas</a>
       </Button>
     </div>
   );

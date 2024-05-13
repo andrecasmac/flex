@@ -1,5 +1,5 @@
 
-import { ProductsT } from "@/app/tables/table/colums";
+import { ProductsT } from "@/app/examples/tables/table/colums";
 import { fetchAllProducts } from "@/app/apis/products/route";
 
 export async function getTable(): Promise<ProductsT[]> {
