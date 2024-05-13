@@ -1,15 +1,16 @@
 import { Button } from "@/components/ui/button";
-export default function Home() {
+
+export default function Page() {
   return (
-    <main className="flex flex-col items-center justify-between pt-20">
+    <div className="flex gap-x-4">
       <Button
         asChild
         variant="default"
         size="lg"
         className="rounded-2xl text-white active:scale-95 transition-all"
       >
-        <a href="/examples">Examples</a>
+        <a href="/examples/tables">Tablas</a>
       </Button>
-    </main>
+    </div>
   );
 }
