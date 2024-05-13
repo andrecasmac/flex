@@ -123,7 +123,7 @@ export function DataTable({ columns, dataT }: DataTableProps) {
       >
         <div className="overflow-auto flex border rounded-xl min-h-[600px] max-h-[600px]">
           <Table>
-            <TableHeader className="bg-turquesa dark:bg-cyan-950  sticky top-0 z-50 ">
+            <TableHeader className="bg-turquoise dark:bg-cyan-950  sticky top-0 z-50 ">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
