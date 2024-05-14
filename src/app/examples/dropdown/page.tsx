@@ -1,10 +1,9 @@
 'use client'
-import { SearchDropdown } from "@/components/ui/searchDropdown";
-
-export default function test(){
+import { ComboboxDropdown } from "@/components/ui/combobox";
+export default function Page(){
     return (
         <main>
-            {/*<SearchDropdown />*/}
+            <ComboboxDropdown />
         </main>
     )
 }
