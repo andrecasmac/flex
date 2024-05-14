@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import Toggle from "@/components/ui/toggle"
+
 export default function Home() {
   return (
     <main className="flex flex-col items-center justify-between pt-20">
@@ -10,6 +12,9 @@ export default function Home() {
       >
         <a href="/examples">Examples</a>
       </Button>
+
+      <h3 className="mt-12">Toggle Example</h3>
+      <Toggle/>
     </main>
   );
 }
