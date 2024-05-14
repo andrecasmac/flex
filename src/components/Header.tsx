@@ -18,14 +18,15 @@ export default function Header() {
   const { setTheme } = useTheme();
 
   return (
-    <header className="relative z-50 bg-black dark:bg-cyan-950">
+    <header className="absolute w-full z-50 bg-black dark:bg-cyan-950">
       <div className="flex items-center justify-between py-3">
         <Image
           src={"/Logo.png"}
           alt="LOGO"
-          width="130"
-          height="30"
-          className="ms-[5%]"
+          width="190"
+          height="35"
+          priority={true}
+          className="ms-[5%] h-[25px] w-[130px]"
         />
         <div>
           <div className="text-white me-[3em]">
