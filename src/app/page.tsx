@@ -20,7 +20,7 @@ export default function Home() {
                       asChild
                       variant="default"
                       size="sm"
-                      className="rounded-xl border border-turquoise bg-white dark:bg-inherit dark:hover:bg-darkTurquoise text-turquoise hover:text-white  shadow-md active:scale-95 transition-all"
+                      className="shadow-sm"
                     >
                       <a href="/admin">Select</a>
                     </Button>
@@ -38,7 +38,7 @@ export default function Home() {
                       asChild
                       variant="default"
                       size="sm"
-                      className="rounded-xl border border-turquoise bg-white dark:bg-inherit dark:hover:bg-darkTurquoise text-turquoise hover:text-white  shadow-md active:scale-95 transition-all"
+                      className="shadow-sm"
                     >
                       <a href="/client">Select</a>
                     </Button>
@@ -51,12 +51,7 @@ export default function Home() {
       </div>
 
       <div className="pt-1">
-        <Button
-          asChild
-          variant="default"
-          size="sm"
-          className="rounded-xl border border-turquoise bg-white dark:bg-inherit dark:hover:bg-darkTurquoise text-turquoise hover:text-white shadow-md active:scale-95 transition-all"
-        >
+        <Button asChild variant="default" size="sm" className="shadow-sm">
           <a href="/examples">Components</a>
         </Button>
       </div>
