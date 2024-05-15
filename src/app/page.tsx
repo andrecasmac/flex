@@ -12,9 +12,6 @@ export default function Home() {
       >
         <a href="/examples">Examples</a>
       </Button>
-
-      <h3 className="mt-12">Toggle Example</h3>
-      <Toggle/>
     </main>
   );
 }
