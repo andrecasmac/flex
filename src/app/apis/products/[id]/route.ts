@@ -1,7 +1,7 @@
 "use server";
 
 import { NextRequest, NextResponse } from "next/server";
-import { url } from './../../ulr'
+import { url } from "../ulr";
 
 export async function fetchProductsPerID(req: NextRequest, { params }: { params: any }) {
 

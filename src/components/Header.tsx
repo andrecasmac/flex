@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
+import { Logo } from "@/assets/logo";
 
 import { useTheme } from "next-themes";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,17 +15,10 @@ import { SunIcon, MoonIcon } from "@radix-ui/react-icons";
 
 export default function Header() {
   const { setTheme } = useTheme();
-
   return (
-    <header className="relative z-50 bg-black dark:bg-cyan-950">
+    <header className="absolute w-full z-50  bg-ligthBlue dark:bg-cyan-950">
       <div className="flex items-center justify-between py-3">
-        <Image
-          src={"/Logo.png"}
-          alt="LOGO"
-          width="130"
-          height="30"
-          className="ms-[5%]"
-        />
+        <Logo className="ms-[5%]" />
         <div>
           <div className="text-white me-[3em]">
             <DropdownMenu>
