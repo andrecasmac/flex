@@ -17,7 +17,7 @@ export default function Page() {
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline">Edit Profile</Button>
+          <Button variant="default">Show Modal</Button>
         </DialogTrigger>
 
         <DialogContent className="sm:max-w-[425px]">
