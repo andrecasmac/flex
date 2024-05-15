@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-import { AdminIcon, ClientIcon } from "./assets/clientsIcons";
+import { AdminIcon, ClientIcon } from "../assets/clientsIcons";
 
 export default function Home() {
   return (

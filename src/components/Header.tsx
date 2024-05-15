@@ -1,6 +1,6 @@
 "use client";
 
-import { Logo } from "@/app/assets/logo";
+import { Logo } from "@/assets/logo";
 
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
