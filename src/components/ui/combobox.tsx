@@ -16,13 +16,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { List } from "postcss/lib/list"
 
-type Status = {
+export type Status = {
   value: string
   label: string
 }
 
-const statuses: Status[] = [
+export const statuses: Status[] = [
   {
     value: "backlog",
     label: "Backlog",
@@ -46,22 +47,22 @@ const statuses: Status[] = [
 ]
 
 export function ComboboxDropdown() {
+
   const [open, setOpen] = React.useState(false)
   const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(
     null
   )
 
   return (
-    <div className="flex items-center space-x-4">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="w-[300px] justify-between text-slate-400">
-            {selectedStatus ? <>{selectedStatus.label}</> : <>Search here <ChevronDown/></>}
+          <Button variant="outline" className="w-[300px] justify-between text-slate-400 border-darkBlueMarine">
+            {selectedStatus ? <>{selectedStatus.label}</> : <>Search here <ChevronDown color="#051f42" /></>}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0" side="right" align="start">
+        <PopoverContent className="p-0 border-darkBlueMarine" side="right" align="start">
           <Command>
-            <CommandInput placeholder="Change status..." />
+            <CommandInput placeholder="Search segment" />
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
@@ -85,6 +86,5 @@ export function ComboboxDropdown() {
           </Command>
         </PopoverContent>
       </Popover>
-    </div>
   )
 }
