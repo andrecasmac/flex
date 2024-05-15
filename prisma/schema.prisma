@@ -8,22 +8,22 @@ datasource db {
 }
 
 model Partner {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  name  String
-  edi_version String
-  delimiters String
-  EOL String
+  id                 String @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  edi_version        String
+  delimiters         String
+  EOL                String
   type_of_connection String
-  PO_Test Json
+  PO_Test            Json
 
   EDI_documents EDI_Document[]
 
-  partnershipsId String @db.ObjectId @unique
-  partnerships associated_partner @relation(fields: [partnershipsId], references: [id])
+  partnershipsId String             @unique @db.ObjectId
+  partnerships   associated_partner @relation(fields: [partnershipsId], references: [id])
 }
 
 model Client {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String
 
   partnerships associated_partner?
@@ -36,69 +36,69 @@ model associated_partner {
 
   uploaded_documents document[]
 
-  clientId String @db.ObjectId @unique
-  client Client @relation(fields: [clientId], references: [id])
+  clientId String @unique @db.ObjectId
+  client   Client @relation(fields: [clientId], references: [id])
 }
 
 model document {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  type String  
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  type          String
   json_document Json
 
-  partnershipId String @db.ObjectId @unique
-  partnership associated_partner @relation(fields: [partnershipId], references: [id])
+  partnershipId String             @unique @db.ObjectId
+  partnership   associated_partner @relation(fields: [partnershipId], references: [id])
 
   errors error[]
 }
 
 model error {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  code String
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  code    String
   message String
 
-  documentId String @db.ObjectId @unique
-  document document @relation(fields: [documentId], references: [id])
+  documentId String   @unique @db.ObjectId
+  document   document @relation(fields: [documentId], references: [id])
 }
 
 model EDI_Document {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  type String
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  type     String
   template Boolean
 
   structure Segment[]
 
-  partnerId String @db.ObjectId @unique
-  partner Partner @relation(fields: [partnerId], references: [id])
+  partnerId String  @unique @db.ObjectId
+  partner   Partner @relation(fields: [partnerId], references: [id])
 }
 
 model Segment {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
   template Boolean
 
-  EDI_DocumentId String @db.ObjectId @unique
-  EDI_Document EDI_Document @relation(fields: [EDI_DocumentId], references: [id])
+  EDI_DocumentId String       @unique @db.ObjectId
+  EDI_Document   EDI_Document @relation(fields: [EDI_DocumentId], references: [id])
 
   rules rule[]
 }
 
 model rule {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
   code String
 
   validation validation?
 
-  segmentId String @db.ObjectId @unique
-  segment Segment @relation(fields: [segmentId], references: [id])
+  segmentId String  @db.ObjectId
+  segment   Segment @relation(fields: [segmentId], references: [id])
 }
 
 model validation {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
   mandatory String
-  min Int
-  max Int
-  type String
+  min       Int
+  max       Int
+  type      String
 
-  ruleId String @db.ObjectId @unique
-  rule rule @relation(fields: [ruleId], references: [id])
+  ruleId String @unique @db.ObjectId
+  rule   rule   @relation(fields: [ruleId], references: [id])
 }
