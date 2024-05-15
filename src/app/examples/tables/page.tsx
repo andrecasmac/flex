@@ -20,15 +20,6 @@ export default function Page() {
       >
         <a href="/examples/tables/table-dnd">Tabla drag and drop</a>
       </Button>
-
-      <Button
-        asChild
-        variant="default"
-        size="lg"
-        className="rounded-2xl text-white active:scale-95 transition-all"
-      >
-        <a href="/examples/tables/table-dnd">Tabla drag and drop</a>
-      </Button>
     </div>
   );
 }

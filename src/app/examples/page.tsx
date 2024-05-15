@@ -15,7 +15,7 @@ export default function Page() {
         asChild
         variant="default"
         size="lg"
-        className="rounded-2xl text-white active:scale-95 transition-all"
+        className="rounded-2xl active:scale-95 transition-all"
       >
         <a href="/examples/toggle">Toggle</a>
       </Button>
