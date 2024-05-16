@@ -13,12 +13,16 @@ import {
 
 import { SunIcon, MoonIcon } from "@radix-ui/react-icons";
 
+import Link from "next/link";
+
 export default function Header() {
   const { setTheme } = useTheme();
   return (
     <header className="absolute w-full z-50  bg-ligthBlue dark:bg-cyan-950">
       <div className="flex items-center justify-between py-3">
-        <Logo className="ms-[5%]" />
+        <Link href={"/"} className="ms-[5%]">
+          <Logo />
+        </Link>
         <div>
           <div className="text-white me-[3em]">
             <DropdownMenu>
