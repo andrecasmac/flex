@@ -25,7 +25,6 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 
 const formSchema = z.object({
   content: z.string().min(2, {
