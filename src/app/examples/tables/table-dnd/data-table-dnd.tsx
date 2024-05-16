@@ -2,10 +2,6 @@
 
 import { CSSProperties, useMemo, useState } from "react";
 
-import { DataTablePagination } from "./pagination-table";
-
-// import "./index.css";
-
 import {
   ColumnDef,
   flexRender,
@@ -93,7 +89,6 @@ export function DataTable({ columns, dataT }: DataTableProps) {
     debugTable: true,
     debugHeaders: true,
     debugColumns: true,
-    // getPaginationRowModel: getPaginationRowModel(),
   });
 
   function handleDragEnd(event: DragEndEvent) {
@@ -121,9 +116,9 @@ export function DataTable({ columns, dataT }: DataTableProps) {
         onDragEnd={handleDragEnd}
         sensors={sensors}
       >
-        <div className="overflow-auto flex border rounded-xl min-h-[600px] max-h-[600px]">
+        <div className="overflow-auto flex border rounded-xl  max-h-[450px]">
           <Table>
-            <TableHeader className="bg-turquoise dark:bg-cyan-950  sticky top-0 z-50 ">
+            <TableHeader className="bg-turquoise dark:bg-cyan-950 sticky top-0 z-10">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
@@ -165,12 +160,6 @@ export function DataTable({ columns, dataT }: DataTableProps) {
           </Table>
         </div>
       </DndContext>
-
-      {/* <div className="pt-2 pb-5">
-        <div>
-          <DataTablePagination table={table} />
-        </div>
-      </div> */}
 
       <div className=" py-10  text-[10px]">
         <pre>{JSON.stringify(data, null, 2)}</pre>
