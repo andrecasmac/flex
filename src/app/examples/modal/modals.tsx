@@ -1,9 +1,7 @@
-"use client"
-
+"use client";
 
 import { useState } from "react";
 import { ModalPartner } from "./modalPartner";
-
 
 interface ModalsProps {
   modalPartner?: boolean;
@@ -15,7 +13,11 @@ export default function Modals({ modalPartner, ButtonContent }: ModalsProps) {
   return (
     <div>
       {modalPartner && (
-        <ModalPartner isOpen={isOpen} setIsOpen={setIsOpen} ButtonContent="HOLA" />
+        <ModalPartner
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          ButtonContent={ButtonContent}
+        />
       )}
     </div>
   );
