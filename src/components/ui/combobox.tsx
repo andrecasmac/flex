@@ -18,41 +18,21 @@ import {
 } from "@/components/ui/popover"
 import { List } from "postcss/lib/list"
 
-export type Status = {
-  value: string
-  label: string
+import { IComboboxContent } from "../../../types/ComboboxContent"
+
+interface Response{
+  responses: IComboboxContent[];
+  handleState: Function
 }
 
-export const statuses: Status[] = [
-  {
-    value: "backlog",
-    label: "Backlog",
-  },
-  {
-    value: "todo",
-    label: "Todo",
-  },
-  {
-    value: "in progress",
-    label: "In Progress",
-  },
-  {
-    value: "done",
-    label: "Done",
-  },
-  {
-    value: "canceled",
-    label: "Canceled",
-  },
-]
-
-export function ComboboxDropdown() {
+export function ComboboxDropdown(props: Response ) {
+  const {responses, handleState} = props;
 
   const [open, setOpen] = React.useState(false)
-  const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(
+  const [selectedStatus, setSelectedStatus] = React.useState<IComboboxContent | null>(
     null
   )
-
+  
   return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
@@ -60,25 +40,28 @@ export function ComboboxDropdown() {
             {selectedStatus ? <>{selectedStatus.label}</> : <>Search here <ChevronDown color="#051f42" /></>}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0 border-darkBlueMarine" side="right" align="start">
+        <PopoverContent className="p-0 border-darkBlueMarine" align="start">
           <Command>
             <CommandInput placeholder="Search segment" />
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
-                {statuses.map((status) => (
+                {responses.map((response) => (
                   <CommandItem
-                    key={status.value}
-                    value={status.value}
+                    key={response.value}
+                    value={response.value}
                     onSelect={(value) => {
                       setSelectedStatus(
-                        statuses.find((priority) => priority.value === value) ||
+                        responses.find((priority) => priority.value === value) ||
                           null
                       )
+                      handleState(responses.find((priority) => priority.value === value) ||
+                      null)
                       setOpen(false)
                     }}
                   >
-                    {status.label}
+                    
+                    {response.label}
                   </CommandItem>
                 ))}
               </CommandGroup>
