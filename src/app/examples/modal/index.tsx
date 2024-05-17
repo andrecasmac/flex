@@ -3,13 +3,15 @@
 import { useState } from "react";
 import { ModalPartner } from "./modalPartner";
 import { ModalTest } from "./modalTest";
+import { ModalErrorList } from "./modalErrorList";
 
 interface ModalsProps {
   modalPartner?: boolean;
   modalTest?: boolean;
+  modalErrorList?: boolean;
 }
 
-export default function Modals({ modalPartner, modalTest }: ModalsProps) {
+export default function Modals({ modalPartner, modalTest,modalErrorList }: ModalsProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div>
@@ -25,6 +27,13 @@ export default function Modals({ modalPartner, modalTest }: ModalsProps) {
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           ButtonContent="Modal vacio"
+        />
+      )}
+      {modalErrorList && (
+        <ModalErrorList
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          ButtonContent="Modal Lista Error"
         />
       )}
     </div>

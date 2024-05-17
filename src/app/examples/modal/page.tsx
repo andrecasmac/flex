@@ -5,6 +5,7 @@ export default function Page() {
     <div className="space-y-5 flex flex-col items-center ">
       <Modals modalPartner={true} />
       <Modals modalTest={true} />
+      <Modals modalErrorList={true} />
     </div>
   );
 }
