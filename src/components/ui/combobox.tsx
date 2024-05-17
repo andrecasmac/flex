@@ -16,28 +16,25 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { List } from "postcss/lib/list"
 
 import { IComboboxContent } from "../../../types/ComboboxContent"
 
-interface Response{
-  responses: IComboboxContent[];
-  handleState: Function
+// Interface to define the props structure
+interface Response {
+  content: IComboboxContent[];
+  handleSelect: Function
+  selected?: IComboboxContent | null
 }
 
 export function ComboboxDropdown(props: Response ) {
-  const {responses, handleState} = props;
-
+  const {content, handleSelect, selected} = props;
   const [open, setOpen] = React.useState(false)
-  const [selectedStatus, setSelectedStatus] = React.useState<IComboboxContent | null>(
-    null
-  )
   
   return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" className="w-[300px] justify-between text-slate-400 border-darkBlueMarine">
-            {selectedStatus ? <>{selectedStatus.label}</> : <>Search here <ChevronDown color="#051f42" /></>}
+            {selected ? <>{selected.label} <ChevronDown color="#051f42" /></> : <>Search here <ChevronDown color="#051f42" /></>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0 border-darkBlueMarine" align="start">
@@ -46,22 +43,23 @@ export function ComboboxDropdown(props: Response ) {
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
-                {responses.map((response) => (
+                {/* The options are mapped*/}
+                {content.map((option) => (
                   <CommandItem
-                    key={response.value}
-                    value={response.value}
-                    onSelect={(value) => {
-                      setSelectedStatus(
-                        responses.find((priority) => priority.value === value) ||
-                          null
-                      )
-                      handleState(responses.find((priority) => priority.value === value) ||
+                    // Key has to be unique for mapping components
+                    key={option.id}
+                    // Value is what is saved when the user clicks on an option
+                    value={option.id}
+                    onSelect={(id: string) => {
+                      // Since we are dealing with an array, we need to find the selected option
+                      handleSelect(content.find((priority) => priority.id === id) ||
                       null)
+                      // We close the dropdown after selecting one
                       setOpen(false)
                     }}
                   >
-                    
-                    {response.label}
+                    {/* The label is the text that appears in the options */}
+                    {option.label}
                   </CommandItem>
                 ))}
               </CommandGroup>

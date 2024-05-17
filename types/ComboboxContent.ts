@@ -1,4 +1,4 @@
 export interface IComboboxContent {
-    value: string,
+    id: string,
     label: string,
   }

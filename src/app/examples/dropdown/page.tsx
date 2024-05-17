@@ -4,52 +4,56 @@ import { IComboboxContent } from "../../../../types/ComboboxContent";
 import * as React from "react"
 
 export default function Page() {
-
+    // We can save the state of the combobox if the object has an id and label
     const [selectedStatus, setSelectedStatus] = React.useState<IComboboxContent | null>(
         null
     )
 
-    function changeStatus(status: IComboboxContent): void {
+    // This function is passed to the component to change the state in this page
+    function changeStatus(status : IComboboxContent): void {
         setSelectedStatus(status)
     }
 
-
-    const statuses: IComboboxContent[] = [
+    // These are example options, both are string, so we can save ids, or function names in the id field
+    const options: IComboboxContent[] = [
         {
-            value: "backlog",
+            id: "12345",
             label: "Backlog",
         },
         {
-            value: "todo",
+            id: "67890",
             label: "Todo",
         },
         {
-            value: "in progress",
+            id: "inProgress",
             label: "In Progress",
         },
         {
-            value: "done",
+            id: "done",
             label: "Done",
         },
         {
-            value: "canceled",
-            label: "Canceled",
+            id: "cancelled",
+            label: "Cancelled",
         },
         {
-            value: "test",
+            id: "test",
             label: "Test",
         },
         {
-            value: "increible",
-            label: "Increible",
+            id: "incredible",
+            label: "Incredible",
         },
-
     ]
+
     return (
         <main>
-            <ComboboxDropdown responses={statuses} handleState={changeStatus} />
+            {/* We need to pass the content, the handle function, and */}
+            <ComboboxDropdown content={options} handleSelect={changeStatus} selected={selectedStatus}/>
             <div>
-                {selectedStatus ? <span>{selectedStatus.label}</span> : null}
+                Selected id: {selectedStatus ? <>{selectedStatus.id}</> : <>Has not selected</>}
+                <br />
+                Selected label: {selectedStatus ? <>{selectedStatus.label}</> : <>Has not selected</>}
             </div>
         </main>
     )
