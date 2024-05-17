@@ -49,11 +49,11 @@ export function ComboboxDropdown(props: Response ) {
                     // Key has to be unique for mapping components
                     key={option.id}
                     // Value is what is saved when the user clicks on an option
-                    value={option.id}
-                    onSelect={(id: string) => {
+                    value={option.label}
+                    onSelect={(Value: string) => {
                       // Since we are dealing with an array, we need to find the selected option
-                      handleSelect(content.find((priority) => priority.id === id) ||
-                      null)
+                      // If not found, null is assigned
+                      handleSelect(content.find((priority) => priority.label === Value) || null)
                       // We close the dropdown after selecting one
                       setOpen(false)
                     }}
