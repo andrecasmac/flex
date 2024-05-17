@@ -19,6 +19,9 @@ const config = {
     },
     extend: {
       colors: {
+        turquoise: "#0798A5",
+        ligthBlue: "#DEF2FB",
+        darkTurquoise: "#06818C",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
