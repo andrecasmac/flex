@@ -7,7 +7,7 @@ export function AdminIcon(props: React.SVGProps<SVGSVGElement>) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_13_34)">
+      <g clipPath="url(#clip0_13_34)">
         <path
           d="M97.4252 0.661388C125.768 -4.16276 154.757 17.9475 159.568 47.3806C166.812 80.2782 140.262 114.845 108.185 115.622C79.385 
                 118.131 51.8497 93.3333 49.8176 63.349C46.7237 33.6535 68.9551 4.22569 97.4252 0.661388Z"
@@ -50,7 +50,7 @@ export function ClientIcon(props: React.SVGProps<SVGSVGElement>) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_13_31)">
+      <g clipPath="url(#clip0_13_31)">
         <path
           d="M93.8716 3.28884C124.17 -8.11118 160.723 11.3433 168.707 42.8566C178.643 73.3987 157.593 108.706 126.685 115.562C94.3269 124.997
                 58.0302 99.4932 55.0937 65.7986C51.4971 39.1475 68.5812 11.792 93.8716 3.31723V3.28884Z"
