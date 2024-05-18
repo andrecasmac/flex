@@ -22,6 +22,7 @@ const config = {
         turquoise: "#0798A5",
         ligthBlue: "#DEF2FB",
         darkTurquoise: "#06818C",
+        darkBlueMarine:"#051F42",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
