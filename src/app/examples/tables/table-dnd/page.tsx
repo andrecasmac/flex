@@ -2,11 +2,12 @@ import { DataTable } from "./data-table-dnd";
 import { ProductsT, columns } from "./colums";
 import { PageTitle } from "@/components/page-title";
 
-// hook
-import { getTable } from "@/hooks/dataTable";
+import { promises as fs } from 'fs';
 
 export default async function Table() {
-  const data: ProductsT[] = await getTable();
+  // Data should be fetched from DB instead, this is just to map data
+  const file = await fs.readFile(process.cwd() + '/src/app/examples/tables/example-data.json', 'utf8');
+  const data = JSON.parse(file);
 
   return (
     <>
