@@ -54,7 +54,6 @@ export default function MultipleTagsInput({
       e.preventDefault(); // prevent defalt de inputs
       removeTag(tags.length - 1); // elimina la ultima etiqueta
     }
-    return tags;
   };
 
   const removeTag = (index: number) => {
@@ -104,6 +103,7 @@ export default function MultipleTagsInput({
           onBlur={() => setIsFocused(false)}
           className="flex-1 bg-transparent outline-none border-none ring-none py-1 rounded-md"
           placeholder="Add..."
+          aria-label="Add new tag"
         />
       </div>
     </div>
