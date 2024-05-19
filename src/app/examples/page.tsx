@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Page() {
   return (
-    <div className="flex gap-x-4">
+    <div className="flex flex-col gap-y-4">
       <Button
         asChild
         variant="default"
@@ -53,6 +53,15 @@ export default function Page() {
         className="rounded-2xl active:scale-95 transition-all"
       >
         <a href="/examples/dropdown">Dropdown</a>
+      </Button>
+
+      <Button
+        asChild
+        variant="default"
+        size="lg"
+        className="rounded-2xl active:scale-95 transition-all"
+      >
+        <a href="/examples/segment-config">Segment configuration</a>
       </Button>
     </div>
   );

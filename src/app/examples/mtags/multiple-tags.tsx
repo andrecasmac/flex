@@ -1,81 +1,54 @@
 "use client";
 
-import { useState, useEffect, useRef, KeyboardEvent } from "react";
+import { useState, useEffect, useRef, useCallback, KeyboardEvent } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
-export default function MultipleTagsInput({
-  PreviousTags = [],
-  SaveTags,
-  labelContent,
-}: {
-  // typado de las props
+interface MultipleTagsInputProps {
   labelContent?: string;
-  PreviousTags?: string[] | null;
-  SaveTags: (newTags: string[]) => void;
-}) {
-  const [tags, setTags] = useState<string[]>(PreviousTags ?? []); // useState para almacenar las etiquetas
-  const inputRef = useRef<HTMLInputElement>(null); // referecia al campo de entrada
+  tags: string[];  // Receives the tags from the parent
+  onTagsChange: (newTags: string[]) => void; // Callback to update tags
+}
 
-  const [isFocused, setIsFocused] = useState(false); // useState para cambier el css cuando es focus
+export default function MultipleTagsInput({
+  labelContent,
+  tags,
+  onTagsChange,
+}: MultipleTagsInputProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [isFocused, setIsFocused] = useState(false);
 
-  useEffect(() => {
-    // useEffect que actualiza las etiquetas cuando cuando cambian los tags para poder guardarlas
-    SaveTags(tags);
-  }, [tags, SaveTags]);
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLInputElement>) => {
+      const value = inputRef.current?.value.trim();
 
-  useEffect(() => {
-    setTags(PreviousTags || []); // Actualizar tags si PreviousTags cambia
-  }, [PreviousTags]);
-
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    // funcion para manejar el input
-    if (
-      // si se preciona el enter, como o espacio y que el intup no este vacio
-      (e.key === "Enter" || e.key === "," || e.key === " ") &&
-      inputRef.current?.value.trim() !== ""
-    ) {
-      e.preventDefault(); // prevent defalt de inputs
-      const inputElement = inputRef.current; // current input
-      if (inputElement) {
-        const value = inputElement.value.trim(); // obtiene el valor y lo recorta
-        if (value && !tags.includes(value)) {
-          // si el valor no es nulo y no esta diplicado
-          setTags([...tags, value]); // agrega una nueva tag
-          inputElement.value = ""; // limpia la entrada
-        }
+      if (
+        (e.key === "Enter" || e.key === "," || e.key === " ") &&
+        value &&
+        !tags.includes(value)
+      ) {
+        e.preventDefault();
+        onTagsChange([...tags, value]); // Notify parent of change
+        inputRef.current!.value = "";
+      } else if (e.key === "Backspace" && tags.length && !value) {
+        e.preventDefault();
+        onTagsChange(tags.slice(0, -1)); // Notify parent of change
       }
-    } else if (
-      e.key === "Backspace" && // si se preciona backspace
-      tags.length > 0 && // no hay etiquetas
-      inputRef.current?.value === "" // y el input esta vacio
-    ) {
-      e.preventDefault(); // prevent defalt de inputs
-      removeTag(tags.length - 1); // elimina la ultima etiqueta
-    }
-  };
+    },
+    [tags, onTagsChange] // Include onTagsChange as a dependency
+  );
 
-  const removeTag = (index: number) => {
-    // funcion para borrar una etiqueda
-    setTags(tags.filter((_, i) => i !== index));
-  };
-
-  function allTags() {
-    // funcion para debugear
-    console.log(tags);
-  }
 
   return (
-    <div className="flex flex-col space-y-2 w-[50%]">
-      <Label htmlFor="tags-input">{labelContent}</Label>
+    <div className="flex flex-col space-y-2 w-[35%]">
+      {labelContent && <Label htmlFor="tags-input">{labelContent}</Label>}
       <div
         className={`flex flex-wrap gap-2 border border-turquoise dark:border-darkTurquoise bg-white dark:bg-cyan-950 rounded-xl p-2 ${
-          isFocused ? " ring-1 ring-ring" : ""
+          isFocused ? "ring-1 ring-ring" : ""
         }`}
-        onClick={() => inputRef.current?.focus()} // focus al input cuando se hace click a este div
+        onClick={() => inputRef.current?.focus()}
       >
-        {/* mapeo de los tags */}
         {tags.map((tag, index) => (
           <span
             key={index}
@@ -85,11 +58,8 @@ export default function MultipleTagsInput({
             <Button
               type="button"
               variant={"ghost"}
-              className="ml-1 -mr-1 h-4 w-4 rounded-full p-0.3 text-white hover:bg-inherit hover:text-slate-300 focus:outline "
-              onClick={(e) => {
-                // e.stopPropagation(); // evita que el boton se propague al contenedor
-                removeTag(index); // borra el tag al hacer click al boton
-              }}
+              className="ml-1 -mr-1 h-4 w-4 rounded-full p-0.3 text-white hover:bg-inherit hover:text-slate-300 focus:outline"
+              onClick={() => onTagsChange(tags.filter((_, i) => i !== index))} // Notify parent of change
             >
               <X />
             </Button>
@@ -101,7 +71,7 @@ export default function MultipleTagsInput({
           onKeyDown={handleKeyDown}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          className="flex-1 bg-transparent outline-none border-none ring-none py-1 rounded-md"
+          className="flex-1 w-2 bg-transparent outline-none border-none ring-none py-1 rounded-md"
           placeholder="Add..."
           aria-label="Add new tag"
         />
