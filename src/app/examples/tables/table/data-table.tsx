@@ -41,8 +41,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <>
-      <div className="overflow-auto flex border rounded-xl min-h-[600px] max-h-[600px]">
+    <div>
+      <div className="overflow-auto flex border rounded-xl min-h-[6 300px] max-h-[600px]">
         <Table>
           <TableHeader className="bg-turquoise dark:bg-cyan-950 sticky top-0">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -99,6 +99,6 @@ export function DataTable<TData, TValue>({
           <DataTablePagination table={table} />
         </div>
       </div>
-    </>
+    </div>
   );
 }
