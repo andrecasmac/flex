@@ -65,3 +65,19 @@ export const columns: ColumnDef<ProductsT>[] = [
     },
   },
 ];
+
+export type ErrorList = {
+  id: string;
+  name: string;
+  description: string;
+};
+export const columnsErrorList: ColumnDef<ErrorList>[] = [
+  {
+    accessorKey: "errors",
+    header: "Errors",
+  },
+  {
+    accessorKey: "errordescription",
+    header: "Error Description",
+  },
+];
