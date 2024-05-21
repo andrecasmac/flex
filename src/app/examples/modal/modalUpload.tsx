@@ -21,7 +21,6 @@ interface ModalUploadProps {
     isOpen: boolean;
     setIsOpen: (open: boolean) => void;
     ButtonContent: string;
-    onFileUpload: (file: File) => void;
 }
 
 export function ModalUpload ({
