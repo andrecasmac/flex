@@ -1,4 +1,4 @@
-
+'use server'
 import { ProductsT, ErrorList } from "@/app/examples/tables/table/colums";
 import { fetchAllProducts } from "@/app/apis/products/route";
 import { fetchAllErrors } from "@/app/apis/errors/route";
