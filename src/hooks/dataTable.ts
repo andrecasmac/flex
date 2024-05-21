@@ -1,8 +1,8 @@
 'use server'
 import { ProductsT, ErrorList } from "@/app/examples/tables/table/colums";
-import { fetchAllProducts } from "@/app/apis/products/route";
+/*import { fetchAllProducts } from "@/app/apis/products/route";*/
 import { fetchAllErrors } from "@/app/apis/errors/route";
-
+/*
 export async function getTable(): Promise<ProductsT[]> {
     try {
         const productsData = await fetchAllProducts();
@@ -13,7 +13,7 @@ export async function getTable(): Promise<ProductsT[]> {
         throw error;
     }
 }
-
+*/
 export async function getTableError(): Promise<ErrorList[]> {
     try {
         const errorsData = await fetchAllErrors();

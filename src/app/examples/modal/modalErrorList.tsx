@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { DataTable } from "../tables/table/data-table";
 import { columnsErrorList, ErrorList } from "../tables/table/colums";
-import { getTable, getTableError } from "@/hooks/dataTable";
+import { getTableError } from "@/hooks/dataTable";
 
 
 interface ModalErrorProps {
@@ -27,19 +27,18 @@ export function ModalErrorList({
   setIsOpen,
   ButtonContent,
 }: ModalErrorProps) {
+
+  /**/
   const [data, setData]= useState<ErrorList[]>([]);
+
   useEffect(()=>{
     const fetchErrorData = async () => {
-      try {
-        const result:ErrorList[] = await getTableError();
-        setData(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+        const response: ErrorList[]= await getTableError();
+        console.log(response)
+        setData(response);
     };
-
     fetchErrorData();
-  }, []);
+  },[]);
 
   return (
     <Dialog>

@@ -67,17 +67,17 @@ export const columns: ColumnDef<ProductsT>[] = [
 ];
 
 export type ErrorList = {
-  id: string;
   name: string;
   description: string;
+  id: string;
 };
 export const columnsErrorList: ColumnDef<ErrorList>[] = [
   {
-    accessorKey: "errors",
+    accessorKey: "name",
     header: "Errors",
   },
   {
-    accessorKey: "errordescription",
+    accessorKey: "description",
     header: "Error Description",
   },
 ];
