@@ -15,7 +15,6 @@ import { DataTable } from "../tables/table/data-table";
 import { columnsErrorList, ErrorList } from "../tables/table/colums";
 import { getTableError } from "@/hooks/dataTable";
 
-
 interface ModalErrorProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
@@ -28,9 +27,10 @@ export function ModalErrorList({
   ButtonContent,
 }: ModalErrorProps) {
 
-  /**/
+  /*Variable where we store the error data*/
   const [data, setData]= useState<ErrorList[]>([]);
 
+/* Async function in order to fetch the data from the hook*/
   useEffect(()=>{
     const fetchErrorData = async () => {
         const response: ErrorList[]= await getTableError();
@@ -47,6 +47,7 @@ export function ModalErrorList({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[85%] sm:max-h-[100%]">
         <div className="flex items-center justify-center sm:max-w-[90%] pt-10 pl-20">
+          {/* This is the table component that receives that columns structure in 'columns' and the data in 'data'*/}
           <DataTable columns={columnsErrorList} data={data} />
         </div>
         <DialogFooter className="flex items-center justify-center">
