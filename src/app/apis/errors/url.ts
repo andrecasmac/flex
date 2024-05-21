@@ -1,1 +1,0 @@
-export const urlError="https://664bd93535bbda10987e40ba.mockapi.io/api/errorlist"
