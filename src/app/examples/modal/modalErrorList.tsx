@@ -45,8 +45,8 @@ export function ModalErrorList({
       <DialogTrigger asChild>
         <Button variant="default">{ButtonContent} </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[85%] sm:max-h-[100%]">
-        <div className="flex items-center justify-center sm:max-w-[90%] pt-10 pl-20">
+      <DialogContent className="sm:max-w-[75%] sm:max-h-[100%]">
+        <div className="flex items-center justify-center px-20 pt-10">
           <DataTable columns={columnsErrorList} data={data} />
         </div>
         <DialogFooter className="flex items-center justify-center">
