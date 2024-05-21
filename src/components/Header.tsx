@@ -18,7 +18,7 @@ import Link from "next/link";
 export default function Header() {
   const { setTheme } = useTheme();
   return (
-    <header className="absolute w-full z-50  bg-ligthBlue dark:bg-cyan-950">
+    <header className="fixed top-0 left-0 w-full z-50 bg-ligthBlue dark:bg-cyan-950">
       <div className="flex items-center justify-between py-3">
         <Link href={"/"} className="ms-[5%]">
           <Logo />

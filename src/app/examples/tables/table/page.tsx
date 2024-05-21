@@ -1,18 +1,23 @@
 import { DataTable } from "./data-table";
 import { columns } from "./colums";
 
-// hook
-import { getTable } from "@/hooks/dataTable";
+import { PageTitle } from "@/components/page-title";
+import { promises as fs } from 'fs';
 
 export default async function Table() {
-  const data = await getTable();
+  // Data should be fetched from DB instead, this is just to map data
+  const file = await fs.readFile(process.cwd() + '/src/app/examples/tables/example-data.json', 'utf8');
+  const data = JSON.parse(file);
 
   return (
-    <div className="w-[85%]">
-      <p className=" text-center opacity-70 pb-1">
-        NOTA: La tabla esta llenada con un api de ejemplo
-      </p>
-      <DataTable columns={columns} data={data} />
-    </div>
+    <>
+      <PageTitle title="Tabla de datos" />
+      <div className="w-[80%]">
+        <p className=" text-center opacity-70 pb-1">
+          NOTA: La tabla esta llenada con un api de ejemplo
+        </p>
+        <DataTable columns={columns} data={data} />
+      </div>
+    </>
   );
 }
