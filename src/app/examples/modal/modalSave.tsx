@@ -15,11 +15,11 @@ import { Button } from "@/components/ui/button";
 import { CheckCircleIcon, XCircleIcon } from "lucide-react";
 
 interface ModalSaveProps {
-  setIsOpen: (open: boolean) => void;
+  setIsOpen: (open: boolean) => void | undefined;
   ButtonContent: string;
   onSave: () => void; // Added onSave prop
-  showSuccess: boolean; // Added prop for success state
-  showError: boolean; // Added prop for
+  showSuccess?: boolean; // Added prop for success state
+  showError?: boolean; // Added prop for
   ErrorData?: Error | null; // added error data
 }
 

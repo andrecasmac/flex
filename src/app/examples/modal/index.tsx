@@ -12,10 +12,10 @@ interface ModalsProps {
   onSave?: () => Promise<void>;
   onError?: (error: Error) => void;
   ErrorData?: Error | null;
-  showSuccess: boolean;
-  showError: boolean;
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
+  showSuccess?: boolean;
+  showError?: boolean;
+  isOpen?: boolean;
+  setIsOpen?: (open: boolean) => void;
 }
 
 export default function Modals({
@@ -27,8 +27,8 @@ export default function Modals({
   showSuccess,
   showError,
   ErrorData,
-  isOpen,
-  setIsOpen,
+  isOpen = false,
+  setIsOpen = () => {},
 }: ModalsProps) {
   const handleSave = useCallback(async () => {
     try {
