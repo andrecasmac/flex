@@ -27,7 +27,7 @@ export default function Modals({
   showSuccess,
   showError,
   ErrorData,
-  isOpen = false,
+  isOpen,
   setIsOpen = () => {},
 }: ModalsProps) {
   const handleSave = useCallback(async () => {

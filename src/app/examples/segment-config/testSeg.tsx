@@ -84,7 +84,7 @@ export function Segments() {
       ...prevConfigRows,
       [segmentId]: [
         ...(prevConfigRows[segmentId] || []),
-        { id: segmentId, tags: [] },
+        { id: Date.now(), tags: [] },
       ],
     }));
 
