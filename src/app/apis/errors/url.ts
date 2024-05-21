@@ -1,1 +1,1 @@
-export const urlError="https://6647f07b2bb946cf2f9f461f.mockapi.io/ErrorList"
+export const urlError="https://664bd93535bbda10987e40ba.mockapi.io/api/errorlist"
