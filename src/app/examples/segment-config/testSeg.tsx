@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import MultipleTagsInput from "../mtags/multiple-tags";
+import MultipleTagsInput from "../../../components/multiple-tags";
 
 import {
   PlusCircle,
@@ -53,7 +53,6 @@ export function Segments() {
       minUso: 2,
       uso: "O",
       maxUso: 2,
-      // mostrarDetalle: true,
     },
     {
       id: 2,
@@ -62,7 +61,6 @@ export function Segments() {
       minUso: 1,
       uso: "M",
       maxUso: 2,
-      // mostrarDetalle: false,
     },
     {
       id: 3,
@@ -71,7 +69,6 @@ export function Segments() {
       minUso: 1,
       uso: "M",
       maxUso: 1,
-      // mostrarDetalle: false,
     },
   ]);
 
@@ -81,22 +78,13 @@ export function Segments() {
       [id]: !prevOpenRows[id], // Toggle the state for the specific row
     }));
   }
+
   function addTagRow(segmentId: number) {
-    const segment = segmentos.find((seg) => seg.id === segmentId);
-
-    if (
-      !segment ||
-      (configRows[segmentId]?.length || 0) >= (segment.maxUso || Infinity)
-    ) {
-      // Check if segment exists and hasn't reached maxUso
-      return;
-    }
-
-    setConfigRows((prevTagRows) => ({
-      ...prevTagRows,
+    setConfigRows((prevConfigRows) => ({
+      ...prevConfigRows,
       [segmentId]: [
-        ...(prevTagRows[segmentId] || []),
-        { id: Date.now(), tags: [] },
+        ...(prevConfigRows[segmentId] || []),
+        { id: segmentId, tags: [] },
       ],
     }));
 
@@ -107,10 +95,10 @@ export function Segments() {
   }
 
   function removeTagRow(segmentId: number, rowId: number) {
-    setConfigRows((prevTagRows) => ({
-      ...prevTagRows,
+    setConfigRows((prevConfigRows) => ({
+      ...prevConfigRows,
       [segmentId]:
-        prevTagRows[segmentId]?.filter((row) => row.id !== rowId) || [],
+        prevConfigRows[segmentId]?.filter((row) => row.id !== rowId) || [],
     }));
   }
 
@@ -147,34 +135,40 @@ export function Segments() {
               <React.Fragment key={segmento.id}>
                 <TableRow>
                   <TableCell className="w-1">
-                    <button
+                    <Button
                       onClick={() => toggleRow(segmento.id)}
-                      className="text-gray-500 hover:text-gray-700"
+                      size={"icon"}
+                      variant={"ghost"}
+                      className="text-gray-500 hover:text-gray-700 rounded-full hover:bg-none"
                     >
                       {openRow[segmento.id] ? (
                         <ChevronDown />
                       ) : (
                         <ChevronRight />
                       )}
-                    </button>
+                    </Button>
                   </TableCell>
+
                   <TableCell className="font-medium">
                     {segmento.codigo}
                   </TableCell>
+
                   <TableCell>
                     drop
                     {segmento.uso}
                   </TableCell>
+
                   <TableCell>{segmento.dataType}</TableCell>
 
                   <TableCell>{segmento.minUso ?? "N/A"}</TableCell>
+
                   <TableCell>{segmento.maxUso ?? "N/A"}</TableCell>
 
                   <TableCell>
                     <Button
                       variant={"ghost"}
                       size={"icon"}
-                      className="h-8 w-8"
+                      className="h-8 w-8 rounded-full"
                       onClick={() => {
                         addTagRow(segmento.id);
                       }}
@@ -192,7 +186,7 @@ export function Segments() {
                         className="bg-slate-600/20"
                       >
                         <TableCell colSpan={7}>
-                          <div className="flex  justify-around items-center">
+                          <div className="flex justify-around items-center">
                             <MultipleTagsInput
                               tags={ConfigRowItem.tags}
                               onTagsChange={(newTags) =>
@@ -206,7 +200,7 @@ export function Segments() {
 
                             <Button
                               variant={"ghost"}
-                              className="h-8 w-8"
+                              className="h-8 w-8 rounded-full"
                               size={"icon"}
                               onClick={() =>
                                 removeTagRow(segmento.id, ConfigRowItem.id)

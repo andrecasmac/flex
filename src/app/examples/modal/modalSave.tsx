@@ -12,41 +12,54 @@ import {
 
 import { Button } from "@/components/ui/button";
 
-import { CheckCircleIcon } from "lucide-react";
+import { CheckCircleIcon, XCircleIcon } from "lucide-react";
 
 interface ModalSaveProps {
-  isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   ButtonContent: string;
   onSave: () => void; // Added onSave prop
+  showSuccess: boolean; // Added prop for success state
+  showError: boolean; // Added prop for
+  ErrorData?: Error | null; // added error data
 }
 
 export function ModalSave({
-  isOpen,
   setIsOpen,
   ButtonContent,
   onSave,
+  showSuccess,
+  showError,
+  ErrorData,
 }: ModalSaveProps) {
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="default">{ButtonContent} </Button>
+    <Dialog onOpenChange={setIsOpen}>
+      <DialogTrigger asChild onClick={onSave}>
+        <Button variant="default">{ButtonContent}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[625px]">
-        <div className="flex items-center justify-center p-10">
-          <CheckCircleIcon className="w-32 h-32 text-green-200" />
-        </div>
-
-        <DialogFooter className="felx items-center justify-center">
+        {showSuccess && (
+          <div className="flex items-center flex-col w-full justify-center ">
+            <DialogHeader className="w-full text-white sm:text-center font-semibold mb-8">
+              GUARDADO EXITOSAMENTE
+            </DialogHeader>
+            <CheckCircleIcon className="w-32 h-32 text-green-400 dark:text-green-600" />
+          </div>
+        )}
+        {showError && (
+          <div className="flex items-center flex-col w-full justify-center ">
+            <DialogHeader className="w-full text-white sm:text-center font-semibold mb-4">
+              ERROR AL GUARDAR
+            </DialogHeader>
+            <XCircleIcon className="w-32 h-32 text-red-400 dark:text-red-600" />
+            <div className="pt-5">Message: {ErrorData?.message}</div>
+          </div>
+        )}
+        <DialogFooter className="flex items-center justify-center">
           <DialogClose asChild>
-            <Button size="sm" className="h-8 w-[40%]" onClick={onSave}>
-              Save
+            <Button size="sm" className="h-8 w-[40%]">
+              Close
             </Button>
           </DialogClose>
-
-          {/* <Button size="sm" type="submit" className="h-8 w-[40%]">
-            Save
-          </Button> */}
         </DialogFooter>
       </DialogContent>
     </Dialog>

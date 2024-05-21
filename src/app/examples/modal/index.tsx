@@ -9,32 +9,35 @@ interface ModalsProps {
   modalPartner?: boolean;
   modalTest?: boolean;
   modalSave?: boolean;
-  onSave?: () => Promise<void>; // Callback for saving
+  onSave?: () => Promise<void>;
   onError?: (error: Error) => void;
+  ErrorData?: Error | null;
+  showSuccess: boolean;
+  showError: boolean;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
 }
 
 export default function Modals({
   modalPartner,
   modalTest,
   modalSave,
-  onSave, // Callback for saving
+  onSave,
   onError,
+  showSuccess,
+  showError,
+  ErrorData,
+  isOpen,
+  setIsOpen,
 }: ModalsProps) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  // const handleSave = useCallback(async () => {
-  //   try {
-  //     await onSave?.(); // Espera a que se complete la promesa
-  //     setIsOpen(false); // Cierra el modal solo si la operación fue exitosa
-  //   } catch (error) {
-  //     onError?.(error as Error); // Llama al callback de error si ocurre alguno
-  //   }
-  // }, [onSave, onError]);
-
-  const handleSave = useCallback(() => {
-    onSave?.(); // Call the onSave function if provided
-    setIsOpen(false); // Close the modal after saving
-  }, [onSave]);
+  const handleSave = useCallback(async () => {
+    try {
+      await onSave?.();
+      console.log("exito");
+    } catch (error) {
+      onError?.(error as Error);
+    }
+  }, [onSave, onError]);
 
   return (
     <div>
@@ -54,10 +57,12 @@ export default function Modals({
       )}
       {modalSave && (
         <ModalSave
-          isOpen={isOpen}
           setIsOpen={setIsOpen}
           ButtonContent="Save"
           onSave={handleSave}
+          showError={showError}
+          ErrorData={ErrorData}
+          showSuccess={showSuccess}
         />
       )}
     </div>
