@@ -45,17 +45,17 @@ export function ModalErrorList({
       <DialogTrigger asChild>
         <Button variant="default">{ButtonContent} </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[625px]">
-        <div className="flex items-center justify-center pt-10">
+      <DialogContent className="sm:max-w-[85%] sm:max-h-[100%]">
+        <div className="flex items-center justify-center sm:max-w-[90%] pt-10 pl-20">
           <DataTable columns={columnsErrorList} data={data} />
         </div>
         <DialogFooter className="flex items-center justify-center">
           <DialogClose asChild>
-            <Button size="sm" className="h-8 w-[40%]">
+            <Button size="sm" className="h-10 w-[20%]">
               Cancel
             </Button>
           </DialogClose>
-          <Button size="sm" className="h-8 w-[40%]">
+          <Button size="sm" className="h-10 w-[20%]">
             Try Again
           </Button>
         </DialogFooter>

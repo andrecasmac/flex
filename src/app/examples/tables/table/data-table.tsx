@@ -41,8 +41,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
-      <div className="overflow-auto flex border rounded-xl min-h-[6 300px] max-h-[600px]">
+    <div className="flex flex-col">
+      <div className="overflow-auto flex border rounded-xl min-h-[6 300px] max-h-[400px]">
         <Table>
           <TableHeader className="bg-turquoise dark:bg-cyan-950 sticky top-0">
             {table.getHeaderGroups().map((headerGroup) => (
