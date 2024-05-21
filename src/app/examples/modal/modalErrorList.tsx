@@ -63,3 +63,5 @@ export function ModalErrorList({
     </Dialog>
   );
 }
+
+export default ModalErrorList;
