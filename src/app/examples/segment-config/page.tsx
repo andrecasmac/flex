@@ -1,4 +1,3 @@
-import Segmento from "./segments";
 import { PageTitle } from "@/components/page-title";
 
 import { Segments } from "./testSeg";

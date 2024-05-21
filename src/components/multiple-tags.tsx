@@ -76,7 +76,7 @@ export default function MultipleTagsInput({
           onKeyDown={handleKeyDown}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          className="flex-1 w-2 bg-transparent outline-none border-none ring-none py-1 rounded-md"
+          className="flex-1 w-2 bg-transparent outline-none border-none ring-none rounded-md"
           placeholder="Add..."
           aria-label="Add new tag"
         />
