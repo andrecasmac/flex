@@ -278,8 +278,8 @@ export function CreateSegments() {
               {segments.map((s) => (
                 <React.Fragment key={s.id}>
                   {Object.entries(s.segment_rules).map(([ruleId, rule]) => (
-                    <React.Fragment key={ruleId}>
-                      <TableRow key={ruleId}>
+                    <React.Fragment key={`${s.id}-${ruleId}`}>
+                      <TableRow key={`${s.id}-${ruleId}`}>
                         <TableCell className="w-1">
                           <Button
                             onClick={() => toggleRow(ruleId)}
@@ -299,7 +299,7 @@ export function CreateSegments() {
 
                         <TableCell className=" px-20">
                           <ComboboxDropdown
-                            key={`usage-${s.id}`}
+                            key={`usage-${s.id}-${ruleId}`}
                             content={optionsUsage}
                             handleSelect={(status: IDropdown) => {
                               setSegments((prev) =>
@@ -327,7 +327,7 @@ export function CreateSegments() {
 
                         <TableCell className=" px-20">
                           <ComboboxDropdown
-                            key={`type-${s.id}`}
+                            key={`type-${s.id}-${ruleId}`}
                             content={optionsType}
                             handleSelect={(status: IDropdown) => {
                               setSegments((prev) =>
@@ -395,7 +395,7 @@ export function CreateSegments() {
                         <>
                           {(configRows[ruleId] || []).map((configRow) => (
                             <TableRow
-                              key={configRow.id}
+                              key={`${ruleId}-${configRow.id}`}
                               className="bg-slate-600/20"
                             >
                               <TableCell colSpan={7} className="">

@@ -32,49 +32,49 @@ export interface IDropdown {
 
 export const optionsUsage: IDropdown[] = [
     {
-        id: "usage",
+        id: "usage1",
         label: "M",
     },
     {
-        id: "usage",
+        id: "usage2",
         label: "O",
     },
 ];
 
 export const optionsConfig: IDropdown[] = [
     {
-        id: "config",
+        id: "config1",
         label: "is one of",
     },
     {
-        id: "config",
+        id: "config2",
         label: "has format",
     },
 ];
 
 export const optionsType: IDropdown[] = [
     {
-        id: "type",
+        id: "type1",
         label: "ID",
     },
     {
-        id: "type",
+        id: "type2",
         label: "AN",
     },
     {
-        id: "type",
+        id: "type3",
         label: "DT",
     },
     {
-        id: "type",
+        id: "type4",
         label: "TM",
     },
     {
-        id: "type",
+        id: "type5",
         label: "SE",
     },
     {
-        id: "type",
+        id: "type6",
         label: "N0",
     },
 ];
