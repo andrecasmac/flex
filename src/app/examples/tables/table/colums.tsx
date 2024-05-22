@@ -113,7 +113,7 @@ export const columnsSegmentTemplate: ColumnDef<SegmentTemplatesContent>[] = [
 
       return (
         <div className="flex justify-center">
-          <Button size="icon" variant={"ghost"}><Pencil className="h-7 w-7 text-black dark:text-slate-900 " /></Button>
+          <Button size="icon" variant={"ghost"}><Pencil className="h-7 w-7 text-black dark:text-white " /></Button>
         </div>
       );
     },
