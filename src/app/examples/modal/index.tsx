@@ -3,13 +3,15 @@
 import { useState } from "react";
 import { ModalPartner } from "./modalPartner";
 import { ModalTest } from "./modalTest";
+import { ModalUpload } from "./modalUpload";
 
 interface ModalsProps {
   modalPartner?: boolean;
   modalTest?: boolean;
+  modalUpload?: boolean;
 }
 
-export default function Modals({ modalPartner, modalTest }: ModalsProps) {
+export default function Modals({ modalPartner, modalTest, modalUpload }: ModalsProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div>
@@ -25,6 +27,13 @@ export default function Modals({ modalPartner, modalTest }: ModalsProps) {
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           ButtonContent="Modal vacio"
+        />
+      )}
+      {modalUpload && (
+        <ModalUpload
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          ButtonContent="Subir Documento"
         />
       )}
     </div>
