@@ -37,7 +37,7 @@ export function CreateSegments() {
   const [configRows, setRulesRows] = useState<Record<string, ConfigRows[]>>({});
   const [segments, setSegments] = useState<Segment[]>([
     {
-      id: self.crypto.randomUUID(),
+      id: "1",
       name: "ISA",
       mandatory: true,
       max: 1,
