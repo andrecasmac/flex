@@ -29,7 +29,7 @@ import {
   optionsUsage,
   optionsType,
   Segment,
-  ConfigRows
+  ConfigRows,
 } from "../../../../types/segmentTypes/segmentTypes";
 
 export function CreateSegments() {
@@ -102,18 +102,6 @@ export function CreateSegments() {
     },
     []
   );
-
-  // const handleTagsChange = useCallback(
-  //   (ruleId: string, tagRowId: string, newTags: string[]) => {
-  //     setRulesRows((prevRulesRows) => ({
-  //       ...prevRulesRows,
-  //       [ruleId]: prevRulesRows[ruleId].map((row) =>
-  //         row.id === tagRowId ? { ...row, oneOf: newTags } : row
-  //       ),
-  //     }));
-  //   },
-  //   []
-  // );
 
   // handel del min
   const handleMinChange = useCallback(
@@ -197,22 +185,6 @@ export function CreateSegments() {
     []
   );
 
-  // const handleSegmentMax = useCallback(
-  //   (segmentId: string, newValue: string) => {
-  //     const parsedValue = parseInt(newValue, 10);
-  //     // verifica si el valor convertido es un número válido y no negativo
-
-  //     if (!isNaN(parsedValue) && parsedValue >= 0) {
-  //       setSegments((prevSegments) =>
-  //         prevSegments.map((segment) =>
-  //           segment.id === segmentId ? { ...segment, max: newValue } : segment
-  //         )
-  //       );
-  //     }
-  //   },
-  //   []
-  // );
-
   const handleSegmentMax = useCallback(
     (segmentId: string, newValue: string) => {
       const parsedValue = parseInt(newValue, 10); // Parse the input as a number
@@ -239,30 +211,23 @@ export function CreateSegments() {
           <React.Fragment key={s.id}>
             <div className="flex items-center w-[80%] justify-between mb-8 gap-x-6">
               {/*  name? */}
-
-              {/* <Input
-                placeholder={String(rule.min) ?? "N/A"}
-                onChange={(e) =>
-                  handleMinChange(segmento.id, ruleId, e.target.value)
-                }
-              /> */}
               <Label>
-                Segment Code 🤡
+                Segment Code
                 <Input
                   className="mt-2"
                   placeholder={s.name ?? "Code..."}
                   onChange={(e) => handleSegmentCode(s.id, e.target.value)}
-                ></Input>
+                />
               </Label>
 
               <Label>
                 Segment Name
-                <Input className="mt-2" placeholder="Name..."></Input>
+                <Input className="mt-2" placeholder="Name..." />
               </Label>
 
               <Label>
                 N. Elements
-                <Input className="mt-2" placeholder="Element..."></Input>
+                <Input className="mt-2" placeholder="Element..." />
               </Label>
 
               <Label>
@@ -272,8 +237,8 @@ export function CreateSegments() {
                   handleSelect={(status: IDropdown) => {
                     setSegments((prevSegments) =>
                       prevSegments.map((segment) =>
-                        segment.id === s.id // Correct segment identification
-                          ? { ...segment, mandatory: status.label === "M" } // Mapping to boolean
+                        segment.id === s.id
+                          ? { ...segment, mandatory: status.label === "M" }
                           : segment
                       )
                     );
@@ -454,8 +419,6 @@ export function CreateSegments() {
                                   >
                                     <MinusCircle className="h-7 w-7 text-slate-200 dark:text-slate-900 fill-red-500" />
                                   </Button>
-
-                                  {/* ... (MinusCircle button to remove tag row) */}
                                 </div>
                               </TableCell>
                             </TableRow>
