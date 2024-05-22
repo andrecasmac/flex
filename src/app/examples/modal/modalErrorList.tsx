@@ -13,7 +13,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { DataTable } from "../tables/table/data-table";
 import { columnsErrorList, ErrorList } from "../tables/table/colums";
-import { getTableError } from "@/hooks/dataTable";
+
+import errors from "./modalErrorData.json"
 
 interface ModalErrorProps {
   isOpen: boolean;
@@ -28,17 +29,7 @@ export function ModalErrorList({
 }: ModalErrorProps) {
 
   /*Variable where we store the error data*/
-  const [data, setData]= useState<ErrorList[]>([]);
-
-/* Async function in order to fetch the data from the hook*/
-  useEffect(()=>{
-    const fetchErrorData = async () => {
-        const response: ErrorList[]= await getTableError();
-        console.log(response)
-        setData(response);
-    };
-    fetchErrorData();
-  },[]);
+  const [data, setData]= useState<ErrorList[]>(errors);
 
   return (
     <Dialog>
