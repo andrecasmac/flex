@@ -48,8 +48,8 @@ export default function MultipleTagsInput({
     <div className="flex flex-col space-y-2 w-[35%]">
       {labelContent && <Label htmlFor="tags-input">{labelContent}</Label>}
       <div
-        className={`flex flex-wrap gap-2 border border-turquoise dark:border-darkTurquoise bg-white dark:bg-cyan-950 rounded-xl p-2 ${
-          isFocused ? "ring-1 ring-ring" : ""
+        className={`flex flex-wrap gap-2 border border-turquoise dark:border-darkBlueMarine bg-white dark:bg-card rounded-lg p-2 ${
+          isFocused ? "ring-1 ring-ring dark:ring-cyan-950" : ""
         }`}
         onClick={() => inputRef.current?.focus()} // focus al imput
       >
@@ -57,7 +57,7 @@ export default function MultipleTagsInput({
         {tags.map((tag, index) => (
           <span
             key={index}
-            className="inline-flex items-center rounded-md bg-turquoise dark:bg-darkTurquoise px-2 py-1 text-sm font-medium text-white"
+            className="inline-flex items-center rounded-md bg-turquoise dark:bg-darkBlueMarine px-2 py-1 text-sm font-medium text-white"
           >
             {tag}
             <Button
