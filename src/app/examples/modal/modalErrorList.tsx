@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "../tables/table/data-table";
 import { columnsErrorList, ErrorList } from "../tables/table/colums";
 
+// Importing errors from json
 import errors from "./modalErrorData.json"
 
 interface ModalErrorProps {
