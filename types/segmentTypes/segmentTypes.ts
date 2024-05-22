@@ -1,16 +1,3 @@
-export interface TagConfig {
-    code: string;
-}
-
-export interface Segmento {
-    id: string;
-    codigo: string;
-    dataType: string;
-    minUso: string | undefined;
-    uso: string;
-    maxUso: string | undefined;
-    config: TagConfig[]; // Update config to hold TagConfig objects
-}
 
 export interface Segment {
     id: string;
