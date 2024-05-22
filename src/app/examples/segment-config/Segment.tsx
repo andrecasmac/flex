@@ -56,7 +56,7 @@ interface ConfigRows {
   hasFormat?: string;
 }
 
-export function SegmentsTest() {
+export function CreateSegments() {
   const [openRows, setOpenRows] = useState<Record<string, boolean>>({});
   const [configRows, setRulesRows] = useState<Record<string, ConfigRows[]>>({});
   const [segments, setSegments] = useState<Segment[]>([

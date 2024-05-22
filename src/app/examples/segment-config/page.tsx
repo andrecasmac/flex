@@ -1,9 +1,6 @@
 import { PageTitle } from "@/components/page-title";
 
-
-
-import { Segments } from "./testSeg";
-import { SegmentsTest } from "./test2";
+import { CreateSegments } from "./Segment";
 
 export default function Page() {
   return (
@@ -12,8 +9,7 @@ export default function Page() {
 
       <div className="flex w-screen justify-center pb-20">
         {/* <Segments /> */}
-        <SegmentsTest />
-
+        <CreateSegments />
       </div>
     </>
   );
