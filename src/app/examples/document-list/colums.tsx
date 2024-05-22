@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Toggle from "@/components/ui/toggle";
-import React, { useState } from "react";
+import React from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 
 export type ProductsT = {
@@ -20,17 +20,6 @@ export type ProductsT = {
   name: string;
   toggle: boolean;
 };
-
-const useToggle = (initialState: boolean): [boolean, () => void] => {
-  const [state, setState] = useState(initialState);
-
-  const toggle = () => {
-    setState(!state);
-  };
-
-  return [state, toggle];
-}
-
 
 export const columns: ColumnDef<ProductsT>[] = [
   {
@@ -40,13 +29,19 @@ export const columns: ColumnDef<ProductsT>[] = [
   {
     accessorKey: "toggle",
     header: "Mandatory",
+
+    // The function for the state of the Toggle selected
     cell: ({ row }) => {
-      const tableToggle = row.original.toggle;
 
-      const [checked, toggle] = useToggle(tableToggle);
+      // Define the handler for the toggle action selected
+      const handleToggleCell = (checked: boolean) => {
+        // For now, it only works on the console log of the page
+        console.log(`Row ${row.original.id} has changed to: ${checked}`);
+      }
 
+      // Allows to visualize the Toggle of each row
       return (
-        <Toggle checked={checked} onChange={toggle}/>
+        <Toggle actionToggle={row.original.toggle} onChange={handleToggleCell}/>
       );
     },
   },
