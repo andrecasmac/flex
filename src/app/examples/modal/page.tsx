@@ -10,6 +10,7 @@ export default function Page() {
         <Modals modalPartner={true} />
         <Modals modalTest={true} />
         <Modals modalUpload={true} />
+        <Modals modalErrorList={true} />
       </div>
     </>
   );
