@@ -12,6 +12,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Toggle from "@/components/ui/toggle"
+import React, { useState } from "react";
+import { GearIcon } from "@radix-ui/react-icons";
 
 export type ProductsT = {
   id: string;
@@ -27,6 +29,17 @@ export const columns: ColumnDef<ProductsT>[] = [
   {
     accessorKey: "toggle",
     header: "Mandatory",
+    cell: ({ row }) => {
+      const [tableToggle, setTableToggle] = useState(row.original.toggle);
+
+      const ToggleSwitch = (checked: boolean) => {
+        setTableToggle(checked)
+      };
+
+      return (
+        <Toggle checked={tableToggle} onChange={ToggleSwitch}/>
+      );
+    },
   },
   {
     id: "actions",
