@@ -1,17 +1,15 @@
 import { DataTable } from "@/app/examples/tables/table/data-table";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { PageTitle } from "@/components/page-title";
 
 export default function Page() {
     return (
-        <div>
-            <header>
-                <h1> Segment Templates</h1>
-            </header>
-            <hr/>
+        <div className="flex flex-col w-9/12">
+            <PageTitle title="Segment Templates"/>
             <main>
-                <div>
-                    <Button>Create Segment<Plus strokeWidth={1.5}/> </Button>
+                <div className="flex justify-end w-9/12">
+                    <Button>Create Segment<Plus strokeWidth={1.5} /> </Button>
                 </div>
                 <div>
                     Tabla
