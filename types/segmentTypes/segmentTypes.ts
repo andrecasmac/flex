@@ -1,30 +1,26 @@
 
 export interface Segment {
     id: string;
-    name: string
+    name: string;
     mandatory: boolean;
     max: number;
     template: boolean;
     segment_rules: {
         [rule_number: string]: {
             mandatory: boolean;
-            min: number;
-            max: number;
+            min: number | null;
+            max: number | null;
             type: "ID" | "AN" | "DT" | "TM" | "SE" | "N0";
-            oneOf?: string[]
+            oneOf?: string[];
             isEqual?: string;
             hasFormat?: string;
-        }
-    }
-}
-
-export interface TagRule {
-    code: string;
+        };
+    };
 }
 
 export interface ConfigRows {
-    id:string
-    oneOf?: string[]
+    id: string;
+    oneOf?: string[];
     isEqual?: string;
     hasFormat?: string;
 }

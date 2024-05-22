@@ -28,33 +28,9 @@ import {
   IDropdown,
   optionsUsage,
   optionsType,
+  Segment,
+  ConfigRows
 } from "../../../../types/segmentTypes/segmentTypes";
-
-interface Segment {
-  id: string;
-  name: string;
-  mandatory: boolean;
-  max: number;
-  template: boolean;
-  segment_rules: {
-    [rule_number: string]: {
-      mandatory: boolean;
-      min: number | null;
-      max: number | null;
-      type: "ID" | "AN" | "DT" | "TM" | "SE" | "N0";
-      oneOf?: string[];
-      isEqual?: string;
-      hasFormat?: string;
-    };
-  };
-}
-
-interface ConfigRows {
-  id: string;
-  oneOf?: string[];
-  isEqual?: string;
-  hasFormat?: string;
-}
 
 export function CreateSegments() {
   const [openRows, setOpenRows] = useState<Record<string, boolean>>({});

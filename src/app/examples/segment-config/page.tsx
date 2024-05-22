@@ -8,7 +8,6 @@ export default function Page() {
       <PageTitle title="Create Segment" />
 
       <div className="flex w-screen justify-center pb-20">
-        {/* <Segments /> */}
         <CreateSegments />
       </div>
     </>
