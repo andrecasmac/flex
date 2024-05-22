@@ -11,6 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Pencil,MinusCircle } from "lucide-react";
+import { SegmentTemplatesContent } from "../../../../../types/TableTypes";
 
 export type ProductsT = {
   id: string;
@@ -60,6 +62,53 @@ export const columns: ColumnDef<ProductsT>[] = [
               <DropdownMenuItem>View payment details</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+        </div>
+      );
+    },
+  },
+];
+
+export const columnsSegmentTemplate: ColumnDef<SegmentTemplatesContent>[] = [
+  {
+    accessorKey: "id",
+    header: "Segment ID",
+  },
+  {
+    accessorKey: "name",
+    header: "Segment name",
+  },
+  {
+    accessorKey: "nElements",
+    header: "N. Elements",
+  },
+  {
+    accessorKey: "usage",
+    header: "Usage",
+  },
+  {
+    accessorKey: "maxUse",
+    header: "Max Use",
+  },
+  {
+    id: "edit",
+    header: "Edit",
+    cell: ({ row }) => {
+
+      return (
+        <div className="flex justify-center">
+          <Button size="icon" variant={"ghost"}><Pencil className="h-7 w-7 text-black dark:text-slate-900 " /></Button>
+        </div>
+      );
+    },
+  },
+  {
+    id: "delete",
+    header: "Delete",
+    cell: ({ row }) => {
+
+      return (
+        <div className="flex justify-center">
+          <Button size="icon" variant={"ghost"}><MinusCircle className="h-7 w-7 text-slate-200 dark:text-slate-900 fill-red-500" /></Button>
         </div>
       );
     },
