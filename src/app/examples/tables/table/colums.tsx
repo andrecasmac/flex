@@ -74,7 +74,7 @@ export type ErrorList = {
   id: string;
 };
 
-/* This is where we declare the key and the laberl for the columns of the Error Table*/
+/* This is where we declare the key and the label for the columns of the Error Table*/
 export const columnsErrorList: ColumnDef<ErrorList>[] = [
   {
     accessorKey: "name",/*Key*/
@@ -86,7 +86,7 @@ export const columnsErrorList: ColumnDef<ErrorList>[] = [
     header:()=> <div className="text-start">Error Description</div>,/*Label*/
   },
 ];
-/* This is where we declare the key and the laberl for the columns of the Segment Templates Table*/
+/* This is where we declare the key and the label for the columns of the Segment Templates Table*/
 export const columnsSegmentTemplate: ColumnDef<SegmentTemplatesContent>[] = [
   {
     accessorKey: "id",/*Key*/
