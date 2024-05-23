@@ -1,6 +1,7 @@
 import Modals from ".";
 
 import { PageTitle } from "@/components/page-title";
+import ErrorContextProvider from "@/app/context/errorContextProvider";
 
 export default function Page() {
   return (
@@ -9,8 +10,10 @@ export default function Page() {
       <div className="space-y-5 flex flex-col items-center ">
         <Modals modalPartner={true} />
         <Modals modalTest={true} />
-        <Modals modalUpload={true} />
-        <Modals modalErrorList={true} />
+        <ErrorContextProvider>
+          <Modals modalUpload={true} />
+          <Modals modalErrorList={true} />
+        </ErrorContextProvider>
       </div>
     </>
   );
