@@ -1,7 +1,9 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter } from "@/components/ui/card";
 
 import { AdminIcon, ClientIcon } from "../assets/clientsIcons";
+
 
 export default function Home() {
   return (
