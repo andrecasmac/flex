@@ -9,15 +9,16 @@ export default function Page() {
         size="lg"
         className="rounded-2xl text-white active:scale-95 transition-all"
       >
-        <a href="/examples/tables">Tablas</a>
+        <a href="/examples/DA/Partners">Partners</a>
       </Button>
+
       <Button
         asChild
         variant="default"
         size="lg"
         className="rounded-2xl text-white active:scale-95 transition-all"
       >
-        <a href="/examples/DA">Data Access</a>
+        <a href="/examples/DA/Clients">Clients</a>
       </Button>
     </div>
   );

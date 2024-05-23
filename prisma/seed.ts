@@ -25,30 +25,18 @@ async function main() {
                                             name: "ISA",
                                             template: false,
                                             rules: {
-                                                create: [ //rules
-                                                    {
-                                                        code: "ISA01",
-                                                        validation: {
-                                                            create: { //validation
+                                                        "1": { 
                                                                 mandatory: "M",
                                                                 min: 2,
                                                                 max: 2,
                                                                 type: "Int"
-                                                            }
-                                                        }
-                                                    },
-                                                    {
-                                                        code: "ISA02",
-                                                        validation: {
-                                                            create: { //validation
+                                                        },      
+                                                        "2":{ 
                                                                 mandatory: "M",
                                                                 min: 10,
                                                                 max: 10,
                                                                 type: "String"
-                                                            }
-                                                        }
-                                                    }
-                                                ]
+                                                        }, 
                                             }
                                         }
                                     }
@@ -78,15 +66,7 @@ async function main() {
                         include: {
                             EDI_documents: {
                                 include: {
-                                    structure: {
-                                        include: {
-                                            rules: {
-                                                include: {
-                                                    validation: true,
-                                                },
-                                            },
-                                        },
-                                    },
+                                    structure: true
                                 },
                             },
                         },
