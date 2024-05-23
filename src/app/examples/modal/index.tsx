@@ -18,7 +18,7 @@ interface ModalsProps {
   ErrorData?: Error | null;
   showSuccess?: boolean;
   showError?: boolean;
-  isOpen: boolean;
+  isOpen?: boolean;
   setIsOpen?: (open: boolean) => void;
 }
 

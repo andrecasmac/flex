@@ -18,7 +18,7 @@ import { columnsErrorList, ErrorList } from "../tables/table/colums";
 import errors from "./modalErrorData.json"
 
 interface ModalErrorProps {
-  isOpen: boolean;
+  isOpen?: boolean;
   setIsOpen: (open: boolean) => void;
   ButtonContent: string;
 }

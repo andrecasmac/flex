@@ -18,7 +18,7 @@ import { UploadIcon } from "@radix-ui/react-icons";
 
 
 interface ModalUploadProps {
-    isOpen: boolean;
+    isOpen?: boolean;
     setIsOpen: (open: boolean) => void;
     ButtonContent: string;
 }

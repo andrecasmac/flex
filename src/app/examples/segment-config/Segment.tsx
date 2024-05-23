@@ -54,6 +54,56 @@ export function CreateSegments() {
     },
   ]);
 
+  // function addSegmentRule(value: string, segmentId: string) {
+  //   const n = parseInt(value, 10);
+  //   if (isNaN(n) || n <= 0) return;
+
+  //   setSegments((prevSegments) =>
+  //     prevSegments.map((segment) => {
+  //       if (segment.id !== segmentId) return segment;
+
+  //       const newSegmentRules = { ...segment.segment_rules };
+  //       const currentRuleCount = Object.keys(newSegmentRules).length;
+  //       console.log(currentRuleCount)
+  //       for (let i = currentRuleCount; i < currentRuleCount + n; i++) {
+  //         newSegmentRules[i + 1] = {
+  //           mandatory: true,
+  //           min: 1,
+  //           max: 1,
+  //           type: "ID",
+  //           oneOf: [],
+  //         };
+  //       }
+
+  //       return { ...segment, segment_rules: newSegmentRules };
+  //     })
+  //   );
+  // }
+  function addSegmentRule(segmentId: string, value: string) {
+    const n = parseInt(value, 10);
+    if (isNaN(n) || n <= 0) return;
+
+    setSegments((prevSegments) =>
+      prevSegments.map((segment) => {
+        if (segment.id !== segmentId) return segment;
+
+        const newSegmentRules = { ...segment.segment_rules };
+        const currentRuleCount = Object.keys(newSegmentRules).length;
+
+        for (let i = 0; i < n; i++) {
+          newSegmentRules[currentRuleCount + i + 1] = {
+            mandatory: true,
+            min: 1,
+            max: 1,
+            type: "ID",
+            oneOf: [],
+          };
+        }
+
+        return { ...segment, segment_rules: newSegmentRules };
+      })
+    );
+  }
   function toggleRow(id: string) {
     setOpenRows((prevOpenRows) => ({
       ...prevOpenRows,
@@ -204,6 +254,7 @@ export function CreateSegments() {
     },
     []
   );
+  
   return (
     <>
       <div className="flex flex-col w-full items-center">
@@ -227,7 +278,11 @@ export function CreateSegments() {
 
               <Label>
                 N. Elements
-                <Input className="mt-2" placeholder="Element..." />
+                <Input
+                  className="mt-2"
+                  placeholder="Element..."
+                  onChange={(e) => addSegmentRule(s.id, e.target.value)}
+                />
               </Label>
 
               <Label>
