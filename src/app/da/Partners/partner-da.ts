@@ -1,13 +1,17 @@
 "use server"
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //Create partner
-export async function createPartner(name:string){
+export async function createPartner(name:string, edi_version:string, delimiters:string, EOL:string, type_of_connection:string, PO_Test:JSON){
     const partner = await prisma.partner.create({
         data: {
             name: name,
-            PO_Test: {},
+            edi_version: edi_version,
+            delimiters: delimiters,
+            EOL: EOL,
+            type_of_connection: type_of_connection,
+            PO_Test: JSON.stringify(PO_Test),
             partnerships: {}
         }
     });

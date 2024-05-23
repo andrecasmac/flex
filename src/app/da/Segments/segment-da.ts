@@ -3,11 +3,12 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //Create segment
-export async function createSegment(name:string){
+export async function createSegment(name:string, template:boolean){
     const segment = await prisma.segment.create({
         data: {
             name: name,
             EDI_Document: {},
+            template: template,
             rules: {}
         }
     });

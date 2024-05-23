@@ -1,5 +1,5 @@
 "use server"
-import { document, PrismaClient,Prisma } from "@prisma/client";
+import { document, PrismaClient,Prisma, Partner } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //Create partnership
