@@ -41,15 +41,15 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <>
-      <div className="overflow-auto flex border rounded-xl min-h-[600px] max-h-[600px]">
+    <div className="flex flex-col w-full">
+      <div className="overflow-auto flex border rounded-xl min-h-[6 300px] max-h-[400px]">
         <Table>
           <TableHeader className="bg-turquoise dark:bg-cyan-950 sticky top-0">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="text-center">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -99,6 +99,6 @@ export function DataTable<TData, TValue>({
           <DataTablePagination table={table} />
         </div>
       </div>
-    </>
+    </div>
   );
 }

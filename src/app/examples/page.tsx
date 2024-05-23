@@ -7,9 +7,43 @@ export default function Page() {
         asChild
         variant="default"
         size="lg"
-        className="rounded-2xl text-white active:scale-95 transition-all"
+        className="rounded-2xl active:scale-95 transition-all"
       >
         <a href="/examples/tables">Tablas</a>
+      </Button>
+      <Button
+        asChild
+        variant="default"
+        size="lg"
+        className="rounded-2xl active:scale-95 transition-all"
+      >
+        <a href="/examples/toggle">Toggle</a>
+      </Button>
+
+      <Button
+        asChild
+        variant="default"
+        size="lg"
+        className="rounded-2xl active:scale-95 transition-all"
+      >
+        <a href="/examples/modal">Modal</a>
+      </Button>
+
+      <Button
+        asChild
+        variant="default"
+        size="lg"
+        className="rounded-2xl active:scale-95 transition-all"
+      >
+        <a href="/examples/batches">Batches</a>
+      </Button>
+      <Button
+        asChild
+        variant="default"
+        size="lg"
+        className="rounded-2xl active:scale-95 transition-all"
+      >
+        <a href="/examples/dropdown">Dropdown</a>
       </Button>
       <Button
         asChild
@@ -21,4 +55,4 @@ export default function Page() {
       </Button>
     </div>
   );
-}
+};
