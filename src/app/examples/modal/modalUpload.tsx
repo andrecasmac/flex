@@ -15,6 +15,7 @@ import React, { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useDropzone } from "react-dropzone";
 import { UploadIcon } from "@radix-ui/react-icons";
+import { ErrorList } from "../tables/table/colums";
 
 
 interface ModalUploadProps {
@@ -37,6 +38,20 @@ export function ModalUpload ({
 
     // State to send error when pressing the validate button with no file in the Dropzone
     const [errorValidate, setErrorValidate] = useState<string | null>(null);
+
+    const [errorList, setErrorList] = useState<ErrorList[]>([])
+
+    const[errorData, setErrorData] = useState<ErrorList>({name:"Error",description:txtFileContent,id:"0"})
+
+
+    const sendDataToServer = async (jsonData:JSON) => {
+        const response = await fetch('/api/your-endpoint', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(jsonData),
+        });
+        // Handle response if needed
+      };
 
     // Callback function to handle file drop event
     const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -78,7 +93,9 @@ export function ModalUpload ({
 
         // Will validate the file and close the Dropzone
         else{
-            console.log("Validated File: ", uploadedFile);
+            setErrorData({name:"Error"+" "+errorData.id, description:txtFileContent, id:(parseInt(errorData.id)+1).toString()})
+            setErrorList([errorData])
+            console.log("Validated File: ", errorList);
             setIsOpen(false);
         }
     };
