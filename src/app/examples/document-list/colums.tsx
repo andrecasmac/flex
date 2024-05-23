@@ -14,6 +14,7 @@ import {
 import Toggle from "@/components/ui/toggle";
 import React from "react";
 import { FaGear } from "react-icons/fa6";
+import { HiDotsVertical } from "react-icons/hi";
 
 export type ProductsT = {
   id: string;
@@ -28,18 +29,32 @@ export const columns: ColumnDef<ProductsT>[] = [
   },
   {
     id: "configure",
-    header: "Configure",
+    header: () => {
+      return (
+        <div className="flex justify-center">
+          <p>Configure</p>
+        </div>
+      );
+    },
     cell() {
       return (
-        <Button className="w-auto h-auto p-0 border-0 bg-inherit text-primary hover:bg-inherit hover:text-primary">
-          <FaGear className="w-8 h-8"/>
-        </Button>
+        <div className="flex justify-center">
+          <Button className="w-auto h-auto p-0 border-0 bg-inherit text-primary hover:bg-inherit hover:text-primary">
+            <FaGear className="w-8 h-8"/>
+          </Button>
+        </div>
       );
     },
   },
   {
     accessorKey: "toggle",
-    header: "Mandatory",
+    header: () => {
+      return (
+        <div className="flex justify-center">
+          <p>Mandatory</p>
+        </div>
+      );
+    },
 
     // The function for the state of the Toggle selected
     cell: ({ row }) => {
@@ -52,13 +67,21 @@ export const columns: ColumnDef<ProductsT>[] = [
 
       // Allows to visualize the Toggle of each row
       return (
-        <Toggle actionToggle={row.original.toggle} onChange={handleToggleCell}/>
+        <div className="flex justify-center">
+          <Toggle actionToggle={row.original.toggle} onChange={handleToggleCell}/>
+        </div>
       );
     },
   },
   {
     id: "actions",
-    header: "Action",
+    header: () => {
+      return (
+        <div className="flex justify-center">
+          <p>Actions</p>
+        </div>
+      );
+    },
     cell: ({ row }) => {
       const produtct = row.original;
 
@@ -66,9 +89,9 @@ export const columns: ColumnDef<ProductsT>[] = [
         <div className="flex justify-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
+              <Button variant="ghost" className="h-10 w-8 p-0">
                 <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
+                <HiDotsVertical className="h-8 w-8 text-primary" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
