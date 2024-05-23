@@ -70,7 +70,7 @@ export const columns: ColumnDef<ProductsT>[] = [
 export interface ErrorList {
   name: string | null;
   description: string | null;
-  id: string | null;
+  id: string;
 };
 
 /* This is where we declare the key and the label for the columns of the Error Table*/
