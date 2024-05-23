@@ -1,5 +1,5 @@
 "use client";
-import { useState,useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import {
   DialogContent,
   DialogHeader,
@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { DataTable } from "../tables/table/data-table";
 import { columnsErrorList, ErrorList } from "../tables/table/colums";
+import ErrorContext from "@/app/context/errorContext";
 
 // Importing errors from json
 import errors from "./modalErrorData.json"
@@ -30,8 +31,16 @@ export function ModalErrorList({
 }: ModalErrorProps) {
 
   /*Variable where we store the error data*/
-  const [data, setData]= useState<ErrorList[]>(errors);
+  const [data, setData] = useState<ErrorList[]>(errors);
 
+  const { errorlistShareData } = useContext(ErrorContext)
+
+  useEffect(() => {
+    const fetchErrorData = async () => {
+      setData(errorlistShareData)
+    };
+    fetchErrorData();
+  }, [errorlistShareData]);
   return (
     <Dialog>
       <DialogTrigger asChild>
