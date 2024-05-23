@@ -1,5 +1,4 @@
 "use client";
-
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -66,7 +65,7 @@ export const columns: ColumnDef<ProductsT>[] = [
   },
 ];
 /* This is the type for the columns of the Error Table*/
-export type ErrorList = {
+export interface ErrorList {
   name: string;
   description: string;
   id: string;
