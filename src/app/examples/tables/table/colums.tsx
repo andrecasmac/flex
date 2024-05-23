@@ -65,3 +65,21 @@ export const columns: ColumnDef<ProductsT>[] = [
     },
   },
 ];
+/* This is the type for the columns of the Error Table*/
+export type ErrorList = {
+  name: string;
+  description: string;
+  id: string;
+};
+
+/* This is where we declare the key and the laberl for the columns of the Error Table*/
+export const columnsErrorList: ColumnDef<ErrorList>[] = [
+  {
+    accessorKey: "name",/*Key*/
+    header: "Errors",/*Label*/
+  },
+  {
+    accessorKey: "description",/*Key*/
+    header: "Error Description",/*Label*/
+  },
+];
