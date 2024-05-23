@@ -26,14 +26,14 @@ export default function Page() {
     return (
         <div className="flex flex-col w-full justify-center items-center">
             <PageTitle title="Segment Templates"/>
-            <main>
-                <div className="flex justify-end w-11/12 pr-6">
+            <div className="flex flex-col w-9/12">
+                <div className="flex justify-end w-full ">
                     <Button>Create Segment<Plus strokeWidth={1.5} /> </Button>
                 </div>
-                <div className="flex w-screen justify-center items-center pt-5">
+                <div className="flex justify-center items-center pt-5">
                     <DataTable columns={columnsSegmentTemplate} data={data}/>
                 </div>
-            </main>
+            </div>
         </div>
     )
 }
