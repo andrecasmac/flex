@@ -66,9 +66,9 @@ export const columns: ColumnDef<ProductsT>[] = [
 ];
 /* This is the type for the columns of the Error Table*/
 export interface ErrorList {
-  name: string;
-  description: string;
-  id: string;
+  name: string | null;
+  description: string | null;
+  id: string | null;
 };
 
 /* This is where we declare the key and the laberl for the columns of the Error Table*/
