@@ -3,10 +3,10 @@ import { PrismaClient, Segment } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //Create EDI-Document
-export async function createEDIdocument(){
+export async function createEDIdocument(type: string){
     const EDI_document = prisma.eDI_Document.create({
         data: {
-            type: "810",
+            type: type,
             partner: {}
         }
     });

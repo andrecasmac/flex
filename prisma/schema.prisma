@@ -14,7 +14,7 @@ model Partner {
   delimiters         String @default("*")
   EOL                String @default("~")
   type_of_connection String @default("FTP")
-  PO_Test            Json
+  PO_Test            Json   @default("{}")
 
   EDI_documents EDI_Document[]
 
