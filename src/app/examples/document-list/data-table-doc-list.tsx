@@ -19,8 +19,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { DataTablePagination } from "./pagination-table";
-
 import { Button } from "@/components/ui/button";
 import { UniqueIdentifier } from "@dnd-kit/core";
 
@@ -41,7 +39,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="flex flex-col w-full">
+    <>
       <div className="overflow-auto flex border rounded-xl min-h-[6 300px] max-h-[400px]">
         <Table>
           <TableHeader className="bg-turquoise dark:bg-cyan-950 sticky top-0">
@@ -49,7 +47,7 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="text-center">
+                    <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -93,12 +91,6 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-
-      <div className="pt-2 pb-5">
-        <div>
-          <DataTablePagination table={table} />
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
