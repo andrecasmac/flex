@@ -1,0 +1,20 @@
+[
+    {"name":"Partner 1", "delimeter":"Delimeters 1", "ediversions":"EDI Versions 1", "eol":"EOL 1", "connectiontype":"Connection Type 1", "hidden":true, "id":"1"},
+    {"name":"Partner 2", "delimeter":"Delimeters 2", "ediversions":"EDI Versions 2", "eol":"EOL 2", "connectiontype":"Connection Type 2", "hidden":true, "id":"2"},
+    {"name":"Partner 3", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":false, "id":"3"},
+    {"name":"Partner 4", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":true, "id":"4"},
+    {"name":"Partner 5", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":false, "id":"5"},
+    {"name":"Partner 6", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":true, "id":"6"},
+    {"name":"Partner 7", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":false, "id":"7"},
+    {"name":"Partner 8", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":false, "id":"8"},
+    {"name":"Partner 9", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":true, "id":"9"},
+    {"name":"Partner 10", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":false, "id":"10"},
+    {"name":"Partner 11", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":true, "id":"11"},
+    {"name":"Partner 12", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":true, "id":"12"},
+    {"name":"Partner 13", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":true, "id":"13"},
+    {"name":"Partner 14", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":false, "id":"14"},
+    {"name":"Partner 15", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":true, "id":"15"},
+    {"name":"Partner 16", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":true, "id":"16"},
+    {"name":"Partner 17", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":false, "id":"17"},
+    {"name":"Partner 18", "delimeter":"Delimeters", "ediversions":"EDI Versions", "eol":"EOL", "connectiontype":"Connection Type", "hidden":false, "id":"18"}
+]
