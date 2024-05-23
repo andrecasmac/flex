@@ -12,7 +12,7 @@ export default function Page() {
     return (
         <div className="flex flex-col items-center justify-between pt-20">
             <p className="my-12">Toggle Example</p>
-            <Toggle checked={Enabled} onChange={toggleSwitch}/>
+            <Toggle actionToggle={Enabled} onChange={toggleSwitch}/>
             <p>{Enabled ? 'Toggle Enabled' : 'Toggle Disabled'}</p>
         </div>
     )
