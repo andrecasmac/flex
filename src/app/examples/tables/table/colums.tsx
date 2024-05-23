@@ -78,74 +78,76 @@ export type ErrorList = {
 export const columnsErrorList: ColumnDef<ErrorList>[] = [
   {
     accessorKey: "name",/*Key*/
-    header: "Errors",/*Label*/
+    header: ()=> <div className="text-start">Error</div>,/*Label*/
+
   },
   {
     accessorKey: "description",/*Key*/
-    header: "Error Description",/*Label*/
+    header:()=> <div className="text-start">Error Description</div>,/*Label*/
   },
 ];
+/* This is where we declare the key and the laberl for the columns of the Segment Templates Table*/
 export const columnsSegmentTemplate: ColumnDef<SegmentTemplatesContent>[] = [
   {
-    accessorKey: "id",
-    header: "Segment ID",
+    accessorKey: "id",/*Key*/
+    header: "Segment ID",/*Label*/
     cell: ({ row }) => {
-      const segmentID:string =(row.getValue("id"))
+      const segmentID:string =(row.getValue("id"))/*Variable that stores the value of id*/
       return <div className="text-center font-medium">{segmentID}</div>
     },
   },
   {
-    accessorKey: "name",
-    header: "Segment name",
+    accessorKey: "name",/*Key*/
+    header: "Segment name",/*Label*/
     cell: ({ row }) => {
-      const segmentName:string = (row.getValue("name"))
+      const segmentName:string = (row.getValue("name"))/*Variable that stores the value of name*/
       return <div className="text-center font-medium">{segmentName}</div>
     },
   },
   {
-    accessorKey: "nElements",
-    header: "N. Elements",
+    accessorKey: "nElements",/*Key*/
+    header: "N. Elements",/*Label*/
     cell: ({ row }) => {
-      const nElements = parseInt(row.getValue("nElements"))
+      const nElements:number = parseInt(row.getValue("nElements"))/*Variable that stores the value of nElements*/
       return <div className="text-center font-medium">{nElements}</div>
     },
   },
   {
-    accessorKey: "usage",
-    header: "Usage",
+    accessorKey: "usage",/*Key*/
+    header: "Usage",/*Label*/
     cell: ({ row }) => {
-      const usage = parseInt(row.getValue("usage"))
+      const usage:number = parseInt(row.getValue("usage"))/*Variable that stores the value of usage*/
       return <div className="text-center font-medium">{usage}</div>
     },
   },
   {
-    accessorKey: "maxUse",
-    header: "Max Use",
+    accessorKey: "maxUse",/*Key*/
+    header: "Max Use",/*Label*/
     cell: ({ row }) => {
-      const maxUse = parseInt(row.getValue("maxUse"))
+      const maxUse:number = parseInt(row.getValue("maxUse"))/*Variable that stores the value of maxUse*/
       return <div className="text-center font-medium">{maxUse}</div>
     },
   },
   {
-    id: "edit",
-    header: "Edit",
+    id: "edit",/*Key*/
+    header: "Edit",/*Label*/
     cell: ({ row }) => {
 
       return (
         <div className="flex justify-center">
-          <Button size="icon" variant={"ghost"}><Pencil className="h-7 w-7 text-black dark:text-white " /></Button>
+          <Button size="icon" variant={"ghost"}><Pencil className="h-7 w-7 text-black dark:text-white " /></Button>{/*Button for the edit function*/}
         </div>
       );
     },
   },
   {
-    id: "delete",
-    header: "Delete",
+    id: "delete",/*Key*/
+    header: "Delete",/*Label*/
     cell: ({ row }) => {
 
       return (
         <div className="flex justify-center">
-          <Button size="icon" variant={"ghost"}><MinusCircle className="h-7 w-7 text-slate-200 dark:text-slate-900 fill-red-500" /></Button>
+          <Button size="icon" variant={"ghost"}><MinusCircle className="h-7 w-7 text-slate-200 dark:text-slate-900 fill-red-500" /></Button>{/*Button for the delete function*/}
         </div>
       );
     },
