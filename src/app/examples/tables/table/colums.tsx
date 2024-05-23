@@ -89,22 +89,42 @@ export const columnsSegmentTemplate: ColumnDef<SegmentTemplatesContent>[] = [
   {
     accessorKey: "id",
     header: "Segment ID",
+    cell: ({ row }) => {
+      const segmentID:string =(row.getValue("id"))
+      return <div className="text-center font-medium">{segmentID}</div>
+    },
   },
   {
     accessorKey: "name",
     header: "Segment name",
+    cell: ({ row }) => {
+      const segmentName:string = (row.getValue("name"))
+      return <div className="text-center font-medium">{segmentName}</div>
+    },
   },
   {
     accessorKey: "nElements",
     header: "N. Elements",
+    cell: ({ row }) => {
+      const nElements = parseInt(row.getValue("nElements"))
+      return <div className="text-center font-medium">{nElements}</div>
+    },
   },
   {
     accessorKey: "usage",
     header: "Usage",
+    cell: ({ row }) => {
+      const usage = parseInt(row.getValue("usage"))
+      return <div className="text-center font-medium">{usage}</div>
+    },
   },
   {
     accessorKey: "maxUse",
     header: "Max Use",
+    cell: ({ row }) => {
+      const maxUse = parseInt(row.getValue("maxUse"))
+      return <div className="text-center font-medium">{maxUse}</div>
+    },
   },
   {
     id: "edit",
