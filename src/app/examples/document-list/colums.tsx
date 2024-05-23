@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Toggle from "@/components/ui/toggle";
 import React from "react";
-import { GearIcon } from "@radix-ui/react-icons";
+import { FaGear } from "react-icons/fa6";
 
 export type ProductsT = {
   id: string;
@@ -25,6 +25,17 @@ export const columns: ColumnDef<ProductsT>[] = [
   {
     accessorKey: "name",
     header: "Documents",
+  },
+  {
+    id: "configure",
+    header: "Configure",
+    cell() {
+      return (
+        <Button className="w-auto h-auto p-0 border-0 bg-inherit text-primary hover:bg-inherit hover:text-primary">
+          <FaGear className="w-8 h-8"/>
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "toggle",
