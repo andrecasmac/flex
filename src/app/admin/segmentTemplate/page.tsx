@@ -1,3 +1,5 @@
+'use client'
+import { useRouter } from "next/router";
 import { DataTable } from "@/app/examples/tables/table/data-table";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -24,14 +26,14 @@ const data:SegmentTemplatesContent[]=[
 ]
 export default function Page() {
 
-
+    const router=useRouter()
     return (
         <div className="flex flex-col w-full justify-center items-center">
             <PageTitle title="Segment Templates"/>
             <div className="flex flex-col w-9/12">
                 <div className="flex justify-end w-full ">
                     {/*Button to create a new segment*/}
-                    <Button>Create Segment<Plus strokeWidth={1.5} /> </Button>
+                    <Button onClick={()=>router.push('../createSegment')}>Create Segment<Plus strokeWidth={1.5} /> </Button>
                 </div>
                 <div className="flex justify-center items-center pt-5">
                     {/*Table where the Segment Templates are displayed*/}

@@ -1,5 +1,5 @@
 "use client";
-
+import { useRouter } from "next/router";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Pencil,MinusCircle } from "lucide-react";
 import { SegmentTemplatesContent } from "../../../../../types/TableTypes";
-
+const router=useRouter()
 export type ProductsT = {
   id: string;
   name: string;
@@ -135,7 +135,7 @@ export const columnsSegmentTemplate: ColumnDef<SegmentTemplatesContent>[] = [
 
       return (
         <div className="flex justify-center">
-          <Button size="icon" variant={"ghost"}><Pencil className="h-7 w-7 text-black dark:text-white " /></Button>{/*Button for the edit function*/}
+          <Button size="icon" variant={"ghost"} onClick={()=>router.push('../createSegment')}><Pencil className="h-7 w-7 text-black dark:text-white " /></Button>{/*Button for the edit function*/}
         </div>
       );
     },
