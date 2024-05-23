@@ -1,5 +1,5 @@
 "use server"
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //Create segment
@@ -45,13 +45,13 @@ export async function updateSegmentName(id:string, name:string){
 }
 
 //Update segment rules
-export async function updateSegmentRule(id:string, rule:JSON, _RuleId:string){
+export async function updateSegmentRule(id:string, rule:Prisma.JsonArray, _RuleId:string){
     const segment = await prisma.segment.update({
         where:{
             id:id
         },
         data:{
-            rules: JSON.stringify(rule)
+            rules: rule
         }
     });
     return segment;
