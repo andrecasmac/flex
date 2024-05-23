@@ -35,7 +35,6 @@ const ClientsList: React.FC = () => {
         const data = await getAllClients();
         setClients(data);
       } catch (err) {
-        console.log(err)
         setError('Failed to fetch data');
       } finally {
         setLoading(false);
