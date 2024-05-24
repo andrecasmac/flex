@@ -19,7 +19,7 @@ function advance(source: string): string {
 
 
 function skip_newlines(source: string): string {
-	while (current_char(source) === '\n') {
+	while (current_char(source) === '\n' || current_char(source) === '\r') {
 		source = advance(source);
 	}
 
@@ -374,42 +374,42 @@ function validate_type(element_schema: any, string: string): boolean {
 
 function validate_element(element_schema: any, element: string, index: number) {
 	if (!validate_mandatory(element_schema, element)) {
-		throw new Error(`element ${index} mandatory`); 
+		throw new Error(`Element ${index} is mandatory and was missing`);
 	}
 
 	if (!validate_length(element_schema, element)) {
-		throw new Error(`bad length at element ${index} '${element}'`); 
+		throw new Error(`Wrong length at element ${index} '${element}'`); 
 	}
 
 	if (!validate_type(element_schema, element)) {
 		if (element_schema.type == "ID") {
 			if ("oneOf" in element_schema) {
-				throw new Error(`bad type at ${index} '${element}': value should be one of ${element_schema.oneOf}`); 
+				throw new Error(`Wrong type at ${index} '${element}': value should be one of ${element_schema.oneOf}`); 
 			} else {
-				throw new Error(`bad type at ${index} '${element}'`); 
+				throw new Error(`Wrong type at ${index} '${element}'`); 
 			}
 		} else if (element_schema.type == "DT") {
 			switch (element.length) {
 				case 6:
-					throw new Error(`bad type at ${index} '${element}': value should be date in format YYMMDD`); 
+					throw new Error(`Wrong type at ${index} '${element}': value should be date in format YYMMDD`); 
 				case 8:
-					throw new Error(`bad type at ${index} '${element}': value should be date in format CCYYMMDD`); 
+					throw new Error(`Wrong type at ${index} '${element}': value should be date in format CCYYMMDD`); 
 			}
 
 		} else if (element_schema.type == "TM") {
 			switch (element.length) {
 				case 4:
-					throw new Error(`bad type at ${index} '${element}': value should be time in format HHMM`); 
+					throw new Error(`Wrong type at ${index} '${element}': value should be time in format HHMM`); 
 				case 6:
-					throw new Error(`bad type at ${index} '${element}': value should be time in format HHMMSS`); 
+					throw new Error(`Wrong type at ${index} '${element}': value should be time in format HHMMSS`); 
 				case 7:
-					throw new Error(`bad type at ${index} '${element}': value should be time in format HHMMSSD`); 
+					throw new Error(`Wrong type at ${index} '${element}': value should be time in format HHMMSSD`); 
 				case 8:
-					throw new Error(`bad type at ${index} '${element}': value should be time in format HHMMSSDD`); 
+					throw new Error(`Wrong type at ${index} '${element}': value should be time in format HHMMSSDD`); 
 			}
 		}
 
-		throw new Error(`bad type at ${index} '${element}': type should be ${element_schema.type}`); 
+		throw new Error(`Wrong type at ${index} '${element}': type should be ${element_schema.type}`); 
 	}
 
 }
@@ -424,20 +424,22 @@ function validate_segment(segment_schema: any, segment: string[], segment_index:
 		let element_schema = segment_schema[element_index];
 
 		if (element_schema == undefined) {
-			errors.push(`error at segment #${segment_index} ${get_segment_name(segment)}: unexpected element '${element}' at position ${element_index}`);
+			errors.push(`Error at segment #${segment_index} ${get_segment_name(segment)}: unexpected element '${element}' at position ${element_index}`);
 			continue;
 		}
 
 		try {
 			validate_element(element_schema, element, element_index)
 		} catch (e: any) {
-			errors.push(`error at segment #${segment_index} ${get_segment_name(segment)}: ${e.message}`);
+			errors.push(`Error at segment #${segment_index} ${get_segment_name(segment)}: ${e.message}`);
 		}
 	}
 
 	// - 1 because of the segment_data field. Probably could be done in a better way TODO
 	while (element_index <= (Object.keys(segment_schema).length - 1)) {
-		errors.push(`error at segment #${segment_index} ${get_segment_name(segment)}: missing element at index ${element_index}`);
+		if (segment_schema[element_index].mandatory) {
+			errors.push(`Error at segment #${segment_index} ${get_segment_name(segment)}: missing element at index ${element_index}`);
+		}
 		element_index += 1;
 	}
 
@@ -558,7 +560,7 @@ export function parse_input_structure(parsed_edi: any, schema: any, segment_inde
 
 			else {
 				if (!in_loop) {
-					errors.push(`unexpected segment #${segment_index + 1} '${current_token}' expected ${expected_token}`);
+					errors.push(`Unexpected segment #${segment_index + 1} '${current_token}': expected ${expected_token}`);
 					segment_index += 1;
 				} else {
 					return [null, null, false];
@@ -580,7 +582,7 @@ export function parse_input_structure(parsed_edi: any, schema: any, segment_inde
 				
 				for (edi_segment_index += 1; edi_segment_index < edi_n_segments; edi_segment_index++) {
 					if (get_segment_mandatory(schema, edi_segment_index)) {
-						errors.push(`missing segment #${segment_index} '${get_edi_segment_name(schema, edi_segment_index)}'`);
+						errors.push(`Missing segment #${segment_index} '${get_edi_segment_name(schema, edi_segment_index)}'`);
 					}
 				}
 
@@ -598,7 +600,7 @@ export function parse_input_structure(parsed_edi: any, schema: any, segment_inde
 	if (!in_loop) {
 		// log errors of extra input segments that were left
 		for (segment_index; segment_index < input_n_segments; segment_index++) {
-			errors.push(`unexpected segment #${segment_index + 1} '${get_segment_name(parsed_edi[segment_index])}'`);
+			errors.push(`Unexpected segment #${segment_index + 1} '${get_segment_name(parsed_edi[segment_index])}'`);
 		}
 	}
 
