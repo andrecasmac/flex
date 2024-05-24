@@ -29,16 +29,20 @@ export function ModalSuccess({
   ButtonContent,
 }: ModalSuccess) {
 
-  const {isOtherOpen, setOtherIsOpen}= useContext(ErrorContext)
+  const { isOtherOpen, setOtherIsOpen } = useContext(ErrorContext)
   return (
     <Dialog open={isOtherOpen} onOpenChange={setOtherIsOpen}>
       <DialogTrigger asChild>
-        
+
       </DialogTrigger>
       <DialogContent className="sm:max-w-[625px]">
-        <div className="flex items-center justify-center pt-10"> 
-        <CircleCheck size={80} color="#0798A5" strokeWidth={1.25} /><br></br>
-        The file was succesfully validated 
+        <div className="flex flex-col items-center justify-center pt-10">
+          <div className="flex flex-row">
+            <CircleCheck size={120} color="#0798A5" strokeWidth={1.25} />
+          </div>
+          <div className="flex flex-row pt-10">
+            The file was succesfully validated
+          </div>
         </div>
 
         <DialogFooter className="felx items-center justify-center">
