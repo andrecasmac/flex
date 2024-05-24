@@ -41,20 +41,10 @@ export function ModalUpload({
     // State to send error when pressing the validate button with no file in the Dropzone
     const [errorValidate, setErrorValidate] = useState<string | null>(null);
     
-    // State to store error when pressing the validate button
-    const [errorData, setErrorData] = useState<ErrorList>({ name: "ErrorTest", description: "Test", id: "0" })
-    // State to store error in the list
-    const [errorList, setErrorList] = useState<ErrorList[]>([errorData])
-
     //Function to send data using useContext
     function sendData(txtFileContent:string | null) {
-        
-        setErrorData({ name: "Error" + " " + (errorData.id+1), description: txtFileContent, id: (parseInt(errorData.id) + 1).toString() })
-        //Variable where we store the list of Error Data
-        setErrorList([errorData])
         //Variable where we send the values with useContext
-        setErrorListShareData(errorList)
-        console.log(errorlistShareData)
+        setErrorListShareData([{ name: "Error", description: txtFileContent, id:"1" }])
         };
 
     // Callback function to handle file drop event
@@ -77,6 +67,7 @@ export function ModalUpload({
 
         // Clear error if file selected
         setErrorValidate(null)
+        
     }, []);
 
     // Create a get root and input props from useDropzone

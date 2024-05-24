@@ -31,25 +31,20 @@ export function ModalErrorList({
 }: ModalErrorProps) {
 
   /*Variable where we store the error data*/
-  const [data, setData] = useState<ErrorList[]>(errors);
 
   const { errorlistShareData } = useContext(ErrorContext)
 
   useEffect(() => {
-    const fetchErrorData = async () => {
-      setData(errorlistShareData)
-    };
-    fetchErrorData();
   }, [errorlistShareData]);
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="default">{ButtonContent} </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[85%] sm:max-h-[100%] flex flex-col items-center">
         <div className="flex items-center sm:max-w-[90%] pt-10">
           {/* This is the table component that receives that columns structure in 'columns' and the data in 'data'*/}
-          <DataTable columns={columnsErrorList} data={data} />
+          <DataTable columns={columnsErrorList} data={errorlistShareData} />
         </div>
         <DialogFooter className="sm:max-w-[100%]">
           <DialogClose asChild>
