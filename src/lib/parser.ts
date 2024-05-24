@@ -384,32 +384,32 @@ function validate_element(element_schema: any, element: string, index: number) {
 	if (!validate_type(element_schema, element)) {
 		if (element_schema.type == "ID") {
 			if ("oneOf" in element_schema) {
-				throw new Error(`Wrong type at ${index} '${element}': value should be one of ${element_schema.oneOf}`); 
+				throw new Error(`Wrong type at ${index} '${element}' - value should be one of [${element_schema.oneOf}]`); 
 			} else {
 				throw new Error(`Wrong type at ${index} '${element}'`); 
 			}
 		} else if (element_schema.type == "DT") {
 			switch (element.length) {
 				case 6:
-					throw new Error(`Wrong type at ${index} '${element}': value should be date in format YYMMDD`); 
+					throw new Error(`Wrong type at ${index} '${element}' - value should be date in format YYMMDD`); 
 				case 8:
-					throw new Error(`Wrong type at ${index} '${element}': value should be date in format CCYYMMDD`); 
+					throw new Error(`Wrong type at ${index} '${element}' - value should be date in format CCYYMMDD`); 
 			}
 
 		} else if (element_schema.type == "TM") {
 			switch (element.length) {
 				case 4:
-					throw new Error(`Wrong type at ${index} '${element}': value should be time in format HHMM`); 
+					throw new Error(`Wrong type at ${index} '${element}' - value should be time in format HHMM`); 
 				case 6:
-					throw new Error(`Wrong type at ${index} '${element}': value should be time in format HHMMSS`); 
+					throw new Error(`Wrong type at ${index} '${element}' - value should be time in format HHMMSS`); 
 				case 7:
-					throw new Error(`Wrong type at ${index} '${element}': value should be time in format HHMMSSD`); 
+					throw new Error(`Wrong type at ${index} '${element}' - value should be time in format HHMMSSD`); 
 				case 8:
-					throw new Error(`Wrong type at ${index} '${element}': value should be time in format HHMMSSDD`); 
+					throw new Error(`Wrong type at ${index} '${element}' - value should be time in format HHMMSSDD`); 
 			}
 		}
 
-		throw new Error(`Wrong type at ${index} '${element}': type should be ${element_schema.type}`); 
+		throw new Error(`Wrong type at ${index} '${element}' - type should be ${element_schema.type}`); 
 	}
 
 }

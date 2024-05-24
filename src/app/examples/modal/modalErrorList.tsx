@@ -55,12 +55,9 @@ export function ModalErrorList({
         <DialogFooter className="sm:max-w-[100%]">
           <DialogClose asChild>
             <Button size="lg" className="h-10 w-[100%]" onClick={handleButtonCancel}>
-              Cancel
+              Close
             </Button>
           </DialogClose>
-          <Button size="lg" className="h-10 w-[100%]">
-            Try Again
-          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
