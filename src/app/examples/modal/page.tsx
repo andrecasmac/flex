@@ -13,6 +13,7 @@ export default function Page() {
         <ErrorContextProvider>
           <Modals modalUpload={true} />
           <Modals modalErrorList={true} />
+          <Modals modalSuccess={true}/>
         </ErrorContextProvider>
       </div>
     </>

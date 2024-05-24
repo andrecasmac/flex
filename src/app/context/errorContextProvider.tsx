@@ -8,10 +8,11 @@ import { ErrorList } from '../examples/tables/table/colums';
 
 const ErrorContextProvider: React.FC<PropsWithChildren> = ({ children }:any) => {
     const [errorlistShareData, setErrorListShareData] = useState<ErrorList[]>([]);
-    const [isOtherOpen, setOtherIsOpen] = useState(false);
+    const [isErrorsOpen, setErrorsOpen] = useState(false);
+    const [isSuccessfulOpen, setIsSuccessfulOpen] = useState(false);
 
   return (
-    <ErrorContext.Provider value={{ errorlistShareData, setErrorListShareData,isOtherOpen,setOtherIsOpen}}>
+    <ErrorContext.Provider value={{ errorlistShareData, setErrorListShareData, isErrorsOpen, setErrorsOpen, isSuccessfulOpen, setIsSuccessfulOpen}}>
       {children}
     </ErrorContext.Provider>
   );
