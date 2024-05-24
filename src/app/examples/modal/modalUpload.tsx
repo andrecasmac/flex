@@ -11,7 +11,8 @@ import {
     DialogPortal,
 } from "@/components/ui/dialog";
 
-import React, { useCallback, useState } from "react";
+import React, { useContext,useCallback, useState } from "react";
+import ErrorContext from "@/app/context/errorContext";
 import { Button } from "@/components/ui/button";
 import { useDropzone } from "react-dropzone";
 import { UploadIcon } from "@radix-ui/react-icons";
@@ -29,7 +30,7 @@ export function ModalUpload ({
     setIsOpen,
     ButtonContent,
 }:ModalUploadProps) {
-
+    const {errorlistShareData, setErrorListShareData}= useContext(ErrorContext)
     // State to store the selected file
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
@@ -39,10 +40,9 @@ export function ModalUpload ({
     // State to send error when pressing the validate button with no file in the Dropzone
     const [errorValidate, setErrorValidate] = useState<string | null>(null);
 
-    const [errorList, setErrorList] = useState<ErrorList[]>([])
+    const[errorData, setErrorData] = useState<ErrorList>({name:"ErrorTest",description:"Test",id:"0"})
 
-    const[errorData, setErrorData] = useState<ErrorList>({name:"Error",description:txtFileContent,id:"0"})
-
+    const [errorList, setErrorList] = useState<ErrorList[]>([errorData])
 
     const sendDataToServer = async (jsonData:JSON) => {
         const response = await fetch('/api/your-endpoint', {
@@ -54,12 +54,10 @@ export function ModalUpload ({
       };
 
     // Callback function to handle file drop event
-    const onDrop = useCallback((acceptedFiles: File[]) => {
-
+    const onDrop = useCallback((acceptedFiles: File[]) => { 
         // Only process the first file, assuming single file upload
         const file = acceptedFiles[0];
         setUploadedFile(file);
-        console.log("Uploaded File: ", file)
 
         // For reading the .txt file content
         const textReader = new FileReader();
@@ -93,9 +91,13 @@ export function ModalUpload ({
 
         // Will validate the file and close the Dropzone
         else{
+            // Variable where we store the 
             setErrorData({name:"Error"+" "+errorData.id, description:txtFileContent, id:(parseInt(errorData.id)+1).toString()})
-            setErrorList([errorData])
-            console.log("Validated File: ", errorList);
+            //
+            setErrorList([{name:"Error"+" "+errorData.id, description:txtFileContent, id:(parseInt(errorData.id)+1).toString()}])
+            //
+            setErrorListShareData(errorList)
+            console.log("Validated File: ", errorlistShareData);
             setIsOpen(false);
         }
     };
