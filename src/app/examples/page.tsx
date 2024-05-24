@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Page() {
   return (
@@ -35,7 +36,7 @@ export default function Page() {
         size="lg"
         className="rounded-2xl active:scale-95 transition-all"
       >
-        <a href="/examples/mtags">Multiple Tags</a>
+        <Link href="/examples/mtags">Multiple Tags</Link>
       </Button>
 
       <Button
@@ -72,6 +73,16 @@ export default function Page() {
       >
         <a href="/examples/partner-list">Partner List</a>
       </Button>
+
+      <Button
+        asChild
+        variant="default"
+        size="lg"
+        className="rounded-2xl active:scale-95 transition-all"
+      >
+        <a href="/examples/segment-config">Create Segment</a>
+      </Button>
+
       <Button
         asChild
         variant="default"
@@ -82,4 +93,4 @@ export default function Page() {
       </Button>
     </div>
   );
-};
+}
