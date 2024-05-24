@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { useDropzone } from "react-dropzone";
 import { UploadIcon } from "@radix-ui/react-icons";
 import { ErrorList } from "../tables/table/colums";
+import { ModalSuccess } from "./modalSuccess";
 
 import { parse_edi, parse_input_structure, validate_segments } from "@/lib/parser"
 import * as edi_schema from "@/lib/855_schema.json" 
@@ -152,11 +153,11 @@ export function ModalUpload({
                         <Button size="sm" type="submit" onClick={handleValidate} className="h-8 w-[40%]">
                             Validate
                         </Button>
-
                     </div>
                 </DialogContent>
             </DialogPortal>
         </Dialog>
+        
     )
 }
 

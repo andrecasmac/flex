@@ -43,7 +43,7 @@ export function ModalErrorList({
     
   }, [errorlistShareData]);
   return (
-    <Dialog open={isOtherOpen} onOpenChange={setOtherIsOpen}>
+    <Dialog>
       <DialogTrigger asChild>
         <Button variant="default">{ButtonContent} </Button>
       </DialogTrigger>
