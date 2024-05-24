@@ -29,9 +29,10 @@ export function ModalSuccess({
   ButtonContent,
 }: ModalSuccess) {
 
-  const { isOtherOpen, setOtherIsOpen } = useContext(ErrorContext)
+  const {isSuccessfulOpen, setIsSuccessfulOpen}= useContext(ErrorContext)
+  
   return (
-    <Dialog open={isOtherOpen} onOpenChange={setOtherIsOpen}>
+    <Dialog open={isSuccessfulOpen} onOpenChange={setIsSuccessfulOpen}>
       <DialogTrigger asChild>
 
       </DialogTrigger>

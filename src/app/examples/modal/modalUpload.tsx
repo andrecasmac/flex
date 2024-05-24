@@ -37,7 +37,8 @@ export function ModalUpload({
 }: ModalUploadProps) {
     //State that stores the content of errorlist and sharing it with another component using useContext
     const { errorlistShareData, setErrorListShareData } = useContext(ErrorContext)
-    const {isOtherOpen, setOtherIsOpen}= useContext(ErrorContext)
+    const {isErrorsOpen, setErrorsOpen}= useContext(ErrorContext)
+    const {isSuccessfulOpen, setIsSuccessfulOpen}= useContext(ErrorContext)
     // State to store the selected file
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
@@ -56,7 +57,16 @@ export function ModalUpload({
         const structure_errors_data = structure_errors.map((err: string) => ({name: "Structure Error", description: err}))
         const segment_errors_data = segment_errors.map((err: string) => ({name: "Segment Error", description: err}))
         const errors_data = structure_errors_data.concat(segment_errors_data)
-        setErrorListShareData(errors_data)
+        // If there are errors, error table will be opened
+        if (errors_data.length > 0) {
+            setErrorListShareData(errors_data)
+            setErrorsOpen(true);
+        } else {
+        // If no errors were found, validated modal will be opened
+            setIsSuccessfulOpen(true)
+        }
+        // Close this modal
+        setIsOpen(false);
         };
 
     // Callback function to handle file drop event
@@ -100,8 +110,6 @@ export function ModalUpload({
         else {
             if (txtFileContent) {
                 sendData(txtFileContent)
-                setOtherIsOpen(true);
-                setIsOpen(false);
             }
             else {
                 console.log("No Content Found In File")

@@ -34,16 +34,16 @@ export function ModalErrorList({
 
   const { errorlistShareData } = useContext(ErrorContext)
 
-  const {isOtherOpen, setOtherIsOpen}= useContext(ErrorContext)
+  const {isErrorsOpen, setErrorsOpen}= useContext(ErrorContext)
 
   function handleButtonCancel(){
-    setOtherIsOpen(false);
+    setErrorsOpen(false);
   }
   useEffect(() => {
     
   }, [errorlistShareData]);
   return (
-    <Dialog>
+    <Dialog open={isErrorsOpen} onOpenChange={setErrorsOpen}>
       <DialogTrigger asChild>
         <Button variant="default">{ButtonContent} </Button>
       </DialogTrigger>
