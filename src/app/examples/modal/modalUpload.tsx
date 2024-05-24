@@ -32,6 +32,7 @@ export function ModalUpload({
 }: ModalUploadProps) {
     //State that stores the content of errorlist and sharing it with another component using useContext
     const { errorlistShareData, setErrorListShareData } = useContext(ErrorContext)
+    const {isOtherOpen, setOtherIsOpen}= useContext(ErrorContext)
     // State to store the selected file
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
@@ -40,7 +41,7 @@ export function ModalUpload({
 
     // State to send error when pressing the validate button with no file in the Dropzone
     const [errorValidate, setErrorValidate] = useState<string | null>(null);
-    
+
     //Function to send data using useContext
     function sendData(txtFileContent:string | null) {
         //Variable where we send the values with useContext
@@ -87,6 +88,7 @@ export function ModalUpload({
         // Will validate the file, send data and close the Dropzone
         else {
             sendData(txtFileContent)
+            setOtherIsOpen(true);
             setIsOpen(false);
         }
     };
@@ -115,7 +117,7 @@ export function ModalUpload({
                             {uploadedFile && <p className="text-gray-500 underline pt-4">{uploadedFile.name}</p>}
 
                             {/* If .txt, it will show the contents of the file */}
-                            {txtFileContent && <pre className="text-gray-500 pt-4 text-left">{txtFileContent}</pre>}
+                            {txtFileContent && <pre className="text-gray-500 pt-4 text-left">Se subio</pre>}
                         </div>
                     </div>
 

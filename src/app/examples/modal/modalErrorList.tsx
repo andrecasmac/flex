@@ -34,10 +34,16 @@ export function ModalErrorList({
 
   const { errorlistShareData } = useContext(ErrorContext)
 
+  const {isOtherOpen, setOtherIsOpen}= useContext(ErrorContext)
+
+  function handleButtonCancel(){
+    setOtherIsOpen(false);
+  }
   useEffect(() => {
+    
   }, [errorlistShareData]);
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOtherOpen} onOpenChange={setOtherIsOpen}>
       <DialogTrigger asChild>
         <Button variant="default">{ButtonContent} </Button>
       </DialogTrigger>
@@ -48,7 +54,7 @@ export function ModalErrorList({
         </div>
         <DialogFooter className="sm:max-w-[100%]">
           <DialogClose asChild>
-            <Button size="lg" className="h-10 w-[100%]">
+            <Button size="lg" className="h-10 w-[100%]" onClick={handleButtonCancel}>
               Cancel
             </Button>
           </DialogClose>
