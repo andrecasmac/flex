@@ -63,6 +63,14 @@ export default function Page() {
       >
         <a href="/examples/partner-list">Partner List</a>
       </Button>
+      <Button
+        asChild
+        variant="default"
+        size="lg"
+        className="rounded-2xl active:scale-95 transition-all"
+      >
+        <a href="/examples/DA">Data Access</a>
+      </Button>
     </div>
   );
-}
+};
