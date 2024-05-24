@@ -18,6 +18,10 @@ import { useDropzone } from "react-dropzone";
 import { UploadIcon } from "@radix-ui/react-icons";
 import { ErrorList } from "../tables/table/colums";
 
+import { parse_edi, parse_input_structure, validate_segments } from "@/lib/parser"
+import * as edi_schema from "@/lib/855_schema.json" 
+import { Description } from "@radix-ui/react-dialog";
+
 
 interface ModalUploadProps {
     isOpen: boolean;
@@ -43,9 +47,15 @@ export function ModalUpload({
     const [errorValidate, setErrorValidate] = useState<string | null>(null);
 
     //Function to send data using useContext
-    function sendData(txtFileContent:string | null) {
+    function sendData(txtFileContent:string) {
+        let parsed_edi = parse_edi(txtFileContent);
+        let [structure, structure_errors]: any[] = parse_input_structure(parsed_edi, edi_schema);
+        let segment_errors: any[] = validate_segments(structure, edi_schema);
         //Variable where we send the values with useContext
-        setErrorListShareData([{ name: "Error", description: txtFileContent, id:"1" }])
+        const structure_errors_data = structure_errors.map((err: string) => ({name: "Structure Error", description: err}))
+        const segment_errors_data = segment_errors.map((err: string) => ({name: "Segment Error", description: err}))
+        const errors_data = structure_errors_data.concat(segment_errors_data)
+        setErrorListShareData(errors_data)
         };
 
     // Callback function to handle file drop event
@@ -87,9 +97,14 @@ export function ModalUpload({
 
         // Will validate the file, send data and close the Dropzone
         else {
-            sendData(txtFileContent)
-            setOtherIsOpen(true);
-            setIsOpen(false);
+            if (txtFileContent) {
+                sendData(txtFileContent)
+                setOtherIsOpen(true);
+                setIsOpen(false);
+            }
+            else {
+                console.log("No Content Found In File")
+            }
         }
     };
 
@@ -117,7 +132,7 @@ export function ModalUpload({
                             {uploadedFile && <p className="text-gray-500 underline pt-4">{uploadedFile.name}</p>}
 
                             {/* If .txt, it will show the contents of the file */}
-                            {txtFileContent && <pre className="text-gray-500 pt-4 text-left">Se subio</pre>}
+                            {txtFileContent && <pre className="text-gray-500 pt-4 text-left">The file was uploaded correctly</pre>}
                         </div>
                     </div>
 
