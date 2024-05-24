@@ -10,11 +10,11 @@ datasource db {
 model Partner {
   id                 String @id @default(auto()) @map("_id") @db.ObjectId
   name               String
-  edi_version        String
-  delimiters         String
-  EOL                String
-  type_of_connection String
-  PO_Test            Json
+  edi_version        String @default("X12")
+  delimiters         String @default("*")
+  EOL                String @default("~")
+  type_of_connection String @default("FTP")
+  PO_Test            Json   @default("{}")
 
   EDI_documents EDI_Document[]
 
@@ -63,7 +63,7 @@ model error {
 model EDI_Document {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
   type     String
-  template Boolean
+  template Boolean @default(true)
 
   structure Segment[]
 
@@ -74,31 +74,10 @@ model EDI_Document {
 model Segment {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
   name     String
-  template Boolean
+  template Boolean @default(true)
 
   EDI_DocumentId String       @unique @db.ObjectId
   EDI_Document   EDI_Document @relation(fields: [EDI_DocumentId], references: [id])
 
-  rules rule[]
-}
-
-model rule {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  code String
-
-  validation validation?
-
-  segmentId String  @unique @db.ObjectId
-  segment   Segment @relation(fields: [segmentId], references: [id])
-}
-
-model validation {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  mandatory String
-  min       Int
-  max       Int
-  type      String
-
-  ruleId String @unique @db.ObjectId
-  rule   rule   @relation(fields: [ruleId], references: [id])
+  rules Json
 }

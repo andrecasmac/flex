@@ -5,10 +5,12 @@ import { ModalPartner } from "./modalPartner";
 import { ModalTest } from "./modalTest";
 import { ModalUpload } from "./modalUpload";
 import { ModalErrorList } from "./modalErrorList";
+import { ModalAddDoc } from "./modalAddDoc";
 
 import { ModalSave } from "./modalSave";
 interface ModalsProps {
   modalPartner?: boolean;
+  modalAddDoc?: boolean;
   modalTest?: boolean;
   modalUpload?: boolean;
   modalErrorList?: boolean;
@@ -24,16 +26,19 @@ interface ModalsProps {
 
 export default function Modals({
   modalPartner,
-  modalTest, modalUpload, modalErrorList,
+  modalAddDoc,
+  modalTest,
+  modalUpload,
+  modalErrorList,
   modalSave,
-  onSave,
   onError,
-  showSuccess,
   showError,
+  onSave,
   ErrorData,
-  isOpen,
-  setIsOpen = () => {},
+  showSuccess,
 }: ModalsProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
   const handleSave = useCallback(async () => {
     try {
       await onSave?.();
@@ -42,7 +47,7 @@ export default function Modals({
       onError?.(error as Error);
     }
   }, [onSave, onError]);
-
+  
   return (
     <div>
       {modalPartner && (
@@ -50,6 +55,13 @@ export default function Modals({
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           ButtonContent="Modal"
+        />
+      )}
+      {modalAddDoc && (
+        <ModalAddDoc
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          ButtonContent="Add Document +"
         />
       )}
       {modalTest && (

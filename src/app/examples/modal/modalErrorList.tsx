@@ -1,5 +1,5 @@
 "use client";
-import { useState,useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import {
   DialogContent,
   DialogHeader,
@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { DataTable } from "../tables/table/data-table";
 import { columnsErrorList, ErrorList } from "../tables/table/colums";
+import ErrorContext from "@/app/context/errorContext";
 
 // Importing errors from json
 import errors from "./modalErrorData.json"
@@ -30,21 +31,30 @@ export function ModalErrorList({
 }: ModalErrorProps) {
 
   /*Variable where we store the error data*/
-  const [data, setData]= useState<ErrorList[]>(errors);
 
+  const { errorlistShareData } = useContext(ErrorContext)
+
+  const {isOtherOpen, setOtherIsOpen}= useContext(ErrorContext)
+
+  function handleButtonCancel(){
+    setOtherIsOpen(false);
+  }
+  useEffect(() => {
+    
+  }, [errorlistShareData]);
   return (
-    <Dialog>
+    <Dialog open={isOtherOpen} onOpenChange={setOtherIsOpen}>
       <DialogTrigger asChild>
         <Button variant="default">{ButtonContent} </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[85%] sm:max-h-[100%] flex flex-col items-center">
         <div className="flex items-center sm:max-w-[90%] pt-10">
           {/* This is the table component that receives that columns structure in 'columns' and the data in 'data'*/}
-          <DataTable columns={columnsErrorList} data={data} />
+          <DataTable columns={columnsErrorList} data={errorlistShareData} />
         </div>
         <DialogFooter className="sm:max-w-[100%]">
           <DialogClose asChild>
-            <Button size="lg" className="h-10 w-[100%]">
+            <Button size="lg" className="h-10 w-[100%]" onClick={handleButtonCancel}>
               Cancel
             </Button>
           </DialogClose>

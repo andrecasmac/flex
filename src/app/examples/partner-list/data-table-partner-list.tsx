@@ -19,7 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { DataTablePagination } from "./pagination-table";
+import { DataTablePagination } from "../tables/table/pagination-table";
 
 import { Button } from "@/components/ui/button";
 import { UniqueIdentifier } from "@dnd-kit/core";
@@ -49,7 +49,7 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="text-center">
+                    <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
