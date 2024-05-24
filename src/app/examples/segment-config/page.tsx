@@ -1,6 +1,5 @@
 import { PageTitle } from "@/components/page-title";
-
-import { CreateSegments } from "./Segment";
+import { CreateSegments } from "./create-segment";
 
 export default function Page() {
   return (
