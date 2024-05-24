@@ -11,10 +11,12 @@ import {
     DialogPortal,
 } from "@/components/ui/dialog";
 
-import React, { useCallback, useState } from "react";
+import React, { useContext, useCallback, useState } from "react";
+import ErrorContext from "@/app/context/errorContext";
 import { Button } from "@/components/ui/button";
 import { useDropzone } from "react-dropzone";
 import { UploadIcon } from "@radix-ui/react-icons";
+import { ErrorList } from "../tables/table/colums";
 
 
 interface ModalUploadProps {
@@ -23,12 +25,14 @@ interface ModalUploadProps {
     ButtonContent: string;
 }
 
-export function ModalUpload ({
+export function ModalUpload({
     isOpen,
     setIsOpen,
     ButtonContent,
-}:ModalUploadProps) {
-
+}: ModalUploadProps) {
+    //State that stores the content of errorlist and sharing it with another component using useContext
+    const { errorlistShareData, setErrorListShareData } = useContext(ErrorContext)
+    const {isOtherOpen, setOtherIsOpen}= useContext(ErrorContext)
     // State to store the selected file
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
@@ -38,18 +42,22 @@ export function ModalUpload ({
     // State to send error when pressing the validate button with no file in the Dropzone
     const [errorValidate, setErrorValidate] = useState<string | null>(null);
 
+    //Function to send data using useContext
+    function sendData(txtFileContent:string | null) {
+        //Variable where we send the values with useContext
+        setErrorListShareData([{ name: "Error", description: txtFileContent, id:"1" }])
+        };
+
     // Callback function to handle file drop event
     const onDrop = useCallback((acceptedFiles: File[]) => {
-
         // Only process the first file, assuming single file upload
         const file = acceptedFiles[0];
         setUploadedFile(file);
-        console.log("Uploaded File: ", file)
 
         // For reading the .txt file content
         const textReader = new FileReader();
         textReader.onload = () => {
-            
+
             // Store the file content in the state once reading is complete
             const content = textReader.result as string;
             setTxtFileContent(content);
@@ -60,10 +68,11 @@ export function ModalUpload ({
 
         // Clear error if file selected
         setErrorValidate(null)
+        
     }, []);
 
     // Create a get root and input props from useDropzone
-    const { getRootProps, getInputProps} = useDropzone({ onDrop, maxFiles: 1 });
+    const { getRootProps, getInputProps } = useDropzone({ onDrop, maxFiles: 1 });
 
     // Function to handle the Valitate Button
     const handleValidate = () => {
@@ -76,9 +85,10 @@ export function ModalUpload ({
             return;
         }
 
-        // Will validate the file and close the Dropzone
-        else{
-            console.log("Validated File: ", uploadedFile);
+        // Will validate the file, send data and close the Dropzone
+        else {
+            sendData(txtFileContent)
+            setOtherIsOpen(true);
             setIsOpen(false);
         }
     };
@@ -100,14 +110,14 @@ export function ModalUpload ({
                         <div {...getRootProps()} className="bg-ligthBlue rounded-md h-full w-full cursor-pointer text-center flex flex-col items-center justify-center" >
                             {/* Input element for file selection */}
                             <input {...getInputProps()} />
-                            <UploadIcon color="Gray" width="80" height="80"/>
+                            <UploadIcon color="Gray" width="80" height="80" />
                             <p className="text-gray-500 mt-2">Upload your document</p>
 
                             {/* The name of the File selected */}
                             {uploadedFile && <p className="text-gray-500 underline pt-4">{uploadedFile.name}</p>}
 
                             {/* If .txt, it will show the contents of the file */}
-                            {txtFileContent && <pre className="text-gray-500 pt-4 text-left">{txtFileContent}</pre>}
+                            {txtFileContent && <pre className="text-gray-500 pt-4 text-left">Se subio</pre>}
                         </div>
                     </div>
 
