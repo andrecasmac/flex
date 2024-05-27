@@ -1,24 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { getAllPartners } from '../../../da/Partners/partner-da'; // Adjust the import path according to your project structure
-
-//Types should go in a separate file, but for the sake of the example, they are defined here
-type EDI_Document = {
-  id: string;
-  type: string;
-  template: boolean;
-};
-
-type Partner = {
-  id: string;
-  name: string;
-  edi_version: string;
-  delimiters: string;
-  EOL: string;
-  type_of_connection: string;
-  PO_Test: any;
-  EDI_documents: EDI_Document[];
-};
+import { getAllPartners } from '../../../../da/Partners/partner-da'; // Adjust the import path according to your project structure
+import { Partner } from '../../../../../types/DbTypes';
 
 const PartnersList: React.FC = () => {
   const [partners, setPartners] = useState<Partner[]>([]);
@@ -59,18 +42,6 @@ const PartnersList: React.FC = () => {
             <p>Delimiters: {partner.delimiters}</p>
             <p>EOL: {partner.EOL}</p>
             <p>Type of Connection: {partner.type_of_connection}</p>
-            <pre>PO Test: {JSON.stringify(partner.PO_Test, null, 2)}</pre>
-            <h3>EDI Documents</h3>
-            {partner.EDI_documents.length > 0 ? (
-              partner.EDI_documents.map(doc => (
-                <div key={doc.id} className='mb-10'>
-                  <p>Type: {doc.type}</p>
-                  <p>Template: {doc.template ? 'Yes' : 'No'}</p>
-                </div>
-              ))
-            ) : (
-              <p>No EDI documents available</p>
-            )}
           </div>
         ))
       ) : (

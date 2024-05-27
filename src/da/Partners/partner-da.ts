@@ -23,7 +23,11 @@ export async function getAllPartners(){
     try {
         const partners = await prisma.partner.findMany({
           include: {
-            EDI_documents: true
+            EDI_documents: {
+                include: {
+                    structure: true
+                }
+            }
           }
         });
         if (!partners) {

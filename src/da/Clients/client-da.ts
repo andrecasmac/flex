@@ -9,7 +9,20 @@ export async function getAllClients() {
           include: {
             partnerships: {
               include: {
-                partner: true
+                partner: {
+                  include: {
+                    EDI_documents: {
+                      include: {
+                        structure: true
+                      }
+                    }
+                  }
+                },
+                uploaded_documents: {
+                  include: {
+                    errors: true
+                  }
+                }
               }
             }
           }
