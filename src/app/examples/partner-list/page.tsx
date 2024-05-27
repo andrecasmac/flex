@@ -13,7 +13,7 @@ export default async function Page() {
             <PageTitle title="Partner's List" />
             <div className="w-[80%]">
                 <div className="flex flex-row-reverse mb-5 ">
-                    <Modals modalAddDoc={true} />
+                    <Modals modalAddPartner={true} />
                 </div>
                 <DataTable columns={columns} data={data} />
             </div>
