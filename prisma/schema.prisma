@@ -8,13 +8,14 @@ datasource db {
 }
 
 model Partner {
-  id                 String @id @default(auto()) @map("_id") @db.ObjectId
+  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
   name               String
-  edi_version        String @default("X12")
-  delimiters         String @default("*")
-  EOL                String @default("~")
-  type_of_connection String @default("FTP")
-  PO_Test            Json   @default("{}")
+  edi_version        String  @default("X12")
+  delimiters         String  @default("*")
+  EOL                String  @default("~")
+  type_of_connection String  @default("FTP")
+  PO_Test            Json    @default("{}")
+  hidden             Boolean @default(true)
 
   EDI_documents EDI_Document[]
 
@@ -26,7 +27,7 @@ model Client {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String
 
-  partnerships associated_partner?
+  partnerships associated_partner[]
 }
 
 model associated_partner {
@@ -72,12 +73,14 @@ model EDI_Document {
 }
 
 model Segment {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  template Boolean @default(true)
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  mandatory String  @default("M")
+  max       Int
+  template  Boolean @default(true)
 
   EDI_DocumentId String       @unique @db.ObjectId
   EDI_Document   EDI_Document @relation(fields: [EDI_DocumentId], references: [id])
 
-  rules Json
+  rules Json @default("{}")
 }
