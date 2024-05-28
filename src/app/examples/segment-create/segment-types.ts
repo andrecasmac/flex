@@ -1,76 +1,68 @@
 
-
-export interface SegmentT {
-    name: string;
-    mandatory: boolean;
-    max: number;
-    template: boolean;
-    segment_rules: { [Key: string]: SegmentRule }
-}
-
 export interface SegmentRule {
     mandatory: boolean;
     min: number;
     max: number;
-    type: "ID" | "AN" | "DT" | "TM" | "SE" | "R" | "N0" | "N1" | "N2" | "N3" | "N4" | "N5" | "N6" | "";
-    oneOf?: string[];
-    isEqual?: string;
-    hasFormat?: string;
-    dateHasFormat?: string;
-    timeHasFormat?: string;
-    isHigherThan?: string;
+    type: string;
+    [key: string]: string | number | boolean | [] | undefined; // Para reglas adicionales
 }
 
-export interface ConfigRows {
-    id: string;
-    isEqual?: string;
-    hasFormat?: string;
-    dateHasFormat?: string;
-    timeHasFormat?: string;
-    isHigherThan?: string;
+export interface SegmentData {
+    name: string;
+    mandatory: boolean;
+    max: number;
+    template: boolean;
+    segment_rules: { [key: number]: SegmentRule }; // Corrección aquí
 }
 
-// export type ConfigRowByType = {
-//     [key in keyof SegmentRule as Exclude<key, "min" | "max" | "mandatory">]: (ConfigRowBase & Partial<Pick<SegmentRule, key>>)[];
-// };
+export const initialRuleByType: SegmentRule = {
+    mandatory: true,
+    min: 1,
+    max: 1,
+    type: "",
+};
 
-export type ConfigRowByType = {
-    ID: ConfigRowID[];
-    DT: ConfigRowDT[];
-    TM: ConfigRowTM[];
-    AN: ConfigRowAN[];
-    R: ConfigRowR[];
-    N0: ConfigRowN0[];
-    N1: ConfigRowBase[];
-    N2: ConfigRowBase[];
-    N3: ConfigRowBase[];
-    N4: ConfigRowBase[];
-    N5: ConfigRowBase[];
-    N6: ConfigRowBase[];
-    SE: ConfigRowSE[];
-    "": ConfigRowBase[];
-
+export const additionalRulesByType: {
+    [key: string]: { rules: Partial<SegmentRule>; allowedRules: string[] };
+} = {
+    ID: { rules: { oneOf: "" }, allowedRules: ["oneOf"] },
+    DT: { rules: { dateHasFormat: "" }, allowedRules: ["dateHasFormat"] },
+    TM: { rules: { timeHasFormat: "" }, allowedRules: ["timeHasFormat"] },
+    AN: { rules: { isEqual: "", oneOf: "" }, allowedRules: ["isEqual", "oneOf"] },
+    R: { rules: { isHigherThan: "" }, allowedRules: ["isHigherThan"] },
+    SE: { rules: { isEqual: "" }, allowedRules: ["isEqual"] },
+    N0: { rules: { isHigherThan: "", isEqual: "" }, allowedRules: ["isHigherThan", "isEqual"] },
+    N1: { rules: {}, allowedRules: [] },
+    N2: { rules: {}, allowedRules: [] },
+    N3: { rules: {}, allowedRules: [] },
+    N4: { rules: {}, allowedRules: [] },
+    N5: { rules: {}, allowedRules: [] },
+    N6: { rules: {}, allowedRules: [] },
 };
 
 
-export interface ConfigRowBase {
-    id: string;
-    ruleId: string;
-}
 
-export interface ConfigRowID extends ConfigRowBase { oneOf?: string[]; }
-export interface ConfigRowDT extends ConfigRowBase { dateHasFormat?: string; }
-export interface ConfigRowTM extends ConfigRowBase { timeHasFormat?: string; }
-export interface ConfigRowAN extends ConfigRowBase { isEqual?: string; oneOf?: string[]; }
-export interface ConfigRowR extends ConfigRowBase { isHigherThan?: string; }
-export interface ConfigRowN0 extends ConfigRowBase { isHigherThan?: string; isEqual?: string; }
-export interface ConfigRowSE extends ConfigRowBase { isEqual?: string; }
-
+// export const additionalRulesByType: { [key: string]: Partial<SegmentRule> } = {
+//     ID: { oneOf: "" },
+//     DT: { dateHasFormat: "" },
+//     TM: { timeHasFormat: "" },
+//     AN: { isEqual: "", oneOf: "" },
+//     R: { isHigherThan: "" },
+//     N0: { isHigherThan: "", isEqual: "" },
+//     N1: {},
+//     N2: {},
+//     N3: {},
+//     N4: {},
+//     N5: {},
+//     N6: {},
+//     SE: { isEqual: "" },
+// };
 
 export interface IDropdown {
     id: string;
     label: string;
 }
+
 
 export const optionsUsage: IDropdown[] = [
     {
@@ -142,6 +134,25 @@ export const optionsConfigNO: IDropdown[] = [
     },
 ];
 
+
+
+export const optionsDtFormats: IDropdown[] = [
+    {
+        id: "format1",
+        label: "Formato 1",
+    },
+    {
+        id: "format2",
+        label: "Formato 2",
+    },
+    {
+        id: "format3",
+        label: "Formato 3",
+    },
+];
+
+
+
 export const optionsType: IDropdown[] = [
     {
         id: "type1",
@@ -196,3 +207,5 @@ export const optionsType: IDropdown[] = [
         label: "N6",
     },
 ];
+
+

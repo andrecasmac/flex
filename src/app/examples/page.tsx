@@ -80,7 +80,7 @@ export default function Page() {
         size="lg"
         className="rounded-2xl active:scale-95 transition-all"
       >
-        <a href="/examples/segment-config">Create Segment</a>
+        <a href="/examples/segment-create">Create Segment</a>
       </Button>
 
       <Button
