@@ -21,11 +21,10 @@ export default function PartnershipsOnboarding() {
             <TableHeader className="bg-turquoise dark:bg-cyan-950">
               <TableRow className="">
                 <TableHead></TableHead>
-                <TableHead className="text-center">Elements</TableHead>
-                <TableHead className="text-center">Usage</TableHead>
-                <TableHead className="text-center">Data Type</TableHead>
-                <TableHead className="text-center">Min</TableHead>
-                <TableHead className="text-center">Max</TableHead>
+                <TableHead className="text-center">Documents</TableHead>
+                <TableHead className="text-center">Status</TableHead>
+                <TableHead className="text-center">Action</TableHead>
+                <TableHead className="text-center">Download</TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>
