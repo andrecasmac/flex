@@ -5,3 +5,9 @@ export type SegmentTemplatesContent={
     usage:number,
     maxUse:number,
 }
+
+export type PartnerShipsClienContent={
+    id:string,
+    name:string,
+    status:string,
+}
