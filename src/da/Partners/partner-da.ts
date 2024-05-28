@@ -4,18 +4,26 @@ const prisma = new PrismaClient();
 
 //Create partner
 export async function createPartner(name:string, edi_version:string, delimiters:string, EOL:string, type_of_connection:string, PO_Test:JSON){
-    const partner = await prisma.partner.create({
-        data: {
-            name: name,
-            edi_version: edi_version,
-            delimiters: delimiters,
-            EOL: EOL,
-            type_of_connection: type_of_connection,
-            PO_Test: JSON.stringify(PO_Test),
-            partnerships: {}
+    try{
+        const partner = await prisma.partner.create({
+            data: {
+                name: name,
+                edi_version: edi_version,
+                delimiters: delimiters,
+                EOL: EOL,
+                type_of_connection: type_of_connection,
+                PO_Test: JSON.stringify(PO_Test),
+                partnerships: {}
+            }
+        });
+        if(!partner){
+            throw new Error("Failed to create partner");
         }
-    });
-    return partner;
+        return partner;
+    } catch(error) {
+        console.log("Error creating partner: ", error);
+        throw error;
+    }
 }
 
 //Read all partners
@@ -36,37 +44,61 @@ export async function getAllPartners(){
         return partners;
       } catch (error) {
         console.error('Error fetching clients:', error);
-        throw error; // Rethrow the error after logging it
+        throw error; 
       };
 }
 
 //Read partner by id
 export async function getPartnerById(id:string){
-    const partner = await prisma.partner.findUnique({
-        where: {id: id}
-    });
-    return partner;
+    try{
+        const partner = await prisma.partner.findUnique({
+            where: {id: id}
+        });
+        if(!partner){
+            throw new Error("Failed to fetch partner");
+        }
+        return partner;
+    } catch(error) {
+        console.log("Error fetching partner: ", error);
+        throw error;
+    }
 }
 
 //Update partner's name
 export async function updatePartner(id:string, name:string){
-    const updatedPartner = await prisma.partner.update({
-        where: {
-            id:id
-        },
-        data: {
-            name: name
+    try{
+        const updatedPartner = await prisma.partner.update({
+            where: {
+                id:id
+            },
+            data: {
+                name: name
+            }
+        });
+        if(!updatedPartner){
+            throw new Error("Failed to update partner");
         }
-    });
-    return updatedPartner;
+        return updatedPartner;
+    } catch(error) {
+        console.log("Error updating partner's name: ",error);
+        throw error;
+    }
 }
 
 //Delete partner by id
 export async function deletePartner(id:string){
-    const deletedPartner = await prisma.partner.delete({
-        where: {
-            id:id
+    try{
+        const deletedPartner = await prisma.partner.delete({
+            where: {
+                id:id
+            }
+        });
+        if(!deletedPartner){
+            throw new Error("Failed to delete partner");
         }
-    });
-    return deletedPartner;
+        return deletedPartner;
+    } catch(error) {
+        console.log("Error deleting partner: ",error);
+        throw error;
+    }
 }
