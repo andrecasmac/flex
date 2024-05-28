@@ -12,8 +12,9 @@ export default async function Page() {
         <>
             <PageTitle title="Partner's List" />
             <div className="w-[80%]">
-                <div className="flex flex-row-reverse mb-5 ">
+                <div className="flex flex-row-reverse mb-5 gap-5">
                     <ModalsPartners modalAddPartner={true} />
+                    <ModalsPartners modalDeletePartner={true} />
                 </div>
                 <DataTable columns={columns} data={data} />
             </div>

@@ -94,17 +94,10 @@ export const columns: ColumnDef<ProductsT>[] = [
                 <HiDotsVertical className="h-8 w-8 text-primary" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              <DropdownMenuItem
-                onClick={() =>
-                  navigator.clipboard.writeText(String(produtct.id))
-                }
-              >
-                Copy payment ID
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuContent className="border-primary" align="start">
+              <DropdownMenuItem>View</DropdownMenuItem>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <DropdownMenuItem>Delete</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
