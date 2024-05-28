@@ -22,14 +22,41 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 const formSchema = z.object({
-  content: z.string().min(1, {
-    message: "*Please fill in all data",
+  partner: z.string().min(1, {
+    message: "*Please fill in Partner name",
   }),
+  delimiter: z.string().min(1, {
+    message: "*Select a Delimiter",
+  }),
+  connection_type: z.string().min(1, {
+    message: "*Select Connection Type",
+  }),
+  edi_version: z.string().min(1, {
+    message: "*Select EDI Version",
+  }),
+  description: z.string().min(1, {
+    message: "*Add a description",
+  }),
+  eol: z.string().min(1, {
+    message: "*Select an EOL",
+  }),
+  file: z
+  .instanceof(File, {message: "*Please upload a file"})
+  .refine((file) => file !== undefined, {message: "*Please upload a file"})
+  .refine((file) => file?.name.endsWith(".txt"), {message: "*File must be .txt"}),
 });
 
 interface ModalAddPartnerProps {
@@ -46,7 +73,13 @@ export function ModalAddPartner({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      content: "",
+      partner: "",
+      delimiter: "",
+      connection_type: "",
+      edi_version: "",
+      description: "",
+      eol: "",
+      file: undefined,
     },
   });
 
@@ -73,7 +106,7 @@ export function ModalAddPartner({
             <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-2">
               <FormField
                 control={form.control}
-                name="content"
+                name="partner"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Trading Partner Name</FormLabel>
@@ -86,47 +119,126 @@ export function ModalAddPartner({
               />
               
               <div className="grid grid-cols-2 gap-5">
-                <div>
-                    <FormLabel>Delimiters</FormLabel>
-                    <FormControl>
-                    <Input />
-                    </FormControl>
-                </div>
 
-                <div>
-                    <FormLabel>Connection Type</FormLabel>
-                    <FormControl>
-                    <Input />
-                    </FormControl>
-                </div>
+                <FormField
+                  control={form.control}
+                  name="delimiter"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Delimiters</FormLabel>
+                      <FormControl>
+                        <Select {...field} value={field.value} onValueChange={field.onChange}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Delimiter" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Delimiter 1">Delimiter 1</SelectItem>
+                            <SelectItem value="Delimiter 2">Delimiter 2</SelectItem>
+                            <SelectItem value="Delimiter 3">Delimiter 3</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                <div>
-                    <FormLabel>EDI Version</FormLabel>
-                    <FormControl>
-                    <Input />
-                    </FormControl>
-                </div>
+                <FormField
+                  control={form.control}
+                  name="connection_type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Connection Type</FormLabel>
+                      <FormControl>
+                        <Select {...field} value={field.value} onValueChange={field.onChange}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Connection Type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Connection Type 1">Connection Type 1</SelectItem>
+                            <SelectItem value="Connection Type 2">Connection Type 2</SelectItem>
+                            <SelectItem value="Connection Type 3">Connection Type 3</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                <div>
-                    <FormLabel>Document Description</FormLabel>
-                    <FormControl>
-                    <Input />
-                    </FormControl>
-                </div>
+                <FormField
+                  control={form.control}
+                  name="edi_version"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>EDI Version</FormLabel>
+                      <FormControl>
+                        <Select {...field} value={field.value} onValueChange={field.onChange}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select EDI Version" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="EDI Version 1">EDI Version 1</SelectItem>
+                            <SelectItem value="EDI Version 2">EDI Version 2</SelectItem>
+                            <SelectItem value="EDI Version 3">EDI Version 3</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                <div>
-                    <FormLabel>EOL</FormLabel>
-                    <FormControl>
-                    <Input />
-                    </FormControl>
-                </div>
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Document Description</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                <div>
-                    <FormLabel>File</FormLabel>
-                    <FormControl>
-                    <Input />
-                    </FormControl>
-                </div>
+                <FormField
+                  control={form.control}
+                  name="eol"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>EOL</FormLabel>
+                      <FormControl>
+                        <Select {...field} value={field.value} onValueChange={field.onChange}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select EOL" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="EOL 1">EOL 1</SelectItem>
+                            <SelectItem value="EOL 2">EOL 2</SelectItem>
+                            <SelectItem value="EOL 3">EOL 3</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="file"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>File</FormLabel>
+                      <FormControl>
+                        <Input type="file" onChange={(event) => field.onChange(event.target.files?.[0])}  />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
             </div>
 
               <DialogFooter>
