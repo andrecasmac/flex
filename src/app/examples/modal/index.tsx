@@ -6,7 +6,6 @@ import { ModalTest } from "./modalTest";
 import { ModalUpload } from "./modalUpload";
 import { ModalErrorList } from "./modalErrorList";
 import { ModalAddDoc } from "./modalAddDoc";
-import { ModalAddPartner } from "./modalAddPartner";
 
 interface ModalsProps {
   modalPartner?: boolean;
@@ -14,10 +13,9 @@ interface ModalsProps {
   modalTest?: boolean;
   modalUpload?: boolean;
   modalErrorList?: boolean;
-  modalAddPartner?: boolean;
 }
 
-export default function Modals({ modalPartner, modalAddDoc, modalTest, modalUpload, modalErrorList, modalAddPartner }: ModalsProps) {
+export default function Modals({ modalPartner, modalAddDoc, modalTest, modalUpload, modalErrorList }: ModalsProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div>
@@ -54,13 +52,6 @@ export default function Modals({ modalPartner, modalAddDoc, modalTest, modalUplo
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           ButtonContent="Subir Documento"
-        />
-      )}
-      {modalAddPartner && (
-        <ModalAddPartner
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          ButtonContent="Add Partner +"
         />
       )}
     </div>
