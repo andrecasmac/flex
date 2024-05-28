@@ -40,8 +40,6 @@ export default function PartnershipsOnboarding() {
                 </TableCell>
                 <TableCell className="w-[8%]">
                 </TableCell>
-                <TableCell className="w-[8%]">
-                </TableCell>
                 <TableCell>
                 </TableCell>
               </TableRow>
