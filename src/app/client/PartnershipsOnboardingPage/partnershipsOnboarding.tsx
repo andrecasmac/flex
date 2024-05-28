@@ -1,5 +1,5 @@
 import { PageTitle } from "@/components/page-title";
-import { Table, TableHeader, TableBody, TableRow, TableCell, TableCaption } from "@/components/ui/table"
+import { Table, TableHead, TableBody, TableRow, TableCell, TableHeader } from "@/components/ui/table"
 import partnershipsData from "./partnershipsData.json"
 
 import { useEffect, useState } from "react";
@@ -16,20 +16,43 @@ export default function PartnershipsOnboarding() {
   return (
     <>
       <PageTitle title="{} Partnership" />
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableCell><TableHeader>Documents</TableHeader></TableCell>
-            <TableCell><TableHeader>Status</TableHeader></TableCell>
-            <TableCell><TableHeader>Actions</TableHeader></TableCell>
-            <TableCell><TableHeader>Download</TableHeader></TableCell>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-        </TableBody>
-      </Table>
+      <div className="w-[80%] overflow-auto border rounded-xl">
+          <Table className="max-sm:text-sm text-base md:text-lg">
+            <TableHeader className="bg-turquoise dark:bg-cyan-950">
+              <TableRow className="">
+                <TableHead></TableHead>
+                <TableHead className="text-center">Elements</TableHead>
+                <TableHead className="text-center">Usage</TableHead>
+                <TableHead className="text-center">Data Type</TableHead>
+                <TableHead className="text-center">Min</TableHead>
+                <TableHead className="text-center">Max</TableHead>
+                <TableHead></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                </TableCell>
+                <TableCell className="font-medium ">
+                </TableCell>
+                <TableCell className=" px-20">
+                </TableCell>
+                <TableCell className=" px-20">
+                </TableCell>
+                <TableCell className="w-[8%]">
+                </TableCell>
+                <TableCell className="w-[8%]">
+                </TableCell>
+                <TableCell>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
     </>
-
-    
   );
 }
