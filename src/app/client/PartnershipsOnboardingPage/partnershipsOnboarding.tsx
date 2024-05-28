@@ -1,6 +1,8 @@
+import React from 'react';
 import { PageTitle } from "@/components/page-title";
-import { Table, TableHead, TableBody, TableRow, TableCell, TableHeader } from "@/components/ui/table"
-import partnershipsData from "./partnershipsData.json"
+import { Table, TableHead, TableBody, TableRow, TableCell, TableHeader } from "@/components/ui/table";
+import partnershipsData from "./partnershipsData.json";
+import Badge from '@/components/badge';
 
 export default function PartnershipsOnboarding() {
   return (
@@ -23,7 +25,10 @@ export default function PartnershipsOnboarding() {
               <TableRow key={index}>
                 <TableCell></TableCell>
                 <TableCell className="font-medium">{item.document_name}</TableCell>
-                <TableCell className="px-20 text-center">{item.status || "-"}</TableCell>
+                {/* Integrar el componente Badge en la columna de status */}
+                <TableCell className="px-20 text-center">
+                  <Badge label={item.status || "-"} />
+                </TableCell>
                 <TableCell className="px-20 text-center">{item.validated ? "Validated" : "Pending Validation"}</TableCell>
                 <TableCell className="w-[8%]"></TableCell>
                 <TableCell></TableCell>
