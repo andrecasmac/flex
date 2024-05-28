@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 
 export default function PartnershipsOnboarding() {
   return (
-    <div>
+    <>
       <PageTitle title="{} Partnership" />
       <Table>
         <TableHeader>
@@ -28,7 +28,7 @@ export default function PartnershipsOnboarding() {
         <TableBody>
         </TableBody>
       </Table>
-    </div>
+    </>
 
     
   );
