@@ -14,36 +14,37 @@ import Toggle from "@/components/ui/toggle";
 import React from "react";
 import { FaGear } from "react-icons/fa6";
 import { HiDotsVertical } from "react-icons/hi";
+import { Partner } from "../../../../types/DbTypes";
 
-export type ProductsT = {
+export type PartnerT = {
   id: string;
   name: string;
-  delimeter: string;
-  ediversions: string;
-  eol: string;
-  connectiontype: string;
+  delimeters: string;
+  edi_version: string;
+  EOL: string;
+  type_of_connection: string;
   hidden: boolean;
 };
 
-export const columns: ColumnDef<ProductsT>[] = [
+export const columns: ColumnDef<Partner>[] = [
   {
     accessorKey: "name",
     header: "Partner",
   },
   {
-    accessorKey: "delimeter",
+    accessorKey: "delimiters",
     header: "Delimeter",
   },
   {
-    accessorKey: "ediversions",
+    accessorKey: "edi_version",
     header: "EDI Versions",
   },
   {
-    accessorKey: "eol",
+    accessorKey: "EOL",
     header: "EOL",
   },
   {
-    accessorKey: "connectiontype",
+    accessorKey: "type_of_connection",
     header: "Connection Type",
   },
   {
