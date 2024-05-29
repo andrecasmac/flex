@@ -30,7 +30,7 @@ import {
 function SegmentGenerator() {
   const [segmentData, setSegmentData] = useState<SegmentData>({
     name: "ISA",
-    mandatory: true,
+    mandatory: "M",
     max: 1,
     template: false,
     segment_rules: {},
@@ -172,11 +172,11 @@ function SegmentGenerator() {
               handleSelect={(option: IDropdown) => {
                 setSegmentData((prev) => ({
                   ...prev,
-                  mandatory: option.label === "M",
+                  mandatory: option.label,
                 }));
               }}
               selected={optionsUsage.find(
-                (option) => option.label === (segmentData.mandatory ? "M" : "O")
+                (option) => option.label === segmentData.mandatory
               )}
             />
           </Label>
@@ -253,16 +253,14 @@ function SegmentGenerator() {
                             handleRuleChange(
                               Number(elementIndex),
                               "mandatory",
-                              selectedOption.label === "M"
+                              selectedOption.label
                             );
                           }}
                           selected={optionsUsage.find(
                             (option) =>
                               option.label ===
-                              (segmentData.segment_rules[Number(elementIndex)]
+                              segmentData.segment_rules[Number(elementIndex)]
                                 .mandatory
-                                ? "M"
-                                : "O")
                           )}
                         />
                       </TableCell>
