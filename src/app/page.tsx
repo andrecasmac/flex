@@ -4,6 +4,7 @@ import { Card, CardFooter } from "@/components/ui/card";
 
 import { AdminIcon, ClientIcon } from "../assets/clientsIcons";
 
+
 export default function Home() {
   return (
     <main className="flex flex-col justify-center items-center h-screen">
