@@ -10,6 +10,7 @@ import { ChevronRight, MinusCircle, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
@@ -76,11 +77,17 @@ function SegmentGenerator() {
   };
 
   const handleInputChangeMT = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = event.target;
+    const { name, value } = event.target;
     setSegmentData((prevData) => ({
       ...prevData,
-      [name]: type === "checkbox" ? checked : value,
-      // mandatory: selectedLabel === "M", // Convert label to boolean
+      [name]: value,
+    }));
+  };
+
+  const handleCheckbox = () => {
+    setSegmentData((prevData) => ({
+      ...prevData,
+      template: !prevData.template,
     }));
   };
 
@@ -157,12 +164,10 @@ function SegmentGenerator() {
               className="mt-2"
             />
           </Label>
-
           <Label>
             Segment Name
-            <Input className="mt-2" placeholder="Name..." />
+            <Input className="mt-2" type="text" placeholder="Name..." />
           </Label>
-
           <Label>
             N. Elements
             <Input
@@ -175,7 +180,6 @@ function SegmentGenerator() {
               className="mt-2"
             />
           </Label>
-
           <Label>
             <span>Mandatory</span>
             <ComboboxDropdown
@@ -191,7 +195,6 @@ function SegmentGenerator() {
               )}
             />
           </Label>
-
           <Label>
             Max Use
             <Input
@@ -203,14 +206,12 @@ function SegmentGenerator() {
             />
           </Label>
 
-          <Label>
-            <span>Template</span>
-            <Input
-              className="mt-2"
-              type="checkbox"
-              name="template"
+          <Label className="flex flex-col justify-center items-center">
+            Templete
+            <Checkbox
+              className="h-9 w-9 mt-2"
               checked={segmentData.template}
-              onChange={handleInputChangeMT}
+              onCheckedChange={handleCheckbox}
             />
           </Label>
         </div>
