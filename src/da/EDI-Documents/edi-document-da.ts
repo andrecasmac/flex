@@ -25,7 +25,11 @@ export async function createEDIdocument(type: string, template: boolean){
 //Read all EDI-Documents
 export async function getEDIdocuments(){
     try{
-        const EDI_documents = prisma.eDI_Document.findMany();
+        const EDI_documents = prisma.eDI_Document.findMany({
+            include: {
+                structure: true,
+            }
+        });
         if(!EDI_documents){
             throw new Error("Failed to fetch EDI_Documents");
         }
