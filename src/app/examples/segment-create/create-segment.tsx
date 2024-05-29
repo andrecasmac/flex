@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 import { ComboboxDropdown } from "@/components/ui/combobox";
 import MultipleTagsInput from "@/components/multiple-tags";
 
-import { IDropdown, optionsUsage } from "./segment-types";
+import { IDropdown, optionsUsage } from "../../../../types/segmentTypes";
 import { ChevronRight, MinusCircle, PlusCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -25,7 +25,7 @@ import {
   initialRuleByType,
   additionalRulesByType,
   optionsType,
-} from "./segment-types"; // Asegúrate de tener este archivo de tipos
+} from "../../../../types/segmentTypes"; // Asegúrate de tener este archivo de tipos
 
 function SegmentGenerator() {
   const [segmentData, setSegmentData] = useState<SegmentData>({
