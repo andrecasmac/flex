@@ -134,7 +134,7 @@ function SegmentGenerator() {
         segment_rules: {
           ...prevData.segment_rules,
           [elementIndex]: {
-            ...prevData.segment_rules[Number(elementIndex)],
+            ...prevData.segment_rules[elementIndex],
             oneOf: newTags,
           },
         },
@@ -182,18 +182,20 @@ function SegmentGenerator() {
           </Label>
           <Label>
             <span>Mandatory</span>
-            <ComboboxDropdown
-              content={optionsUsage}
-              handleSelect={(option: IDropdown) => {
-                setSegmentData((prev) => ({
-                  ...prev,
-                  mandatory: option.label,
-                }));
-              }}
-              selected={optionsUsage.find(
-                (option) => option.label === segmentData.mandatory
-              )}
-            />
+            <div className="mt-2">
+              <ComboboxDropdown
+                content={optionsUsage}
+                handleSelect={(option: IDropdown) => {
+                  setSegmentData((prev) => ({
+                    ...prev,
+                    mandatory: option.label,
+                  }));
+                }}
+                selected={optionsUsage.find(
+                  (option) => option.label === segmentData.mandatory
+                )}
+              />
+            </div>
           </Label>
           <Label>
             Max Use
@@ -296,14 +298,13 @@ function SegmentGenerator() {
 
                       <TableCell>
                         <Input
-                          className="border border-gray-300 rounded-md "
                           type="number"
-                          name="max"
-                          placeholder="Max..."
+                          name="min"
+                          placeholder="Min..."
                           onChange={(e) =>
                             handleRuleChange(
                               Number(elementIndex),
-                              "max",
+                              "min",
                               Number(e.target.value)
                             )
                           }
@@ -312,14 +313,13 @@ function SegmentGenerator() {
 
                       <TableCell>
                         <Input
-                          className="border border-gray-300 rounded-md p-2"
                           type="number"
-                          name="min"
-                          placeholder="Min..."
+                          name="max"
+                          placeholder="Max..."
                           onChange={(e) =>
                             handleRuleChange(
                               Number(elementIndex),
-                              "min",
+                              "max",
                               Number(e.target.value)
                             )
                           }

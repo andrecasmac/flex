@@ -4,7 +4,7 @@ export interface SegmentRule {
     min: number;
     max: number;
     type: string;
-    [key: string]: string | number | boolean | [] | undefined; // Para reglas adicionales
+    [key: string]: string | number | boolean | String[] | undefined; // Para reglas adicionales
 }
 
 export interface SegmentData {
@@ -12,7 +12,7 @@ export interface SegmentData {
     mandatory: string;
     max: number;
     template: boolean;
-    segment_rules: { [key: number]: SegmentRule }; // Corrección aquí
+    segment_rules: { [key: string]: SegmentRule }; // Corrección aquí
 }
 
 export const initialRuleByType: SegmentRule = {
