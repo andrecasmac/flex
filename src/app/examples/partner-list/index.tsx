@@ -7,9 +7,10 @@ import { ModalDeletePartner } from "./modalDeletePartner";
 interface ModalsPartnersProps {
   modalAddPartner?: boolean;
   modalDeletePartner?: boolean;
+  selectedItemName?: string;
 }
 
-export default function ModalsPartners({ modalAddPartner, modalDeletePartner }: ModalsPartnersProps) {
+export default function ModalsPartners({ modalAddPartner, modalDeletePartner, selectedItemName }: ModalsPartnersProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -21,11 +22,12 @@ export default function ModalsPartners({ modalAddPartner, modalDeletePartner }: 
           ButtonContent="Add Partner +"
         />
       )}
-      {modalDeletePartner && (
+      {modalDeletePartner && selectedItemName &&(
         <ModalDeletePartner
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           ButtonContent="Delete"
+          itemName={selectedItemName}
         />
       )}
     </div>

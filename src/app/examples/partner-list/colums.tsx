@@ -97,7 +97,7 @@ export const columns: ColumnDef<Partner>[] = [
             <DropdownMenuContent className="border-primary" align="start">
               <DropdownMenuItem>View</DropdownMenuItem>
               <DropdownMenuItem>Edit</DropdownMenuItem>
-              <ModalsPartners modalDeletePartner={true} />
+              <ModalsPartners modalDeletePartner={true} selectedItemName={produtct.name} />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
