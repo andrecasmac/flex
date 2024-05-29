@@ -11,9 +11,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Toggle from "@/components/ui/toggle";
-import React from "react";
-import { FaGear } from "react-icons/fa6";
 import { HiDotsVertical } from "react-icons/hi";
+import ModalsPartners from ".";
 
 export type ProductsT = {
   id: string;
@@ -97,7 +96,7 @@ export const columns: ColumnDef<ProductsT>[] = [
             <DropdownMenuContent className="border-primary" align="start">
               <DropdownMenuItem>View</DropdownMenuItem>
               <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
+              <ModalsPartners modalDeletePartner={true} />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

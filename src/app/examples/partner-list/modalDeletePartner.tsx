@@ -9,6 +9,7 @@ import {
   DialogTrigger,
   Dialog,
 } from "@/components/ui/dialog";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 import { Button } from "@/components/ui/button";
 
@@ -26,7 +27,7 @@ export function ModalDeletePartner({
     return (
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button variant="default" className="rounded-xl">{ButtonContent} </Button>
+          <DropdownMenuItem onSelect={event => event.preventDefault()}>{ButtonContent}</DropdownMenuItem>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[625px]">
           <DialogHeader>
