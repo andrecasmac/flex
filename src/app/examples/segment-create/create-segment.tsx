@@ -147,7 +147,6 @@ function SegmentGenerator() {
           <Label>
             Segment Code
             <Input
-              className="border border-gray-300 rounded-md p-2 mb-2"
               type="text"
               name="name"
               value={segmentData.name}
@@ -157,7 +156,6 @@ function SegmentGenerator() {
           <Label>
             N. Elements
             <Input
-              className="border border-gray-300 rounded-md p-2 mb-2"
               type="number"
               name="numElements"
               placeholder="Number of Elements"
@@ -186,7 +184,6 @@ function SegmentGenerator() {
           <Label>
             Max Use
             <Input
-              className="border border-gray-300 rounded-md p-2 mb-2"
               type="number"
               name="max"
               value={segmentData.max}
@@ -229,7 +226,7 @@ function SegmentGenerator() {
 
                 return (
                   <React.Fragment key={elementIndex}>
-                    <TableRow key={elementIndex} className="">
+                    <TableRow key={elementIndex}>
                       <TableCell className="w-1">
                         <Button
                           className="flex items-center space-x-2 "
@@ -339,7 +336,11 @@ function SegmentGenerator() {
                           )
                           .map((ruleName) => (
                             <React.Fragment key={ruleName}>
-                              <TableRow className="bg-slate-600/10">
+                              <TableRow
+                                key={ruleName}
+                                className="bg-slate-600/10"
+                                onClick={(e) => e.stopPropagation()}
+                              >
                                 <TableCell colSpan={7}>
                                   <Label className="w-full flex items-center justify-center gap-x-5 px-2">
                                     {ruleName}
@@ -350,6 +351,7 @@ function SegmentGenerator() {
                                           return (
                                             <div className="w-full flex justify-around">
                                               <MultipleTagsInput
+                                                key={`${currentElement} + ${ruleName}`}
                                                 tags={
                                                   (currentElement[
                                                     ruleName

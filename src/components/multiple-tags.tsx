@@ -48,7 +48,7 @@ export default function MultipleTagsInput({
     <div className="flex flex-col space-y-2 w-[35%]">
       {labelContent && <Label htmlFor="tags-input">{labelContent}</Label>}
       <div
-        className={`flex flex-wrap gap-2 border border-turquoise dark:border-darkBlueMarine bg-white dark:bg-card rounded-lg p-2 ${
+        className={`flex flex-wrap gap-2 border border-input dark:border-darkBlueMarine bg-white dark:bg-card rounded-lg p-2 ${
           isFocused ? "ring-1 ring-ring dark:ring-cyan-950" : ""
         }`}
         onClick={() => inputRef.current?.focus()} // focus al imput
@@ -64,7 +64,12 @@ export default function MultipleTagsInput({
               type="button"
               variant={"ghost"}
               className="ml-1 -mr-1 h-4 w-4 rounded-full p-0.3 text-white hover:bg-inherit hover:text-slate-300 focus:outline"
-              onClick={() => onTagsChange(tags.filter((_, i) => i !== index))} // borrar el tag correspondiente al index
+              onClick={
+                (e) => {
+                  e.stopPropagation();
+                  onTagsChange(tags.filter((_, i) => i !== index));
+                } // borrar el tag correspondiente al index
+              }
             >
               <X />
             </Button>
@@ -76,7 +81,7 @@ export default function MultipleTagsInput({
           onKeyDown={handleKeyDown}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          className="flex-1 w-2 bg-transparent outline-none border-none ring-none rounded-md"
+          className="flex-1 w-2 py-1 bg-transparent outline-none border-none ring-none rounded-md"
           placeholder="Add..."
           aria-label="Add new tag"
         />
