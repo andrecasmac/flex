@@ -73,4 +73,4 @@ export default function Page() {
       </Button>
     </div>
   );
-}
+};
