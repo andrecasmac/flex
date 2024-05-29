@@ -41,22 +41,14 @@ export const additionalRulesByType: {
 };
 
 
+export const ruleNamesMap: { [key: string]: string } = {
+    oneOf: "One of",
+    dateHasFormat: "Date has Format",
+    timeHasFormat: "Time has Format",
+    isEqual: "Is Equal",
+    isHigherThan: "Is Higher Than",
+};
 
-// export const additionalRulesByType: { [key: string]: Partial<SegmentRule> } = {
-//     ID: { oneOf: "" },
-//     DT: { dateHasFormat: "" },
-//     TM: { timeHasFormat: "" },
-//     AN: { isEqual: "", oneOf: "" },
-//     R: { isHigherThan: "" },
-//     N0: { isHigherThan: "", isEqual: "" },
-//     N1: {},
-//     N2: {},
-//     N3: {},
-//     N4: {},
-//     N5: {},
-//     N6: {},
-//     SE: { isEqual: "" },
-// };
 
 export interface IDropdown {
     id: string;
@@ -136,7 +128,22 @@ export const optionsConfigNO: IDropdown[] = [
 
 
 
-export const optionsDtFormats: IDropdown[] = [
+export const optionsDTFormats: IDropdown[] = [
+    {
+        id: "format1",
+        label: "Formato 1",
+    },
+    {
+        id: "format2",
+        label: "Formato 2",
+    },
+    {
+        id: "format3",
+        label: "Formato 3",
+    },
+];
+
+export const optionsTMFormats: IDropdown[] = [
     {
         id: "format1",
         label: "Formato 1",
@@ -209,3 +216,19 @@ export const optionsType: IDropdown[] = [
 ];
 
 
+
+// export const additionalRulesByType: { [key: string]: Partial<SegmentRule> } = {
+//     ID: { oneOf: "" },
+//     DT: { dateHasFormat: "" },
+//     TM: { timeHasFormat: "" },
+//     AN: { isEqual: "", oneOf: "" },
+//     R: { isHigherThan: "" },
+//     N0: { isHigherThan: "", isEqual: "" },
+//     N1: {},
+//     N2: {},
+//     N3: {},
+//     N4: {},
+//     N5: {},
+//     N6: {},
+//     SE: { isEqual: "" },
+// };

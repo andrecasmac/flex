@@ -25,6 +25,9 @@ import {
   initialRuleByType,
   additionalRulesByType,
   optionsType,
+  ruleNamesMap,
+  optionsDTFormats,
+  optionsTMFormats,
 } from "../../../../types/segmentTypes"; // Asegúrate de tener este archivo de tipos
 
 function SegmentGenerator() {
@@ -151,8 +154,15 @@ function SegmentGenerator() {
               name="name"
               value={segmentData.name}
               onChange={handleInputChangeMT}
+              className="mt-2"
             />
           </Label>
+
+          <Label>
+            Segment Name
+            <Input className="mt-2" placeholder="Name..." />
+          </Label>
+
           <Label>
             N. Elements
             <Input
@@ -162,6 +172,7 @@ function SegmentGenerator() {
               value={inputValue} // Bind input value to state
               onChange={handleInputChange}
               onKeyDown={handleInputKeyDown}
+              className="mt-2"
             />
           </Label>
 
@@ -184,6 +195,7 @@ function SegmentGenerator() {
           <Label>
             Max Use
             <Input
+              className="mt-2"
               type="number"
               name="max"
               value={segmentData.max}
@@ -194,6 +206,7 @@ function SegmentGenerator() {
           <Label>
             <span>Template</span>
             <Input
+              className="mt-2"
               type="checkbox"
               name="template"
               checked={segmentData.template}
@@ -311,16 +324,6 @@ function SegmentGenerator() {
                           }
                         />
                       </TableCell>
-
-                      <TableCell>
-                        {/* <Button
-                          variant={"ghost"}
-                          size={"icon"}
-                          className="h-8 w-8 rounded-full flex"
-                        >
-                          <PlusCircle className="h-7 w-7 text-white dark:text-black fill-green-500" />
-                        </Button> */}
-                      </TableCell>
                     </TableRow>
 
                     {showRules[Number(elementIndex)] && (
@@ -335,21 +338,20 @@ function SegmentGenerator() {
                           .map((ruleName) => (
                             <React.Fragment key={ruleName}>
                               <TableRow
-                                key={ruleName}
                                 className="bg-slate-600/10"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <TableCell colSpan={7}>
-                                  <Label className="w-full flex items-center justify-center gap-x-5 px-2">
-                                    {ruleName}
+                                  <span className="w-full flex items-center justify-center gap-x-5 px-2">
+                                    {ruleNamesMap[ruleName] || ruleName}
 
                                     {(() => {
                                       switch (ruleName) {
                                         case "oneOf":
                                           return (
-                                            <div className="w-full flex justify-around">
+                                            <div className="w-[50%] flex justify-around">
                                               <MultipleTagsInput
-                                                key={`${currentElement} + ${ruleName}`}
+                                                key={`tags${currentElement}-${ruleName}`}
                                                 tags={
                                                   (currentElement[
                                                     ruleName
@@ -365,9 +367,59 @@ function SegmentGenerator() {
                                             </div>
                                           );
 
+                                        case "dateHasFormat":
+                                          return (
+                                            <div className="w-[50%]">
+                                              <ComboboxDropdown
+                                                content={optionsDTFormats}
+                                                handleSelect={(
+                                                  selectedOption: IDropdown
+                                                ) => {
+                                                  handleRuleChange(
+                                                    Number(elementIndex),
+                                                    "dateHasFormat",
+                                                    selectedOption.label
+                                                  );
+                                                }}
+                                                selected={optionsDTFormats.find(
+                                                  (option) =>
+                                                    option.label ===
+                                                    segmentData.segment_rules[
+                                                      Number(elementIndex)
+                                                    ].dateHasFormat
+                                                )}
+                                              />
+                                            </div>
+                                          );
+
+                                        case "timeHasFormat":
+                                          return (
+                                            <div className="w-[50%]">
+                                              <ComboboxDropdown
+                                                content={optionsTMFormats}
+                                                handleSelect={(
+                                                  selectedOption: IDropdown
+                                                ) => {
+                                                  handleRuleChange(
+                                                    Number(elementIndex),
+                                                    "timeHasFormat",
+                                                    selectedOption.label
+                                                  );
+                                                }}
+                                                selected={optionsTMFormats.find(
+                                                  (option) =>
+                                                    option.label ===
+                                                    segmentData.segment_rules[
+                                                      Number(elementIndex)
+                                                    ].timeHasFormat
+                                                )}
+                                              />
+                                            </div>
+                                          );
+
                                         default:
                                           return (
-                                            <div className="w-full flex justify-around">
+                                            <div className="w-[50%] flex justify-around">
                                               <Input
                                                 className="border border-gray-300 rounded-md p-2 flex-grow"
                                                 type="text"
@@ -390,15 +442,7 @@ function SegmentGenerator() {
                                           );
                                       }
                                     })()}
-
-                                    {/* <Button
-                                      variant="ghost"
-                                      size="icon"
-                                      className="h-8 w-8 rounded-full"
-                                    >
-                                      <MinusCircle className="h-7 w-7 text-slate-200 dark:text-slate-900 fill-red-500" />
-                                    </Button> */}
-                                  </Label>
+                                  </span>
                                 </TableCell>
                               </TableRow>
                             </React.Fragment>

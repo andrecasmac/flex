@@ -35,7 +35,7 @@ export function ComboboxDropdown(props: Response) {
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="flex w-full justify-between text-slate-400 dark:border-darkBlueMarine"
+          className="flex w-full mt-2 justify-between text-slate-400 dark:border-darkBlueMarine"
         >
           {selected ? (
             <>
