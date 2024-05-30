@@ -14,9 +14,6 @@ import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../../.
 import Badge from "@/components/badge";
 import { ModalViewDocuments } from "@/app/examples/modal/modalViewDocuments";
 
-//Variable that defines if the ModalViewDocuments is open
-const [isModalOpen, setIsModalOpen] = useState(false)
-
 export const columns: ColumnDef<PartnerShipsClientContent>[] = [
     {
         accessorKey: "name",
@@ -47,11 +44,10 @@ export const columns: ColumnDef<PartnerShipsClientContent>[] = [
         cell: ({ row }) => {
             //Variable where we store the content of the row
             const rowContent = row.original;
-            //Variable that defines if the ModalViewDocuments is open
-            const [isModalOpen, setIsModalOpen] = useState(false)
+
             return (
                 <div className="flex justify-end">
-                    <ModalViewDocuments isOpen={isModalOpen} setIsOpen={setIsModalOpen} ButtonContent="View" PartnerShipRowInfo={rowContent} />
+                    <ModalViewDocuments ButtonContent="View" PartnerShipRowInfo={rowContent} />
                 </div>
             );
         },
@@ -95,11 +91,10 @@ export const columnsModal: ColumnDef<PartnerShipsClientContent>[] = [
         cell: ({ row }) => {
             //Variable where we store the content of the row
             const rowContent = row.original
-            //Variable that defines if the ModalViewDocuments is open
-            const [isModalOpen, setIsModalOpen] = useState(false)
+            
             return (
                 <div className="flex justify-end">
-                    <ModalViewDocuments isOpen={isModalOpen} setIsOpen={setIsModalOpen} ButtonContent="View Documents" PartnerShipRowInfo={rowContent} />
+                    <ModalViewDocuments ButtonContent="View Documents" PartnerShipRowInfo={rowContent} />
                 </div>
             );
         },

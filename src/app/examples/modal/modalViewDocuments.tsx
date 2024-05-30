@@ -1,5 +1,5 @@
 "use client";
-import { useContext } from "react";
+import { useContext,useState } from "react";
 import {
   DialogContent,
   DialogHeader,
@@ -15,8 +15,6 @@ import { columnsViewDocouments } from "@/app/client/partnerships/columns";
 import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../../../types/TableTypes";
 import { DataTable } from "../tables/table/data-table";
 interface ModalViewDocuments {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
   ButtonContent: string;
   PartnerShipRowInfo: PartnerShipsClientContent | null;
 }
@@ -58,23 +56,24 @@ const data: ModalViewDocumentsContent[] = [
 
 
 export function ModalViewDocuments({
-  isOpen,
-  setIsOpen,
   ButtonContent,
   PartnerShipRowInfo,
 }: ModalViewDocuments) {
   //Variable that is shared with Modal Add Partnership
   const {isThisOpen,setisThisOpen}=useContext(ModalContext)
 
+  //Variable that defines if the ModalViewDocuments is open
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   //Function that handles onClick of the Button 'Confirm'
   function handleConfirm(){
     //It closes both Modal Add Partnerships and Modal View Documents
     setisThisOpen(false)
-    setIsOpen(false)
+    setIsModalOpen(false)
   }
   return (
 
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
       <DialogTrigger asChild>
         <Button variant="default">{ButtonContent} </Button>
       </DialogTrigger>
