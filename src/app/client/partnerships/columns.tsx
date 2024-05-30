@@ -44,7 +44,6 @@ export const columns: ColumnDef<PartnerShipsClientContent>[] = [
         cell: ({ row }) => {
             //Variable where we store the content of the row
             const rowContent = row.original;
-
             //Variable that defines if the ModalViewDocuments is open
             const [isModalOpen, setIsModalOpen] = useState(false)
             return (
@@ -93,7 +92,6 @@ export const columnsModal: ColumnDef<PartnerShipsClientContent>[] = [
         cell: ({ row }) => {
             //Variable where we store the content of the row
             const rowContent = row.original
-
             //Variable that defines if the ModalViewDocuments is open
             const [isModalOpen, setIsModalOpen] = useState(false)
             return (
