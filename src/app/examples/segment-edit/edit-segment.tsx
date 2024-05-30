@@ -44,27 +44,6 @@ function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
     setNumElements(Object.keys(segmentData.segment_rules).length);
   }, [segmentData]);
 
-  const handleNumElementsChange = (value: string) => {
-    const num = parseInt(value, 10) || 0;
-
-    // Ensure num is within bounds (0 to some maximum, if applicable)
-    const clampedNum = Math.max(0, Math.min(num, 25)); // Example max of 25
-
-    const newSegmentRules: { [key: number]: SegmentRule } = {};
-    for (let i = 1; i <= clampedNum; i++) {
-      newSegmentRules[i] = segmentData.segment_rules[i] || {
-        ...initialRuleByType,
-        type: "",
-      };
-    }
-
-    setNumElements(clampedNum);
-    setSegmentData((prevData) => ({
-      ...prevData,
-      segment_rules: newSegmentRules,
-    }));
-  };
-
   const handleRuleChange = (
     elementIndex: number,
     ruleName: string,
