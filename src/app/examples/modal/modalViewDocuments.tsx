@@ -88,7 +88,7 @@ export function ModalViewDocuments({
           {/*This is where we display the EDI and Delimeters*/}
           EDI Version: {PartnerShipRowInfo ? <>{PartnerShipRowInfo.edi}</> : null} Delimeters(*,{'>'},~)
         </div>
-        <div className="flex items-center justify-center pt-2">
+        <div className="flex items-center w-[70%] justify-center pt-2">
           {/*This is where we display the Table with the Documents*/}
           <DataTable columns={columnsViewDocouments} data={data} />
         </div>

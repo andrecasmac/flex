@@ -50,7 +50,7 @@ export default function Page() {
                     {/*This is the Modal that adds partnerships*/}
                     <ModalAddPartnerships ButtonContent="Add Parternship" data={data}/>
                 </div>
-                <div className="flex w-[75%] justify-center items-center w-full pt-5">
+                <div className="flex w-[75%] justify-center items-center pt-5">
                     {/*This is where we display the Table with the Partnerships*/}
                     <DataTable columns={columns} data={data} />
                 </div>
