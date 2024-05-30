@@ -32,6 +32,18 @@
                 "max": 100,
                 "type": "R",
                 "isHigherThan": "20"
+            },
+            "4": {
+                "mandatory": "O",
+                "min": 300,
+                "max": 100,
+                "type": "AN",
+                "isEqual": "20",
+                "oneOf": [
+                    "40",
+                    "50",
+                    "60"
+                ]
             }
         }
     }

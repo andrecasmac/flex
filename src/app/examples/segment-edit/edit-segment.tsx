@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/table";
 
 import {
-  SegmentRule,
   SegmentData,
   initialRuleByType,
   additionalRulesByType,
@@ -35,13 +34,28 @@ interface SegmentEditProps {
 }
 
 function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
-  const [segmentData, setSegmentData] = useState<SegmentData>(initialSegmentData);
-  const [numElements, setNumElements] = useState(Object.keys(initialSegmentData.segment_rules).length);
-  const [showRules, setShowRules] = useState<{ [key: number]: boolean }>({});
+  const [segmentData, setSegmentData] =
+    useState<SegmentData>(initialSegmentData);
 
+  const [numElements, setNumElements] = useState(
+    Object.keys(initialSegmentData.segment_rules).length
+  );
+
+  const [showRules, setShowRules] = useState<{ [key: number]: boolean }>(() => {
+    const initialShowRules: { [key: number]: boolean } = {};
+    Object.keys(initialSegmentData.segment_rules).forEach((key) => {
+      initialShowRules[Number(key)] = true;
+    });
+    return initialShowRules;
+  });
 
   useEffect(() => {
     setNumElements(Object.keys(segmentData.segment_rules).length);
+    const newShowRules: { [key: number]: boolean } = {};
+    Object.keys(segmentData.segment_rules).forEach((key) => {
+      newShowRules[Number(key)] = true;
+    });
+    setShowRules(newShowRules);
   }, [segmentData]);
 
   const handleRuleChange = (
@@ -104,12 +118,10 @@ function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
   };
 
   return (
-    <div className="p-4 flex w-full gap-x-5 justify-center">
-      <div className="flex flex-col w-[80%]">
-  
-
-        <div className="w-full overflow-auto border rounded-xl">
-          <Table className="p-2 w-full">
+    <div className="flex w-[80%] gap-x-5 justify-center">
+      <div className="flex flex-col w-full">
+        <div className="overflow-auto border rounded-xl">
+          <Table className="p-2 ">
             <TableHeader className="bg-turquoise dark:bg-cyan-950">
               <TableRow>
                 <TableHead></TableHead>

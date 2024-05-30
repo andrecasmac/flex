@@ -84,13 +84,6 @@ function SegmentGenerator() {
     }));
   };
 
-  const handleCheckbox = () => {
-    setSegmentData((prevData) => ({
-      ...prevData,
-      template: !prevData.template,
-    }));
-  };
-
   const handleRuleChange = (
     elementIndex: number,
     ruleName: string,
@@ -151,9 +144,9 @@ function SegmentGenerator() {
   };
 
   return (
-    <div className="p-4 flex w-full gap-x-5 justify-center">
-      <div className="flex flex-col w-[80%]">
-        <div className="flex items-center justify-around w-full mb-8 gap-x-5">
+    <div className="flex w-[80%] gap-x-5 justify-center">
+      <div className="flex flex-col w-full">
+        <div className="flex items-center justify-between px-2 w-full mb-8 gap-x-5">
           <Label>
             Segment Code
             <Input
@@ -205,15 +198,6 @@ function SegmentGenerator() {
               name="max"
               value={segmentData.max}
               onChange={handleInputChangeMT}
-            />
-          </Label>
-
-          <Label className="flex flex-col justify-center items-center">
-            Templete
-            <Checkbox
-              className="h-9 w-9 mt-2"
-              checked={segmentData.template}
-              onCheckedChange={handleCheckbox}
             />
           </Label>
         </div>
