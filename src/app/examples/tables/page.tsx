@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Page() {
   return (
@@ -9,7 +10,7 @@ export default function Page() {
         size="lg"
         className="rounded-2xl active:scale-95 transition-all"
       >
-        <a href="/examples/tables/table">Tabla normal</a>
+        <Link href="/examples/tables/table">Tabla normal</Link>
       </Button>
 
       <Button
@@ -18,7 +19,7 @@ export default function Page() {
         size="lg"
         className="rounded-2xl active:scale-95 transition-all"
       >
-        <a href="/examples/tables/table-dnd">Tabla drag and drop</a>
+        <Link href="/examples/tables/table-dnd">Tabla drag and drop</Link>
       </Button>
     </div>
   );
