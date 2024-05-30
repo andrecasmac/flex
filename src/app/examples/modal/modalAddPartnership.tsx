@@ -1,5 +1,5 @@
 "use client";
-
+import { useContext } from "react";
 import {
   DialogContent,
   DialogHeader,
@@ -13,6 +13,7 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "../tables/table/data-table";
 import { columnsModal } from "@/app/client/partnerships/columns";
+import ModalContext from "@/app/context/modalContext";
 import { PartnerShipsClientContent } from "../../../../types/TableTypes";
 
 interface ModalAddPartnerships {
@@ -20,18 +21,18 @@ interface ModalAddPartnerships {
   setIsOpen: (open: boolean) => void;
   ButtonContent: string;
   data:PartnerShipsClientContent[];
-  handleIsOpen:()=>void;
 }
 
 export function ModalAddPartnerships({
   isOpen,
   setIsOpen,
   ButtonContent,
-  data,
-  handleIsOpen,
+  data
 }: ModalAddPartnerships) {
+
+  const {isThisOpen,setisThisOpen}=useContext(ModalContext)
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isThisOpen} onOpenChange={setisThisOpen}>
       <DialogTrigger asChild>
         <Button variant="default">{ButtonContent} <Plus strokeWidth={1.5} /></Button>
       </DialogTrigger>
@@ -51,10 +52,6 @@ export function ModalAddPartnerships({
               Cancel
             </Button>
           </DialogClose>
-
-          {/* <Button size="sm" type="submit" className="h-8 w-[40%]">
-            Save
-          </Button> */}
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -1,5 +1,5 @@
 "use client";
-
+import { useContext } from "react";
 import {
   DialogContent,
   DialogHeader,
@@ -9,7 +9,7 @@ import {
   DialogTrigger,
   Dialog,
 } from "@/components/ui/dialog";
-
+import ModalContext from "@/app/context/modalContext";
 import { Button } from "@/components/ui/button";
 import { columnsViewDocouments } from "@/app/client/partnerships/columns";
 import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../../../types/TableTypes";
@@ -63,12 +63,13 @@ export function ModalViewDocuments({
   ButtonContent,
   PartnerShipRowInfo,
 }: ModalViewDocuments) {
-
+  const {isThisOpen,setisThisOpen}=useContext(ModalContext)
   function handleConfirm(){
+    setisThisOpen(false)
     setIsOpen(false)
   }
   return (
-    
+
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="default">{ButtonContent} </Button>
