@@ -14,6 +14,9 @@ import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../../.
 import Badge from "@/components/badge";
 import { ModalViewDocuments } from "@/app/examples/modal/modalViewDocuments";
 
+//Variable that defines if the ModalViewDocuments is open
+const [isModalOpen, setIsModalOpen] = useState(false)
+
 export const columns: ColumnDef<PartnerShipsClientContent>[] = [
     {
         accessorKey: "name",
