@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 interface ModalTestProps {
-  isOpen: boolean;
+  isOpen: boolean | undefined;
   setIsOpen: (open: boolean) => void;
   ButtonContent: string;
 }

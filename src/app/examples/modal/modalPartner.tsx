@@ -34,8 +34,8 @@ const formSchema = z.object({
 
 interface ModalPartnerProps {
   ButtonContent: string;
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
+  isOpen: boolean | undefined;
+  setIsOpen: (open: boolean) => void | undefined;
 }
 
 export function ModalPartner({

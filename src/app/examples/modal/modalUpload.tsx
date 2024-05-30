@@ -20,7 +20,7 @@ import { ErrorList } from "../tables/table/colums";
 
 
 interface ModalUploadProps {
-    isOpen: boolean;
+    isOpen?: boolean;
     setIsOpen: (open: boolean) => void;
     ButtonContent: string;
 }

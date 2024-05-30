@@ -19,7 +19,7 @@ import ErrorContext from "@/app/context/errorContext";
 import errors from "./modalErrorData.json"
 
 interface ModalErrorProps {
-  isOpen: boolean;
+  isOpen?: boolean;
   setIsOpen: (open: boolean) => void;
   ButtonContent: string;
 }
