@@ -5,32 +5,55 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { DataTable } from "@/app/examples/tables/table/data-table";
 import { columns } from "@/app/client/partnerships/columns"
+import ModalContextProvider from "@/app/context/modalContextProvider";
 import { ModalAddPartnerships } from "@/app/examples/modal/modalAddPartnership";
-const data = [
+import { PartnerShipsClientContent } from "../../../../types/TableTypes";
+const data: PartnerShipsClientContent[] = [
     {
         id: "1",
         name: "Amazon",
-        status: "Complete"
+        status: "Complete",
+        edi: "X12 4010",
+        connection: "FTP",
     },
     {
         id: "2",
-        name: "Amazon",
-        status: "In Process"
+        name: "Partnership 2",
+        status: "In Process",
+        edi: "X12 4010",
+        connection: "...",
+    },
+    {
+        id: "3",
+        name: "Partnership 3",
+        status: "In Process",
+        edi: "X12 4010",
+        connection: "...",
+    },
+    {
+        id: "4",
+        name: "Partnership 4",
+        status: "In Process",
+        edi: "X12 4010",
+        connection: "...",
     },
 
 ]
 
 export default function Page() {
     const [isOpen, setIsOpen] = useState(false);
+
     return (
         <div className="flex flex-col justify-center items-center w-full">
             <PageTitle title="Partnerships" />
-            <div className="flex w-[80%] justify-end pt-5">
-                <ModalAddPartnerships isOpen={isOpen} setIsOpen={setIsOpen} ButtonContent="Add Partenrship" />  
-            </div>
-            <div className="flex w-[75%] justify-center items-center w-full pt-5">
-                <DataTable columns={columns} data={data} />
-            </div>
+            <ModalContextProvider>
+                <div className="flex w-[80%] justify-end pt-5">
+                    <ModalAddPartnerships isOpen={isOpen} setIsOpen={setIsOpen} ButtonContent="Add Parternship" data={data}/>
+                </div>
+                <div className="flex w-[75%] justify-center items-center w-full pt-5">
+                    <DataTable columns={columns} data={data} />
+                </div>
+            </ModalContextProvider>
         </div>
     )
 }
