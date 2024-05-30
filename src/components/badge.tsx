@@ -8,10 +8,12 @@ const Badge: React.FC<BadgeProps> = ({ label }) => {
   // Función para determinar el color de fondo y el color del texto basado en la etiqueta
   const getBadgeColors = (label: string) => {
     switch (label) {
+      case 'Optional':
       case 'In Process':
         return { backgroundColor: 'bg-yellow-100', textColor: 'text-yellow-800' };
       case 'Complete':
         return { backgroundColor: 'bg-green-100', textColor: 'text-green-800' };
+      case 'Mandatory':
       case 'Cancelled':
         return { backgroundColor: 'bg-red-100', textColor: 'text-red-800' };
       default:

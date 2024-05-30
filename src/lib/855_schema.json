@@ -1,0 +1,560 @@
+[
+    {
+        "name": "ISA",
+        "mandatory": true,
+        "max": 1,
+        "template": false,
+        "segment_rules": {
+            "1": {
+                "mandatory": true,
+                "min": 2,
+                "max": 2,
+                "type": "ID",
+                "oneOf": [
+                    "00"
+                ]
+            },
+            "2": {
+                "mandatory": true,
+                "min": 10,
+                "max": 10,
+                "type": "AN"
+            },
+            "3": {
+                "mandatory": true,
+                "min": 2,
+                "max": 2,
+                "type": "ID",
+                "oneOf": [
+                    "00"
+                ]
+            },
+            "4": {
+                "mandatory": true,
+                "min": 10,
+                "max": 10,
+                "type": "AN"
+            },
+            "5": {
+                "mandatory": true,
+                "min": 2,
+                "max": 2,
+                "type": "ID",
+                "oneOf": [
+                    "ZZ"
+                ]
+            },
+            "6": {
+                "mandatory": true,
+                "min": 15,
+                "max": 15,
+                "type": "AN"
+            },
+            "7": {
+                "mandatory": true,
+                "min": 2,
+                "max": 2,
+                "type": "ID",
+                "oneOf": [
+                    "ZZ"
+                ]
+            },
+            "8": {
+                "mandatory": true,
+                "min": 15,
+                "max": 15,
+                "type": "AN"
+            },
+            "9": {
+                "mandatory": true,
+                "min": 6,
+                "max": 6,
+                "type": "DT"
+            },
+            "10": {
+                "mandatory": true,
+                "min": 4,
+                "max": 4,
+                "type": "TM"
+            },
+            "11": {
+                "mandatory": true,
+                "min": 1,
+                "max": 1,
+                "type": "SE"
+            },
+            "12": {
+                "mandatory": true,
+                "min": 5,
+                "max": 5,
+                "type": "ID",
+                "oneOf": [
+                    "00400"
+                ]
+            },
+            "13": {
+                "mandatory": true,
+                "min": 9,
+                "max": 9,
+                "type": "N0"
+            },
+            "14": {
+                "mandatory": true,
+                "min": 1,
+                "max": 1,
+                "type": "ID",
+                "oneOf": [
+                    "0"
+                ]
+            },
+            "15": {
+                "mandatory": true,
+                "min": 1,
+                "max": 1,
+                "type": "ID",
+                "oneOf": [
+                    "P"
+                ]
+            },
+            "16": {
+                "mandatory": true,
+                "min": 1,
+                "max": 1,
+                "type": "SE"
+            }
+        }
+    },
+    {
+        "name": "GS",
+        "mandatory": true,
+        "max": 1,
+        "template": false,
+        "segment_rules": {
+            "1": {
+                "mandatory": true,
+                "min": 2,
+                "max": 2,
+                "type": "ID",
+                "oneOf": [
+                    "PR"
+                ]
+            },
+            "2": {
+                "mandatory": true,
+                "min": 2,
+                "max": 15,
+                "type": "AN"
+            },
+            "3": {
+                "mandatory": true,
+                "min": 2,
+                "max": 15,
+                "type": "AN"
+            },
+            "4": {
+                "mandatory": true,
+                "min": 8,
+                "max": 8,
+                "type": "DT"
+            },
+            "5": {
+                "mandatory": true,
+                "min": 4,
+                "max": 8,
+                "type": "TM"
+            },
+            "6": {
+                "mandatory": true,
+                "min": 1,
+                "max": 9,
+                "type": "N0"
+            },
+            "7": {
+                "mandatory": true,
+                "min": 1,
+                "max": 2,
+                "type": "ID",
+                "oneOf": [
+                    "X"
+                ]
+            },
+            "8": {
+                "mandatory": true,
+                "min": 1,
+                "max": 12,
+                "type": "AN",
+                "oneOf": [
+                    "004010"
+                ]
+            }
+        }
+    },
+    {
+        "name": "ST",
+        "mandatory": true,
+        "max": 1,
+        "template": false,
+        "segment_rules": {
+            "1": {
+                "mandatory": true,
+                "min": 3,
+                "max": 3,
+                "type": "ID",
+                "oneOf": [
+                    "855"
+                ]
+            },
+            "2": {
+                "mandatory": true,
+                "min": 4,
+                "max": 9,
+                "type": "AN"
+            }
+        }
+    },
+    {
+        "name": "BAK",
+        "mandatory": true,
+        "max": 1,
+        "segment_rules": {
+            "1": {
+                "mandatory": false,
+                "min": 2,
+                "max": 2,
+                "type": "ID",
+                "oneOf": [
+                    "00"
+                ]
+            },
+            "2": {
+                "mandatory": true,
+                "min": 2,
+                "max": 2,
+                "type": "ID",
+                "oneOf": [
+                    "AC",
+                    "AD",
+                    "ZZ"
+                ]
+            },
+            "3": {
+                "mandatory": true,
+                "min": 2,
+                "max": 22,
+                "type": "AN"
+            },
+            "4": {
+                "mandatory": true,
+                "min": 8,
+                "max": 8,
+                "type": "DT"
+            }
+        }
+    },
+    {
+        "name": "LOOP",
+		"mandatory": true,
+		"max": 100000,
+        "segment_rules": [
+            {
+                "name": "PO1",
+                "mandatory": true,
+                "max": 1,
+                "template": false,
+                "segment_rules": {
+                    "1": {
+                        "mandatory": false,
+                        "min": 1,
+                        "max": 20,
+                        "type": "AN"
+                    },
+                    "2": {
+                        "mandatory": true,
+                        "min": 1,
+                        "max": 15,
+                        "type": "R"
+                    },
+                    "3": {
+                        "mandatory": true,
+                        "min": 2,
+                        "max": 2,
+                        "type": "ID",
+                        "oneOf": [
+                            "CA",
+                            "EA",
+                            "UN"
+                        ]
+                    },
+                    "4": {
+                        "mandatory": true,
+                        "min": 1,
+                        "max": 17,
+                        "type": "R"
+                    },
+                    "5": {
+                        "mandatory": true,
+                        "min": 2,
+                        "max": 2,
+                        "type": "ID",
+                        "oneOf": [
+                            "NT"
+                        ]
+                    },
+                    "6": {
+                        "mandatory": true,
+                        "min": 2,
+                        "max": 2,
+                        "type": "ID",
+                        "oneOf": [
+                            "BP",
+                            "EA", 
+                            "EN",
+                            "IB",
+                            "MG",
+                            "UA",
+                            "UK",
+                            "UP",
+                            "VN",
+                            "VP"
+                        ]
+                    },
+                    "7": {
+                        "mandatory": true,
+                        "min": 1,
+                        "max": 48,
+                        "type": "AN"
+                    }
+                }
+            },
+            {
+                "name": "CTP",
+                "mandatory": false,
+                "max": 1,
+                "template": false,
+                "segment_rules": {
+                    "1": {
+                        "mandatory": false,
+                        "min": 0,
+                        "max": 0,
+                        "type": "AN"
+                    },
+                    "2": {
+                        "mandatory": true,
+                        "min": 3,
+                        "max": 3,
+                        "type": "ID",
+                        "oneOf": [
+                            "DPR",
+                            "LPR",
+                            "NET",
+                            "SLP"
+                        ]
+                    },
+                    "3": {
+                        "mandatory": true,
+                        "min": 1,
+                        "max": 17,
+                        "type": "R"
+                    },
+                    "4": {
+                        "mandatory": true,
+                        "min": 1,
+                        "max": 15,
+                        "type": "R"
+                    },
+                    "5": {
+                        "mandatory": true,
+                        "min": 2,
+                        "max": 2,
+                        "type": "ID",
+                        "oneOf": [
+                            "CA",
+                            "EA",
+                            "UN"
+                        ]
+                    },
+                    "6": {
+                        "mandatory": true,
+                        "min": 3,
+                        "max": 3,
+                        "type": "ID",
+                        "oneOf": [
+                            "DIS"
+                        ]
+                    },
+                    "7": {
+                        "mandatory": true,
+                        "min": 1,
+                        "max": 10,
+                        "type": "R"
+                    }
+                }
+            },
+            {
+                "name": "LOOP",
+                "mandatory": true,
+                "max": 104,
+                "segment_rules": [
+                    {
+                        "name": "ACK",
+                        "mandatory": true,
+                        "max": 1, 
+                        "template": false,
+                        "segment_rules": {
+                            "1": {
+                                "mandatory": true,
+                                "min": 2,
+                                "max": 2,
+                                "type": "ID",
+                                "oneOf": [
+                                    "BP",
+                                    "IA",
+                                    "IB",
+                                    "IQ",
+                                    "IR",
+                                    "R2",
+                                    "R3"
+                                ]
+                            },
+                            "2": {
+                                "mandatory": true,
+                                "min": 1,
+                                "max": 15,
+                                "type": "R"
+                            },
+                            "3": {
+                                "mandatory": true,
+                                "min": 2,
+                                "max": 2,
+                                "type": "ID",
+                                "oneOf": [
+                                    "CA",
+                                    "EA",
+                                    "UN"
+                                ]
+                            },
+                            "4": {
+                                "mandatory": false,
+                                "min": 3,
+                                "max": 3,
+                                "type": "ID",
+                                "oneOf": [
+                                    "068"
+                                ]
+                            },
+                            "5": {
+                                "mandatory": false,
+                                "min": 8,
+                                "max": 8,
+                                "type": "DT"
+                            }
+                        }
+                    },
+                    {
+                        "name": "DTM",
+                        "mandatory": false,
+                        "max": 1, 
+                        "template": false,
+                        "segment_rules": {
+                            "1": {
+                                "mandatory": true,
+                                "min": 3,
+                                "max": 3,
+                                "type": "ID",
+                                "oneOf": [
+                                    "067"
+                                ]
+                            },
+                            "2": {
+                                "mandatory": true,
+                                "min": 8,
+                                "max": 8,
+                                "type": "DT"
+                            } 
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "CTT",
+        "mandatory": false,
+        "max": 1, 
+        "template": false,
+        "segment_rules": {
+            "1": {
+                "mandatory": false,
+                "min": 1,
+                "max": 6,
+                "type": "N0"
+            },
+            "2": {
+                "mandatory": false,
+                "min": 1,
+                "max": 10,
+                "type": "R"
+            } 
+        }
+    },
+    {
+        "name": "SE",
+        "mandatory": true,
+        "max": 1, 
+        "template": false,
+        "segment_rules": {
+            "1": {
+                "mandatory": true,
+                "min": 1,
+                "max": 10,
+                "type": "N0"
+            },
+            "2": {
+                "mandatory": true,
+                "min": 4,
+                "max": 9,
+                "type": "AN"
+            } 
+        }
+    },
+    {
+        "name": "GE",
+        "mandatory": true,
+        "max": 1, 
+        "template": false,
+        "segment_rules": {
+            "1": {
+                "mandatory": true,
+                "min": 1,
+                "max": 6,
+                "type": "N0"
+            },
+            "2": {
+                "mandatory": true,
+                "min": 1,
+                "max": 9,
+                "type": "N0"
+            } 
+        }
+    },
+    {
+        "name": "IEA",
+        "mandatory": true,
+        "max": 1, 
+        "template": false,
+        "segment_rules": {
+            "1": {
+                "mandatory": true,
+                "min": 1,
+                "max": 5,
+                "type": "N0"
+            },
+            "2": {
+                "mandatory": true,
+                "min": 9,
+                "max": 9,
+                "type": "N0"
+            } 
+        }
+    }
+]

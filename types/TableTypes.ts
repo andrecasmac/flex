@@ -5,3 +5,17 @@ export type SegmentTemplatesContent={
     usage:number,
     maxUse:number,
 }
+
+export type PartnerShipsClientContent={
+    id:string,
+    name:string,
+    status:string,
+    edi:string,
+    connection:string,
+}
+
+export type ModalViewDocumentsContent={
+    id:string,
+    name:string,
+    mandatory:string,
+}
