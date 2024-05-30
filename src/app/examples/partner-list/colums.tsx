@@ -11,10 +11,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Toggle from "@/components/ui/toggle";
-import React from "react";
-import { FaGear } from "react-icons/fa6";
 import { HiDotsVertical } from "react-icons/hi";
 import { Partner } from "../../../../types/DbTypes";
+import ModalsPartners from ".";
 
 export type PartnerT = {
   id: string;
@@ -95,17 +94,10 @@ export const columns: ColumnDef<Partner>[] = [
                 <HiDotsVertical className="h-8 w-8 text-primary" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              <DropdownMenuItem
-                onClick={() =>
-                  navigator.clipboard.writeText(String(produtct.id))
-                }
-              >
-                Copy payment ID
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuContent className="border-primary" align="start">
+              <DropdownMenuItem>View</DropdownMenuItem>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <ModalsPartners modalDeletePartner={true} selectedItemName={produtct.name} />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
