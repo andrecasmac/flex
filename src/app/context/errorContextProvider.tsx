@@ -1,5 +1,3 @@
-// context/MyContextProvider.tsx
-
 'use client';
 
 import ErrorContext from './errorContext';
