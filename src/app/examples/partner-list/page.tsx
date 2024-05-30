@@ -6,7 +6,7 @@ import { columns } from "./colums";
 import { DataTable } from "./data-table-partner-list";
 import { getAllPartners } from "@/da/Partners/partner-da";
 import { Partner } from "../../../../types/DbTypes";
-import Modals from "../modal";
+import ModalsPartners from ".";
 import { useEffect, useState } from "react";
 
 export default function Page() {
@@ -41,8 +41,8 @@ export default function Page() {
         <>
             <PageTitle title="Partner's List" />
             <div className="w-[80%]">
-                <div className="flex flex-row-reverse mb-5 ">
-                    <Modals modalAddDoc={true} />
+                <div className="flex flex-row-reverse mb-5 gap-5">
+                    <ModalsPartners modalAddPartner={true} />
                 </div>
                 <DataTable columns={columns} data={partners} />
             </div>

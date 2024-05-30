@@ -6,6 +6,7 @@ import { ModalTest } from "./modalTest";
 import { ModalUpload } from "./modalUpload";
 import { ModalErrorList } from "./modalErrorList";
 import { ModalAddDoc } from "./modalAddDoc";
+import { ModalSuccess } from "./modalSuccess";
 
 import { ModalSave } from "./modalSave";
 interface ModalsProps {
@@ -13,6 +14,7 @@ interface ModalsProps {
   modalAddDoc?: boolean;
   modalTest?: boolean;
   modalUpload?: boolean;
+  modalSuccess?: boolean;
   modalErrorList?: boolean;
   modalSave?: boolean;
   onSave?: () => Promise<void>;
