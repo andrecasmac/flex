@@ -1,0 +1,37 @@
+
+    {
+        "name": "ISA",
+        "mandatory": "M",
+        "max": 1,
+        "template": true,
+        "segment_rules": {
+            "1": {
+                "mandatory": "M",
+                "min": 110,
+                "max": 100,
+                "type": "ID",
+                "oneOf": [
+                    "10"
+                ]
+            },
+            "2": {
+                "mandatory": "M",
+                "min": 200,
+                "max": 100,
+                "type": "AN",
+                "isEqual": "1000",
+                "oneOf": [
+                    "10",
+                    "20",
+                    "30"
+                ]
+            },
+            "3": {
+                "mandatory": "O",
+                "min": 300,
+                "max": 100,
+                "type": "R",
+                "isHigherThan": "20"
+            }
+        }
+    }
