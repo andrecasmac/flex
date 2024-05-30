@@ -17,20 +17,16 @@ import ModalContext from "@/app/context/modalContext";
 import { PartnerShipsClientContent } from "../../../../types/TableTypes";
 
 interface ModalAddPartnerships {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
   ButtonContent: string;
-  data:PartnerShipsClientContent[];
+  data: PartnerShipsClientContent[];
 }
 
 export function ModalAddPartnerships({
-  isOpen,
-  setIsOpen,
   ButtonContent,
   data
 }: ModalAddPartnerships) {
-
-  const {isThisOpen,setisThisOpen}=useContext(ModalContext)
+  //Variable that is shared with Modal View Documents
+  const { isThisOpen, setisThisOpen } = useContext(ModalContext)
   return (
     <Dialog open={isThisOpen} onOpenChange={setisThisOpen}>
       <DialogTrigger asChild>
@@ -43,11 +39,13 @@ export function ModalAddPartnerships({
           </DialogTitle>
         </DialogHeader>
         <div className="flex items-center justify-center pt-5 w-[85%]">
+          {/*This is where we display the Table with the Partnerships*/}
           <DataTable columns={columnsModal} data={data} />
         </div>
 
         <DialogFooter className="felx items-center justify-center">
           <DialogClose asChild>
+            {/*Button that closes this Modal*/}
             <Button size="lg" className="h-10">
               Cancel
             </Button>

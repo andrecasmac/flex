@@ -41,16 +41,17 @@ const data: PartnerShipsClientContent[] = [
 ]
 
 export default function Page() {
-    const [isOpen, setIsOpen] = useState(false);
 
     return (
         <div className="flex flex-col justify-center items-center w-full">
             <PageTitle title="Partnerships" />
             <ModalContextProvider>
                 <div className="flex w-[80%] justify-end pt-5">
-                    <ModalAddPartnerships isOpen={isOpen} setIsOpen={setIsOpen} ButtonContent="Add Parternship" data={data}/>
+                    {/*This is the Modal that adds partnerships*/}
+                    <ModalAddPartnerships ButtonContent="Add Parternship" data={data}/>
                 </div>
                 <div className="flex w-[75%] justify-center items-center w-full pt-5">
+                    {/*This is where we display the Table with the Partnerships*/}
                     <DataTable columns={columns} data={data} />
                 </div>
             </ModalContextProvider>
