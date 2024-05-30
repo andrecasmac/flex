@@ -19,7 +19,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 
@@ -41,10 +40,12 @@ export function ModalDeletePartner({
     ButtonContent,
     itemName,
   }: ModalDeletePartnerProps) {
+    const itemNameSize = itemName.length
+
     const formSchema = z.object({
-      name: z.string().includes(itemName, {
-        message: "*Please input name correctly to confirm delete",
-      }),
+      name: z.string()
+      .includes(itemName, {message: "*Incorrect input",})
+      .length(itemNameSize, {message: "*Incorrect input",}),
     });
     
     const form = useForm<z.infer<typeof formSchema>>({
@@ -73,18 +74,18 @@ export function ModalDeletePartner({
 
           <div className="px-10 pt-10">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="flex items-center justify-center p-4 mx-7 border border-primary rounded-lg">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="mx-7">
+                <p className="text-gray-500 mb-5">Please type partner name exactly as shown below to confirm deletion.</p>
+                <div className="flex items-center justify-center p-4 border border-primary rounded-lg">
                   <p className="text-primary text-2xl font-bold">{itemName}</p>
                 </div>
 
-                <div className="mx-7 mt-7">
+                <div className="mt-9">
                   <FormField
                     control={form.control}
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Input Partner name</FormLabel>
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
