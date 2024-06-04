@@ -1,16 +1,15 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { ComboboxDropdown } from "@/components/ui/combobox";
 import MultipleTagsInput from "@/components/multiple-tags";
 
 import { IDropdown, optionsUsage } from "../../../../types/segmentTypes";
-import { ChevronRight, MinusCircle, PlusCircle } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+
 import {
   Table,
   TableBody,
@@ -21,7 +20,6 @@ import {
 } from "@/components/ui/table";
 
 import {
-  SegmentRule,
   SegmentData,
   initialRuleByType,
   additionalRulesByType,
@@ -29,60 +27,36 @@ import {
   ruleNamesMap,
   optionsDTFormats,
   optionsTMFormats,
-} from "../../../../types/segmentTypes"; // Asegúrate de tener este archivo de tipos
+} from "../../../../types/segmentTypes";
 
-function SegmentGenerator() {
-  const [segmentData, setSegmentData] = useState<SegmentData>({
-    name: "ISA",
-    mandatory: "M",
-    max: 1,
-    template: false,
-    segment_rules: {},
+interface SegmentEditProps {
+  initialSegmentData: SegmentData;
+}
+
+function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
+  const [segmentData, setSegmentData] =
+    useState<SegmentData>(initialSegmentData);
+
+  const [numElements, setNumElements] = useState(
+    Object.keys(initialSegmentData.segment_rules).length
+  );
+
+  const [showRules, setShowRules] = useState<{ [key: number]: boolean }>(() => {
+    const initialShowRules: { [key: number]: boolean } = {};
+    Object.keys(initialSegmentData.segment_rules).forEach((key) => {
+      initialShowRules[Number(key)] = true;
+    });
+    return initialShowRules;
   });
 
-  const [numElements, setNumElements] = useState(0);
-  const [showRules, setShowRules] = useState<{ [key: number]: boolean }>({});
-  const [inputValue, setInputValue] = useState(""); // New state for input value
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      handleNumElementsChange(inputValue); // Use the stored inputValue
-    }
-  };
-
-  const handleNumElementsChange = (value: string) => {
-    const num = parseInt(value, 10) || 0;
-
-    // Ensure num is within bounds (0 to some maximum, if applicable)
-    const clampedNum = Math.max(0, Math.min(num, 25)); // Example max of 10
-
-    const newSegmentRules: { [key: number]: SegmentRule } = {};
-    for (let i = 1; i <= clampedNum; i++) {
-      // Start at 1, not 0
-      newSegmentRules[i] = segmentData.segment_rules[i] || {
-        ...initialRuleByType,
-        type: "",
-      };
-    }
-
-    setNumElements(clampedNum);
-    setSegmentData((prevData) => ({
-      ...prevData,
-      segment_rules: newSegmentRules,
-    }));
-  };
-
-  const handleInputChangeMT = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setSegmentData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  useEffect(() => {
+    setNumElements(Object.keys(segmentData.segment_rules).length);
+    const newShowRules: { [key: number]: boolean } = {};
+    Object.keys(segmentData.segment_rules).forEach((key) => {
+      newShowRules[Number(key)] = true;
+    });
+    setShowRules(newShowRules);
+  }, [segmentData]);
 
   const handleRuleChange = (
     elementIndex: number,
@@ -134,7 +108,7 @@ function SegmentGenerator() {
       }));
     },
     []
-  ); // Empty dependency array: memoize the function
+  );
 
   const toggleRules = (elementIndex: number) => {
     setShowRules((prevShowRules) => ({
@@ -146,64 +120,8 @@ function SegmentGenerator() {
   return (
     <div className="flex w-[80%] gap-x-5 justify-center">
       <div className="flex flex-col w-full">
-        <div className="flex items-center justify-between px-2 w-full mb-8 gap-x-5">
-          <Label>
-            Segment Code
-            <Input
-              type="text"
-              name="name"
-              value={segmentData.name}
-              onChange={handleInputChangeMT}
-              className="mt-2"
-            />
-          </Label>
-          <Label>
-            Segment Name
-            <Input className="mt-2" type="text" placeholder="Name..." />
-          </Label>
-          <Label>
-            N. Elements
-            <Input
-              type="number"
-              name="numElements"
-              placeholder="Number of Elements"
-              value={inputValue} // Bind input value to state
-              onChange={handleInputChange}
-              onKeyDown={handleInputKeyDown}
-              className="mt-2"
-            />
-          </Label>
-          <Label>
-            <span>Mandatory</span>
-            <div className="mt-2">
-              <ComboboxDropdown
-                content={optionsUsage}
-                handleSelect={(option: IDropdown) => {
-                  setSegmentData((prev) => ({
-                    ...prev,
-                    mandatory: option.label,
-                  }));
-                }}
-                selected={optionsUsage.find(
-                  (option) => option.label === segmentData.mandatory
-                )}
-              />
-            </div>
-          </Label>
-          <Label>
-            Max Use
-            <Input
-              className="mt-2"
-              type="number"
-              name="max"
-              value={segmentData.max}
-              onChange={handleInputChangeMT}
-            />
-          </Label>
-        </div>
-
-        <div className="w-full overflow-auto border rounded-xl">
-          <Table className="p-2 w-full">
+        <div className="overflow-auto border rounded-xl">
+          <Table className="p-2 ">
             <TableHeader className="bg-turquoise dark:bg-cyan-950">
               <TableRow>
                 <TableHead></TableHead>
@@ -285,6 +203,7 @@ function SegmentGenerator() {
                           type="number"
                           name="min"
                           placeholder="Min..."
+                          value={currentElement.min || ""}
                           onChange={(e) =>
                             handleRuleChange(
                               Number(elementIndex),
@@ -300,6 +219,7 @@ function SegmentGenerator() {
                           type="number"
                           name="max"
                           placeholder="Max..."
+                          value={currentElement.max || ""}
                           onChange={(e) =>
                             handleRuleChange(
                               Number(elementIndex),
@@ -448,4 +368,4 @@ function SegmentGenerator() {
   );
 }
 
-export default SegmentGenerator;
+export default SegmentEdit;
