@@ -50,12 +50,9 @@ export default function Home() {
           </div>
         </Card>
       </div>
-
-      <div className="pt-3">
-        <Button asChild variant="default" size="sm" className="shadow-sm">
+      <Button asChild variant="default" size="sm" className="shadow-sm">
           <a href="/examples">Components</a>
-        </Button>
-      </div>
+      </Button>
     </main>
   );
 }
