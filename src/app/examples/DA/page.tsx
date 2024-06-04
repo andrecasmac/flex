@@ -28,6 +28,14 @@ export default function Page() {
       >
         <a href="/examples/DA/EDI-Documents">EDI_Documents</a>
       </Button>
+      <Button
+        asChild
+        variant="default"
+        size="lg"
+        className="rounded-2xl active:scale-95 transition-all"
+      >
+        <a href="/examples/DA/Partnerships">Partnerships</a>
+      </Button>
     </div>
   );
 }

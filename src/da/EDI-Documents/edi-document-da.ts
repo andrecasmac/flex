@@ -27,7 +27,8 @@ export async function getEDIdocuments(){
     try{
         const EDI_documents = prisma.eDI_Document.findMany({
             include: {
-                structure: true,
+                partner: true,
+                structure: true
             }
         });
         if(!EDI_documents){

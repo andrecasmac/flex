@@ -20,6 +20,7 @@ export type AssociatedPartner = {
     id: string;
     partner: Partner | null;
     uploaded_documents: document[];
+    client: any;
 };
 
 export type document = {
@@ -40,6 +41,7 @@ export type EDI_Document = {
     type: string;
     template: boolean;
     structure: Segment[];
+    partner: any;
 };
 
 export type Segment = {

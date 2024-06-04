@@ -1,5 +1,6 @@
 "use server"
 import { document, PrismaClient,Prisma, Partner } from "@prisma/client";
+import { error } from "console";
 const prisma = new PrismaClient();
 
 //Create partnership
@@ -25,7 +26,26 @@ export async function createPartnership(){
 //Read partnerships
 export async function getAllPartnerships(){
     try{
-        const partnerships = await prisma.associated_partner.findMany();
+        const partnerships = await prisma.associated_partner.findMany({
+            include: {
+                partner: {
+                    include: {
+                        EDI_documents: {
+                            include: {
+                                structure: true,
+                                partner: true
+                            }
+                        }
+                    }
+                },
+                uploaded_documents: {
+                    include: {
+                        errors: true
+                    }
+                },
+                client: true
+            }
+        });
         if(!partnerships){
             throw new Error("Failed to fetch partnerships");
         }

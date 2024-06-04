@@ -33,7 +33,8 @@ export async function getAllPartners(){
           include: {
             EDI_documents: {
                 include: {
-                    structure: true
+                    structure: true,
+                    partner: true
                 }
             }
           }
