@@ -25,7 +25,7 @@ import { Description } from "@radix-ui/react-dialog";
 
 
 interface ModalUploadProps {
-    isOpen: boolean;
+    isOpen?: boolean;
     setIsOpen: (open: boolean) => void;
     ButtonContent: string;
 }

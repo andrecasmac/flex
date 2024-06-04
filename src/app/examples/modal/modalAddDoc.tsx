@@ -70,7 +70,7 @@ export function ModalAddDoc({
 
         <div className="px-10">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-2">
+            <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-8">
               <FormField
                 control={form.control}
                 name="content"
@@ -84,6 +84,10 @@ export function ModalAddDoc({
                   </FormItem>
                 )}
               />
+
+              <div className="flex justify-center items-center h-10 w-full rounded-md border border-input bg-background px-3 py-2">
+                <p className="text-sm text-gray-400">“Document Configuration”</p>
+              </div>
 
               <DialogFooter>
                 <DialogClose asChild>
@@ -99,7 +103,7 @@ export function ModalAddDoc({
                   onClick={() => onSubmit}
                   className="h-8 w-[40%]"
                 >
-                  Configure
+                  Save
                 </Button>
               </DialogFooter>
             </form>
