@@ -86,7 +86,6 @@ export const columns: ColumnDef<ProductsT>[] = [
     },
     cell: ({ row }) => {
       const produtct = row.original;
-      const router = useRouter();
       return (
         <div className="flex justify-center">
           <DropdownMenu>
