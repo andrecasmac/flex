@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ComboboxDropdown } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
@@ -13,15 +13,7 @@ import {
   getLoops,
   optionsUsage,
 } from "./doc-types";
-import {
-  GripVertical,
-  MinusCircle,
-  Pencil,
-  ChevronRight,
-  PlusCircle,
-} from "lucide-react";
-import { SortableContext, useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import { MinusCircle, Pencil, ChevronRight, PlusCircle } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -67,37 +59,8 @@ export default function RowContainer(props: Props) {
     allRows,
   } = props;
 
-  const LoopsIds = useMemo(() => {
-    return allRows.map((row) => row.id);
-  }, [allRows]);
-
   const isLoop = (row: SegmentRow | LoopRow): row is LoopRow =>
     "segments" in row;
-
-  const {
-    setNodeRef,
-    attributes,
-    listeners,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
-    id: row.id,
-    data: {
-      type: "Row",
-      row,
-    },
-  });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.4 : 1,
-  };
-
-  if (isDragging) {
-    return <div ref={setNodeRef} style={style} className="h-20"></div>;
-  }
 
   const segments = getSegments();
   const loops = getLoops();
@@ -113,22 +76,7 @@ export default function RowContainer(props: Props) {
     <>
       {!isLoop(row) ? (
         <>
-          <div
-            ref={setNodeRef}
-            style={style}
-            className="flex flex-row justify-around border-b h-20 px-5"
-          >
-            <div className=" flex items-center justify-start w-1/10">
-              <Button
-                variant={"ghost"}
-                size={"icon"}
-                className="text-start"
-                {...attributes}
-                {...listeners}
-              >
-                <GripVertical />
-              </Button>
-            </div>
+          <div className="flex flex-row justify-around  h-20 px-5">
             <div className=" flex items-center justify-center w-2/4">
               <div className="w-4/5">
                 <ComboboxDropdown
@@ -186,22 +134,8 @@ export default function RowContainer(props: Props) {
         </>
       ) : (
         <>
-          <div
-            ref={setNodeRef}
-            style={style}
-            className="flex flex-row justify-around h-20  bg-slate-400/10 px-5"
-          >
+          <div className="flex flex-row justify-around  h-20 bg-slate-400/10 px-5">
             <div className=" flex items-center justify-start w-1/10 ">
-              <Button
-                variant={"ghost"}
-                size={"icon"}
-                className="text-start"
-                {...attributes}
-                {...listeners}
-              >
-                <GripVertical />
-              </Button>
-
               <Button
                 className="flex items-center space-x-2 "
                 variant={"ghost"}
@@ -288,40 +222,38 @@ export default function RowContainer(props: Props) {
           </div>
           {showSegmentLoops[row.id] && (
             <>
-              {/* <SortableContext items={LoopsIds}> */}
-                {row.segments.map((segment) => (
-                  <div key={segment.id} className="border-s border-b  ms-10">
+              {row.segments.map((segment) => (
+                <div key={segment.id} className=" border-s ms-10">
+                  <RowContainer
+                    key={segment.id}
+                    row={segment}
+                    allRows={allRows}
+                    deleteRow={deleteRow}
+                    handleSelect={handleSelect}
+                    handleInputChange={handleInputChange}
+                    addSegmentsToLoop={addLoopToLoop}
+                    addLoopToLoop={addLoopToLoop}
+                    parentId={row.id}
+                  />
+                </div>
+              ))}
+
+              {row.internLoops &&
+                row.internLoops.map((loop) => (
+                  <div key={loop.id} className=" border-s ms-10">
                     <RowContainer
-                      key={segment.id}
-                      row={segment}
+                      key={loop.id}
+                      row={loop}
                       allRows={allRows}
                       deleteRow={deleteRow}
                       handleSelect={handleSelect}
                       handleInputChange={handleInputChange}
-                      addSegmentsToLoop={addLoopToLoop}
+                      addSegmentsToLoop={addSegmentsToLoop}
                       addLoopToLoop={addLoopToLoop}
                       parentId={row.id}
                     />
                   </div>
                 ))}
-
-                {row.internLoops &&
-                  row.internLoops.map((loop) => (
-                    <div key={loop.id} className="border-s border-b ms-10">
-                      <RowContainer
-                        key={loop.id}
-                        row={loop}
-                        allRows={allRows}
-                        deleteRow={deleteRow}
-                        handleSelect={handleSelect}
-                        handleInputChange={handleInputChange}
-                        addSegmentsToLoop={addSegmentsToLoop}
-                        addLoopToLoop={addLoopToLoop}
-                        parentId={row.id}
-                      />
-                    </div>
-                  ))}
-              {/* </SortableContext> */}
             </>
           )}
         </>

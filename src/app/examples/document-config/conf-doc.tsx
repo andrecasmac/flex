@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Table, TableHeader, TableHead, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,25 +13,8 @@ import {
 } from "./doc-types";
 import RowContainer from "./row-container-base";
 
-import {
-  DndContext,
-  DragStartEvent,
-  DragOverlay,
-  DragEndEvent,
-  useSensor,
-  useSensors,
-  PointerSensor,
-} from "@dnd-kit/core";
-import { SortableContext, arrayMove } from "@dnd-kit/sortable";
-import { createPortal } from "react-dom";
-
 export default function DocConfig() {
   const [rows, setRows] = useState<Row[]>([]);
-  const [activeRow, setActiveRow] = useState<Row | null>(null);
-
-  const rowsId = useMemo(() => rows.map((row) => row.id), [rows]);
-
-  // console.log({ rows });
 
   function createSegmentRow() {
     const segmentToAdd: Row = {
@@ -231,41 +214,16 @@ export default function DocConfig() {
       }
     });
   }
-  function onDragStart(event: DragStartEvent) {
-    console.log("DRAG START", { event });
-    if (event.active.data.current?.type === "Row") {
-      setActiveRow(event.active.data.current.row);
-      return;
-    }
-  }
-
-  function onDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-    if (!over) return;
-
-    const activeRowId = active.id;
-    const overRowId = over.id;
-
-    if (activeRowId === overRowId) return;
-
-    setRows((rows) => {
-      const activeRowIndex = rows.findIndex((row) => row.id === activeRowId);
-      const overRowIndex = rows.findIndex((row) => row.id === overRowId);
-      return arrayMove(rows, activeRowIndex, overRowIndex);
-    });
-  }
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 3,
-      },
-    })
-  );
 
   return (
     <div className="w-[80%] h-[auto] justify-center">
       <div className="pb-4 gap-x-2 flex justify-end">
+        <div className="flex-1 ">
+          <Button variant={"default"} onClick={createSegmentRow}>
+            Create Segment +
+          </Button>
+        </div>
+
         <Button variant={"default"} onClick={createSegmentRow}>
           Add segment +
         </Button>
@@ -274,72 +232,51 @@ export default function DocConfig() {
         </Button>
       </div>
 
-      <div className="overflow-auto rounded-t-md">
-        <Table>
-          <TableHeader className="bg-turquoise dark:bg-cyan-950">
-            <TableRow>
-              <TableHead className="w-20"></TableHead>
-              <TableHead className="w-1"></TableHead>
-              <TableHead className="text-start">
+      <div className="w-full overflow-auto rounded-t-md">
+        <div className="min-w-[700px] w-full">
+          <div className="bg-turquoise dark:bg-cyan-950">
+            <div className="flex text-white h-12">
+              <div className="flex items-center justify-center align-middle text-center ps-10 w-2/4">
                 Segment ID - Segment Name
-              </TableHead>
-              <TableHead className="text-center">Usage</TableHead>
-              <TableHead className="text-center">Max</TableHead>
-              <TableHead className="text-center">Edit</TableHead>
-              <TableHead className="text-center">Remove</TableHead>
-            </TableRow>
-          </TableHeader>
-        </Table>
-      </div>
-
-      <DndContext
-        sensors={sensors}
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
-      >
-        <div className="border rounded-md overflow-auto">
-          <div className="w-full space-y-0">
-            <SortableContext items={rowsId}>
-              <div className="min-w-[700px]">
-                {rows.map((row) => (
-                  <React.Fragment key={row.id}>
-                    <RowContainer
-                      row={row}
-                      allRows={rows}
-                      deleteRow={deleteRow}
-                      handleSelect={handleSelect}
-                      handleInputChange={handleInputChange}
-                      addSegmentsToLoop={addSegmentToLoop}
-                      addLoopToLoop={addLoopToLoop}
-                    />
-                  </React.Fragment>
-                ))}
               </div>
-            </SortableContext>
+              <div className="flex items-center justify-center align-middle text-center w-2/4">
+                Usage
+              </div>
+              <div className="flex items-center justify-center align-middle text-center w-2/4">
+                Max
+              </div>
+              <div className="flex items-center justify-center align-middle text-center  w-1/10">
+                Edit
+              </div>
+              <div className="flex items-center justify-center align-middle px-5 w-1/10">
+                Remove
+              </div>
+            </div>
           </div>
-        </div>
 
-        {typeof document !== "undefined" &&
-          createPortal(
-            <DragOverlay className="opacity-40">
-              {activeRow && (
+          <div className="border rounded-b-lg">
+            {rows.map((row) => (
+              <React.Fragment key={row.id}>
                 <RowContainer
-                  row={activeRow}
-                  allRows={rows.filter((row) => {
-                    (row).id === activeRow.id
-                  })}
-                  // allRows={rows}
+                  row={row}
+                  allRows={rows}
                   deleteRow={deleteRow}
                   handleSelect={handleSelect}
                   handleInputChange={handleInputChange}
                   addSegmentsToLoop={addSegmentToLoop}
                   addLoopToLoop={addLoopToLoop}
                 />
-              )}
-            </DragOverlay>,
-            document.body
-          )}
-      </DndContext>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="border  rounded-b-lg overflow-auto">
+        <div className="w-full space-y-0">
+          <div className="min-w-[700px]"></div>
+        </div>
+      </div> */}
 
       <pre className="pt-10 texxt-xs flex justify-center">
         {JSON.stringify(rows, null, 2)}
