@@ -15,6 +15,7 @@ import Toggle from "@/components/ui/toggle";
 import React from "react";
 import { FaGear } from "react-icons/fa6";
 import { HiDotsVertical } from "react-icons/hi";
+import Link from "next/link";
 
 export type ProductsT = {
   id: string;
@@ -69,7 +70,7 @@ export const columns: ColumnDef<ProductsT>[] = [
       // Allows to visualize the Toggle of each row
       return (
         <div className="flex justify-center">
-          <Toggle actionToggle={row.original.hidden} onChange={handleToggleCell}/>
+          <Toggle actionToggle={row.original.hidden} onChange={handleToggleCell} />
         </div>
       );
     },
@@ -85,7 +86,7 @@ export const columns: ColumnDef<ProductsT>[] = [
     },
     cell: ({ row }) => {
       const produtct = row.original;
-      const router =useRouter();
+      const router = useRouter();
       return (
         <div className="flex justify-center">
           <DropdownMenu>
@@ -104,7 +105,9 @@ export const columns: ColumnDef<ProductsT>[] = [
                 Copy payment ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={()=>router.push("admin/document-list")}>View customer</DropdownMenuItem>
+              <Link href={"admin/document-list"}>
+                <DropdownMenuItem>View customer</DropdownMenuItem>
+              </Link>
               <DropdownMenuItem>View payment details</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Pencil,MinusCircle } from "lucide-react";
 import { SegmentTemplatesContent } from "../../../../../types/TableTypes";
+import Link from "next/link";
 
 export type ProductsT = {
   id: string;
@@ -132,10 +133,11 @@ export const columnsSegmentTemplate: ColumnDef<SegmentTemplatesContent>[] = [
     id: "edit",/*Key*/
     header: "Edit",/*Label*/
     cell: ({ row }) => {
-      const router =useRouter();
       return (
         <div className="flex justify-center">
-          <Button size="icon" variant={"ghost"} onClick={()=>router.push("./segment-edit")}><Pencil className="h-7 w-7 text-black dark:text-white " /></Button>{/*Button for the edit function*/}
+          <Link href={"./segment-edit"}>
+          <Button size="icon" variant={"ghost"}><Pencil className="h-7 w-7 text-black dark:text-white " /></Button>{/*Button for the edit function*/}
+          </Link>
         </div>
       );
     },
