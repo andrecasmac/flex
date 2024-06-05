@@ -297,7 +297,12 @@ export default function RowContainer(props: Props) {
           {showSegmentLoops[row.id] && (
             <>
               {row.segments.map((segment) => (
-                <div key={segment.id} className="border-s border-t ms-10">
+                <div
+                  key={segment.id}
+                  className={`border-s ms-10 ${
+                    row.segments.indexOf(segment) !== 0 ? "border-t" : ""
+                  }`}
+                >
                   <RowContainer
                     key={segment.id}
                     row={segment}

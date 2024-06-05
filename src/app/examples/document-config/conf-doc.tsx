@@ -295,49 +295,64 @@ export default function DocConfig() {
             </div>
           </div>
 
-          <div className="border rounded-b-lg">
-            <DndContext
-              sensors={sensors}
-              onDragStart={onDragStart}
-              onDragEnd={onDragEnd}
-            >
-              <SortableContext items={rowsId}>
-                {rows.map((row) => (
-                  <React.Fragment key={row.id}>
-                    <div className="border-t">
-                      <RowContainer
-                        row={row}
-                        allRows={rows}
-                        deleteRow={deleteRow}
-                        handleSelect={handleSelect}
-                        handleInputChange={handleInputChange}
-                        addSegmentsToLoop={addSegmentToLoop}
-                        addLoopToLoop={addLoopToLoop}
-                      />
-                    </div>
-                  </React.Fragment>
-                ))}
-              </SortableContext>
+          {rows.length === 0 ? (
+            <div className="border rounded-b-lg">
+              <div className="flex justify-center items-center h-20 opacity-40">
+                <h1>Add segments or loops</h1>
+              </div>
+            </div>
+          ) : (
+            <div className="border rounded-b-lg">
+              <DndContext
+                sensors={sensors}
+                onDragStart={onDragStart}
+                onDragEnd={onDragEnd}
+              >
+                <SortableContext items={rowsId}>
+                  {rows.map((row) => (
+                    <React.Fragment key={row.id}>
+                      <div
+                        className={`${
+                          rows.length > 0 &&
+                          rows.indexOf(row) !== rows.length - 1
+                            ? "border-b"
+                            : ""
+                        }`}
+                      >
+                        <RowContainer
+                          row={row}
+                          allRows={rows}
+                          deleteRow={deleteRow}
+                          handleSelect={handleSelect}
+                          handleInputChange={handleInputChange}
+                          addSegmentsToLoop={addSegmentToLoop}
+                          addLoopToLoop={addLoopToLoop}
+                        />
+                      </div>
+                    </React.Fragment>
+                  ))}
+                </SortableContext>
 
-              {typeof document !== "undefined" &&
-                createPortal(
-                  <DragOverlay className="opacity-40">
-                    {activeRow && (
-                      <RowContainer
-                        row={activeRow}
-                        allRows={rows}
-                        deleteRow={deleteRow}
-                        handleSelect={handleSelect}
-                        handleInputChange={handleInputChange}
-                        addSegmentsToLoop={addSegmentToLoop}
-                        addLoopToLoop={addLoopToLoop}
-                      />
-                    )}
-                  </DragOverlay>,
-                  document.body
-                )}
-            </DndContext>
-          </div>
+                {typeof document !== "undefined" &&
+                  createPortal(
+                    <DragOverlay className="opacity-40">
+                      {activeRow && (
+                        <RowContainer
+                          row={activeRow}
+                          allRows={rows}
+                          deleteRow={deleteRow}
+                          handleSelect={handleSelect}
+                          handleInputChange={handleInputChange}
+                          addSegmentsToLoop={addSegmentToLoop}
+                          addLoopToLoop={addLoopToLoop}
+                        />
+                      )}
+                    </DragOverlay>,
+                    document.body
+                  )}
+              </DndContext>
+            </div>
+          )}
         </div>
       </div>
 
