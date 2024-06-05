@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -131,10 +132,10 @@ export const columnsSegmentTemplate: ColumnDef<SegmentTemplatesContent>[] = [
     id: "edit",/*Key*/
     header: "Edit",/*Label*/
     cell: ({ row }) => {
-
+      const router =useRouter();
       return (
         <div className="flex justify-center">
-          <Button size="icon" variant={"ghost"}><Pencil className="h-7 w-7 text-black dark:text-white " /></Button>{/*Button for the edit function*/}
+          <Button size="icon" variant={"ghost"} onClick={()=>router.push("./segment-edit")}><Pencil className="h-7 w-7 text-black dark:text-white " /></Button>{/*Button for the edit function*/}
         </div>
       );
     },

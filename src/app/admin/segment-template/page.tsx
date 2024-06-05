@@ -33,7 +33,7 @@ export default function Page() {
             <div className="flex flex-col w-9/12">
                 <div className="flex justify-end w-full ">
                     {/*Button to create a new segment*/}
-                    <Button onClick={()=>router.push("./")}>Create Segment<Plus strokeWidth={1.5} /> </Button>
+                    <Button onClick={()=>router.push("./segment-create")}>Create Segment<Plus strokeWidth={1.5} /> </Button>
                 </div>
                 <div className="flex justify-center items-center pt-5">
                     {/*Table where the Segment Templates are displayed*/}
