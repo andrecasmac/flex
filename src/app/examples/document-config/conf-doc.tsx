@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { Table, TableHeader, TableHead, TableRow } from "@/components/ui/table";
+import React from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   LoopRow,
@@ -11,10 +11,26 @@ import {
   Row,
   IDropdown,
 } from "./doc-types";
+
+import {
+  DndContext,
+  DragStartEvent,
+  DragOverlay,
+  DragEndEvent,
+  useSensor,
+  useSensors,
+  PointerSensor,
+} from "@dnd-kit/core";
+import { SortableContext, arrayMove } from "@dnd-kit/sortable";
+import { createPortal } from "react-dom";
+
 import RowContainer from "./row-container-base";
 
 export default function DocConfig() {
-  const [rows, setRows] = useState<Row[]>([]);
+  const [rows, setRows] = React.useState<Row[]>([]);
+
+  const rowsId = React.useMemo(() => rows.map((row) => row.id), [rows]);
+  const [activeRow, setActiveRow] = React.useState<Row | null>(null);
 
   function createSegmentRow() {
     const segmentToAdd: Row = {
@@ -45,7 +61,7 @@ export default function DocConfig() {
     return currentRows
       .map((row) => {
         if (row.id === id) {
-          return undefined; // Eliminar la fila actual
+          return undefined; // Eliminar la fila actual si coincide con el ID
         } else if ("segments" in row || "internLoops" in row) {
           // Es un bucle, filtrar recursivamente en segments e internLoops
           const updatedSegments =
@@ -57,16 +73,12 @@ export default function DocConfig() {
               ? deleteRowInNestedLoops(row.internLoops as Row[], id)
               : [];
 
-          // Si el bucle se queda sin hijos, lo eliminamos también
-          if (updatedSegments.length === 0 && updatedInternLoops.length === 0) {
-            return undefined;
-          } else {
-            return {
-              ...row,
-              segments: updatedSegments,
-              internLoops: updatedInternLoops,
-            };
-          }
+          // Conservar el bucle incluso si se queda sin hijos
+          return {
+            ...row,
+            segments: updatedSegments,
+            internLoops: updatedInternLoops,
+          };
         } else {
           // Es un segmento y no coincide, lo conservamos
           return row;
@@ -74,7 +86,6 @@ export default function DocConfig() {
       })
       .filter(Boolean) as Row[]; // Filtrar undefined y convertir a Row[]
   }
-
   function addSegmentToLoop(parentId: Id) {
     const newSegment: SegmentRow = {
       id: `${generateSegmentId()}`, // Incluir parentId en el ID
@@ -215,6 +226,38 @@ export default function DocConfig() {
     });
   }
 
+  function onDragStart(event: DragStartEvent) {
+    console.log("DRAG START", { event });
+    if (event.active.data.current?.type === "Row") {
+      setActiveRow(event.active.data.current.row);
+      return;
+    }
+  }
+
+  function onDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over) return;
+
+    const activeRowId = active.id;
+    const overRowId = over.id;
+
+    if (activeRowId === overRowId) return;
+
+    setRows((rows) => {
+      const activeRowIndex = rows.findIndex((row) => row.id === activeRowId);
+      const overRowIndex = rows.findIndex((row) => row.id === overRowId);
+      return arrayMove(rows, activeRowIndex, overRowIndex);
+    });
+  }
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 3, // 300 px
+      },
+    })
+  );
+
   return (
     <div className="w-[80%] h-[auto] justify-center">
       <div className="pb-4 gap-x-2 flex justify-end">
@@ -255,28 +298,50 @@ export default function DocConfig() {
           </div>
 
           <div className="border rounded-b-lg">
-            {rows.map((row) => (
-              <React.Fragment key={row.id}>
-                <RowContainer
-                  row={row}
-                  allRows={rows}
-                  deleteRow={deleteRow}
-                  handleSelect={handleSelect}
-                  handleInputChange={handleInputChange}
-                  addSegmentsToLoop={addSegmentToLoop}
-                  addLoopToLoop={addLoopToLoop}
-                />
-              </React.Fragment>
-            ))}
+            <DndContext
+              sensors={sensors}
+              onDragStart={onDragStart}
+              onDragEnd={onDragEnd}
+            >
+              <SortableContext items={rowsId}>
+                {rows.map((row) => (
+                  <React.Fragment key={row.id}>
+                    <div className="border-t">
+                      <RowContainer
+                        row={row}
+                        allRows={rows}
+                        deleteRow={deleteRow}
+                        handleSelect={handleSelect}
+                        handleInputChange={handleInputChange}
+                        addSegmentsToLoop={addSegmentToLoop}
+                        addLoopToLoop={addLoopToLoop}
+                      />
+                    </div>
+                  </React.Fragment>
+                ))}
+              </SortableContext>
+
+              {typeof document !== "undefined" &&
+                createPortal(
+                  <DragOverlay className="opacity-40">
+                    {activeRow && (
+                      <RowContainer
+                        row={activeRow}
+                        allRows={rows}
+                        deleteRow={deleteRow}
+                        handleSelect={handleSelect}
+                        handleInputChange={handleInputChange}
+                        addSegmentsToLoop={addSegmentToLoop}
+                        addLoopToLoop={addLoopToLoop}
+                      />
+                    )}
+                  </DragOverlay>,
+                  document.body
+                )}
+            </DndContext>
           </div>
         </div>
       </div>
-
-      {/* <div className="border  rounded-b-lg overflow-auto">
-        <div className="w-full space-y-0">
-          <div className="min-w-[700px]"></div>
-        </div>
-      </div> */}
 
       <pre className="pt-10 texxt-xs flex justify-center">
         {JSON.stringify(rows, null, 2)}
