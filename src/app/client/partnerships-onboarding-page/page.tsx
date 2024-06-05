@@ -6,7 +6,7 @@ import Badge from '@/components/badge';
 
 export default function PartnershipsOnboarding() {
   return (
-    <>
+    <div className="flex flex-col w-full justify-center items-center">
       <PageTitle title="{} Partnership" />
       <div className="w-[80%] overflow-auto border rounded-xl">
         <Table className="max-sm:text-sm text-base md:text-lg">
@@ -37,6 +37,6 @@ export default function PartnershipsOnboarding() {
           </TableBody>
         </Table>
       </div>
-    </>
+    </div>
   );
 }
