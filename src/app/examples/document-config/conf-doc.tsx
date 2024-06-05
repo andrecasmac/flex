@@ -262,9 +262,7 @@ export default function DocConfig() {
     <div className="w-[80%] h-[auto] justify-center">
       <div className="pb-4 gap-x-2 flex justify-end">
         <div className="flex-1 ">
-          <Button variant={"default"} onClick={createSegmentRow}>
-            Create Segment +
-          </Button>
+          <Button variant={"default"}>Create Segment +</Button>
         </div>
 
         <Button variant={"default"} onClick={createSegmentRow}>
