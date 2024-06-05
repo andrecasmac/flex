@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import {
@@ -47,7 +48,9 @@ export const columns: ColumnDef<PartnerShipsClientContent>[] = [
 
             return (
                 <div className="flex justify-end">
-                    <ModalViewDocuments ButtonContent="View" PartnerShipRowInfo={rowContent} />
+                    <Link href={"./partnerships-onboarding-page"}>
+                        <Button>View</Button>
+                    </Link>
                 </div>
             );
         },
@@ -91,7 +94,7 @@ export const columnsModal: ColumnDef<PartnerShipsClientContent>[] = [
         cell: ({ row }) => {
             //Variable where we store the content of the row
             const rowContent = row.original
-            
+
             return (
                 <div className="flex justify-end">
                     <ModalViewDocuments ButtonContent="View Documents" PartnerShipRowInfo={rowContent} />

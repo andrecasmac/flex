@@ -1,8 +1,11 @@
 "use client";
 
+import Link from "next/link";
+
 import { Logo } from "@/assets/logo";
 
 import { useTheme } from "next-themes";
+import { SunIcon, MoonIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,9 +14,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { SunIcon, MoonIcon } from "@radix-ui/react-icons";
-
-import Link from "next/link";
 
 export default function Header() {
   const { setTheme } = useTheme();

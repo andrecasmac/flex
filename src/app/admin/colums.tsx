@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,39 +12,40 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Toggle from "@/components/ui/toggle";
+import React from "react";
+import { FaGear } from "react-icons/fa6";
 import { HiDotsVertical } from "react-icons/hi";
-import { Partner } from "../../../../types/DbTypes";
-import ModalsPartners from ".";
+import Link from "next/link";
 
-export type PartnerT = {
+export type ProductsT = {
   id: string;
   name: string;
-  delimeters: string;
-  edi_version: string;
-  EOL: string;
-  type_of_connection: string;
+  delimeter: string;
+  ediversions: string;
+  eol: string;
+  connectiontype: string;
   hidden: boolean;
 };
 
-export const columns: ColumnDef<Partner>[] = [
+export const columns: ColumnDef<ProductsT>[] = [
   {
     accessorKey: "name",
     header: "Partner",
   },
   {
-    accessorKey: "delimiters",
+    accessorKey: "delimeter",
     header: "Delimeter",
   },
   {
-    accessorKey: "edi_version",
+    accessorKey: "ediversions",
     header: "EDI Versions",
   },
   {
-    accessorKey: "EOL",
+    accessorKey: "eol",
     header: "EOL",
   },
   {
-    accessorKey: "type_of_connection",
+    accessorKey: "connectiontype",
     header: "Connection Type",
   },
   {
@@ -68,7 +70,7 @@ export const columns: ColumnDef<Partner>[] = [
       // Allows to visualize the Toggle of each row
       return (
         <div className="flex justify-center">
-          <Toggle actionToggle={row.original.hidden} onChange={handleToggleCell}/>
+          <Toggle actionToggle={row.original.hidden} onChange={handleToggleCell} />
         </div>
       );
     },
@@ -84,7 +86,6 @@ export const columns: ColumnDef<Partner>[] = [
     },
     cell: ({ row }) => {
       const produtct = row.original;
-
       return (
         <div className="flex justify-center">
           <DropdownMenu>
@@ -94,10 +95,19 @@ export const columns: ColumnDef<Partner>[] = [
                 <HiDotsVertical className="h-8 w-8 text-primary" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="border-primary" align="start">
-              <DropdownMenuItem>View</DropdownMenuItem>
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <ModalsPartners modalDeletePartner={true} selectedItemName={produtct.name} />
+            <DropdownMenuContent align="start">
+              <DropdownMenuItem
+                onClick={() =>
+                  navigator.clipboard.writeText(String(produtct.id))
+                }
+              >
+                Copy payment ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <Link href={"admin/document-list"}>
+                <DropdownMenuItem>View customer</DropdownMenuItem>
+              </Link>
+              <DropdownMenuItem>View payment details</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

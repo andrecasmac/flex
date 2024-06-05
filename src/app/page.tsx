@@ -4,6 +4,7 @@ import { Card, CardFooter } from "@/components/ui/card";
 
 import { AdminIcon, ClientIcon } from "../assets/clientsIcons";
 
+
 export default function Home() {
   return (
     <main className="flex flex-col justify-center items-center h-screen">
@@ -49,12 +50,9 @@ export default function Home() {
           </div>
         </Card>
       </div>
-
-      <div className="pt-3">
-        <Button asChild variant="default" size="sm" className="shadow-sm">
+      <Button asChild variant="default" size="sm" className="shadow-sm">
           <a href="/examples">Components</a>
-        </Button>
-      </div>
+      </Button>
     </main>
   );
 }

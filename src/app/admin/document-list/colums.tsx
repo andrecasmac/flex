@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +15,7 @@ import Toggle from "@/components/ui/toggle";
 import React from "react";
 import { FaGear } from "react-icons/fa6";
 import { HiDotsVertical } from "react-icons/hi";
+import Link from "next/link";
 
 export type ProductsT = {
   id: string;
@@ -38,9 +40,11 @@ export const columns: ColumnDef<ProductsT>[] = [
     cell() {
       return (
         <div className="flex justify-center">
-          <Button className="w-auto h-auto p-0 border-0 bg-inherit text-primary hover:bg-inherit hover:text-primary">
-            <FaGear className="w-8 h-8"/>
-          </Button>
+          <Link href={"./document-configuration"}>
+            <Button className="w-auto h-auto p-0 border-0 bg-inherit text-primary hover:bg-inherit hover:text-primary">
+              <FaGear className="w-8 h-8" />
+            </Button>
+          </Link>
         </div>
       );
     },
@@ -67,7 +71,7 @@ export const columns: ColumnDef<ProductsT>[] = [
       // Allows to visualize the Toggle of each row
       return (
         <div className="flex justify-center">
-          <Toggle actionToggle={row.original.toggle} onChange={handleToggleCell}/>
+          <Toggle actionToggle={row.original.toggle} onChange={handleToggleCell} />
         </div>
       );
     },
