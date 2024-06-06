@@ -8,8 +8,6 @@
 const el_delim = '*';
 const sg_delim = '~';
 
-let line_number = 1;
-
 // ------------------- PARSING FUNCTIONS -----------------------
 
 // gets current character in source stream (with the current logic this is
@@ -29,11 +27,6 @@ function advance(source: string): string {
 // allow for newlines when testing or for prettier formatting
 function skip_newlines(source: string): string {
 	while (current_char(source) === '\n' || current_char(source) === '\r') {
-
-		if (current_char(source) === '\n') {
-			line_number += 1;
-		}
-
 		source = advance(source);
 	}
 
@@ -44,12 +37,12 @@ function skip_newlines(source: string): string {
 // gets the next token to process in the EDI input file
 // which is going to be an element inside the corresponding
 // segment
-function next_token(source: string): any[] {
+function next_token(source: string, segment_index: number): any[] {
 	let token = '';
 	while (current_char(source) != el_delim && current_char(source) != sg_delim) {
 
 		if (current_char(source) == '\n' || current_char(source) == '\r' || source.length == 0) {
-			let error = `missing segment delimeter '${sg_delim}' at line ${line_number}`;
+			let error = `missing segment delimeter '${sg_delim}' at segment ${segment_index}`;
 			source = skip_newlines(source);
 			return [token, source, true, error];
 		}
@@ -70,7 +63,7 @@ function next_token(source: string): any[] {
 // get all tokens/elements of a segment and return them in an array
 // (the segment name counts as the first "element" and will be at the
 // beginning of the array)
-function parse_segment(source: string): [string[], string, string[]] {
+function parse_segment(source: string, segment_index: number): [string[], string, string[]] {
 	let tokens: string[] = [];
 	let errors: string[] = [];
 	let should_break = false;
@@ -78,7 +71,7 @@ function parse_segment(source: string): [string[], string, string[]] {
 		let token: string;
 		let error: string;
 
-		[token, source, should_break, error] = next_token(source);
+		[token, source, should_break, error] = next_token(source, segment_index);
 		tokens.push(token);
 
 		if (error) {
@@ -106,11 +99,12 @@ export function parse_edi(source: string) {
 	let edi_object: string[][] = [];
 	let parse_errors: string[] = [];
 
+	let segment_index = 1;
 	while (source.length !== 0) {
 		let segment_tokens: string[];
 		let segment_parse_errors: string[];
 
-		[segment_tokens, source, segment_parse_errors] = parse_segment(source);
+		[segment_tokens, source, segment_parse_errors] = parse_segment(source, segment_index);
 
 		edi_object.push(segment_tokens);
 
@@ -119,6 +113,8 @@ export function parse_edi(source: string) {
 		})
 
 		source = skip_newlines(source);
+
+		segment_index += 1;
 	}
 
 	return [edi_object, parse_errors];
