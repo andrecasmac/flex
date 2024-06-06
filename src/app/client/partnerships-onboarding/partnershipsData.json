@@ -2,6 +2,7 @@
     {
         "document_name": "EDI 850 PO",
         "status" : "Cancelled",
+        "validated":false,
         "file": ""
     },
     {

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import ModalContext from "@/app/context/modalContext";
 import { Button } from "@/components/ui/button";
-import { columnsViewDocouments } from "@/app/client/partnerships/columns";
+import { columnsViewDocouments } from "@/app/client/columns";
 import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../../../types/TableTypes";
 import { DataTable } from "../tables/table/data-table";
 interface ModalViewDocuments {
