@@ -1,22 +1,14 @@
-'use client'
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+"use client";
+import React from "react";
 import { PageTitle } from "@/components/page-title";
-import Link from "next/link";
+import DocConfig from "./conf-doc";
 export default function Page() {
-    const router = useRouter();
-
-    return (
-
-        <div className="flex flex-col justify-center items-center">
-            <div className="flex gap-x-4">
-                <PageTitle title="Document Configuration" />
-            </div>
-            <div>
-                <Link href={"./segment-template/"}>
-                    <Button>Add Segment</Button>
-                </Link>
-            </div>
-        </div>
-    );
+  return (
+    <div className="flex flex-col justify-center items-center w-full">
+      <PageTitle title="Document Configuration" />
+      <div className="flex w-screen justify-center pb-20">
+        <DocConfig />
+      </div>
+    </div>
+  );
 }
