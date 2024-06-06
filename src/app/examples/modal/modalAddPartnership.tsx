@@ -12,7 +12,7 @@ import {
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "../tables/table/data-table";
-import { columnsModal } from "@/app/client/partnerships/columns";
+import { columnsModal } from "@/app/client/columns";
 import ModalContext from "@/app/context/modalContext";
 import { PartnerShipsClientContent } from "../../../../types/TableTypes";
 

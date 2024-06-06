@@ -11,7 +11,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../../../types/TableTypes";
+import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../../types/TableTypes";
 import Badge from "@/components/badge";
 import { ModalViewDocuments } from "@/app/examples/modal/modalViewDocuments";
 
@@ -43,12 +43,22 @@ export const columns: ColumnDef<PartnerShipsClientContent>[] = [
         id: "actions",
         header: () => <div className="flex justify-end mr-3">Action</div>,
         cell: ({ row }) => {
-            //Variable where we store the content of the row
-            const rowContent = row.original;
-
+            //Variables where we store the content of the row
+            const rowID = row.original.id;
+            const rowName = row.original.name;
+            const rowStatus = row.original.status;
+            const rowEDI = row.original.edi;
+            const rowConnect = row.original.connection;
+            
             return (
                 <div className="flex justify-end">
-                    <Link href={"./partnerships-onboarding-page"}>
+                    <Link href={{pathname:"client/partnerships-onboarding", query:{
+                        id:rowID,
+                        name:rowName,
+                        status:rowStatus,
+                        edi:rowEDI,
+                        connection: rowConnect,
+                    }}}>
                         <Button>View</Button>
                     </Link>
                 </div>

@@ -10,6 +10,7 @@ const Badge: React.FC<BadgeProps> = ({ label }) => {
     switch (label) {
       case 'Optional':
       case 'In Process':
+      case 'Pending':
         return { backgroundColor: 'bg-yellow-100', textColor: 'text-yellow-800' };
       case 'Complete':
         return { backgroundColor: 'bg-green-100', textColor: 'text-green-800' };

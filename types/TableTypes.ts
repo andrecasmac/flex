@@ -19,3 +19,12 @@ export type ModalViewDocumentsContent={
     name:string,
     mandatory:string,
 }
+
+export type PartnerShipClientTableContent={
+    id:string,
+    document_name: string,
+    mandatory: string|null,
+    status: string,
+    validated:boolean,
+    file: string,
+}
