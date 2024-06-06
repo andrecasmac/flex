@@ -12,7 +12,7 @@ export function PageTitle({ title }: PropsTitle) {
       <div
         className={`flex justify-start w-[80%] border-b border-turquoise dark:border-darkTurquoise pb-4 mb-10 ${IstokWeb.className}`}
       >
-        <h1 className="text-6xl">{title}</h1>
+        <h1 className="text-[3rem]">{title}</h1>
       </div>
     </>
   );
