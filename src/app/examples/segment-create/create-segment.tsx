@@ -5,12 +5,12 @@ import { ComboboxDropdown } from "@/components/ui/combobox";
 import MultipleTagsInput from "@/components/multiple-tags";
 
 import { IDropdown, optionsUsage } from "../../../../types/segmentTypes";
-import { ChevronRight, MinusCircle, PlusCircle } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+
 import {
   Table,
   TableBody,
@@ -29,7 +29,7 @@ import {
   ruleNamesMap,
   optionsDTFormats,
   optionsTMFormats,
-} from "../../../../types/segmentTypes"; // Asegúrate de tener este archivo de tipos
+} from "../../../../types/segmentTypes"; 
 
 function SegmentGenerator() {
   const [segmentData, setSegmentData] = useState<SegmentData>({
@@ -217,226 +217,239 @@ function SegmentGenerator() {
             </TableHeader>
 
             <TableBody>
-              {Object.keys(segmentData.segment_rules).map((elementIndex) => {
-                const currentElement =
-                  segmentData.segment_rules[Number(elementIndex)];
-                const allowedRules =
-                  additionalRulesByType[currentElement.type]?.allowedRules ||
-                  [];
+              {Object.keys(segmentData.segment_rules).length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center opacity-40">
+                    No elements. Please add elements.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                Object.keys(segmentData.segment_rules).map((elementIndex) => {
+                  const currentElement =
+                    segmentData.segment_rules[Number(elementIndex)];
+                  const allowedRules =
+                    additionalRulesByType[currentElement.type]?.allowedRules ||
+                    [];
 
-                return (
-                  <React.Fragment key={elementIndex}>
-                    <TableRow key={elementIndex}>
-                      <TableCell className="w-1">
-                        <Button
-                          className="flex items-center space-x-2 "
-                          variant={"ghost"}
-                          size={"icon"}
-                          onClick={() => toggleRules(Number(elementIndex))}
-                        >
-                          <ChevronRight
-                            className={`transition-transform transform ${
-                              showRules[Number(elementIndex)] ? "rotate-90" : ""
-                            }`}
+                  return (
+                    <React.Fragment key={elementIndex}>
+                      <TableRow key={elementIndex}>
+                        <TableCell className="w-1">
+                          <Button
+                            className="flex items-center space-x-2 "
+                            variant={"ghost"}
+                            size={"icon"}
+                            onClick={() => toggleRules(Number(elementIndex))}
+                          >
+                            <ChevronRight
+                              className={`transition-transform transform ${
+                                showRules[Number(elementIndex)]
+                                  ? "rotate-90"
+                                  : ""
+                              }`}
+                            />
+                          </Button>
+                        </TableCell>
+
+                        <TableCell className="font-medium ">
+                          {segmentData.name + " " + elementIndex}
+                        </TableCell>
+
+                        <TableCell>
+                          <ComboboxDropdown
+                            content={optionsUsage}
+                            handleSelect={(selectedOption: IDropdown) => {
+                              handleRuleChange(
+                                Number(elementIndex),
+                                "mandatory",
+                                selectedOption.label
+                              );
+                            }}
+                            selected={optionsUsage.find(
+                              (option) =>
+                                option.label ===
+                                segmentData.segment_rules[Number(elementIndex)]
+                                  .mandatory
+                            )}
                           />
-                        </Button>
-                      </TableCell>
+                        </TableCell>
 
-                      <TableCell className="font-medium ">
-                        {segmentData.name + " " + elementIndex}
-                      </TableCell>
-
-                      <TableCell>
-                        <ComboboxDropdown
-                          content={optionsUsage}
-                          handleSelect={(selectedOption: IDropdown) => {
-                            handleRuleChange(
-                              Number(elementIndex),
-                              "mandatory",
-                              selectedOption.label
-                            );
-                          }}
-                          selected={optionsUsage.find(
-                            (option) =>
-                              option.label ===
-                              segmentData.segment_rules[Number(elementIndex)]
-                                .mandatory
-                          )}
-                        />
-                      </TableCell>
-
-                      <TableCell>
-                        <ComboboxDropdown
-                          content={optionsType}
-                          handleSelect={(option: IDropdown) =>
-                            handleTypeChange(Number(elementIndex), option.label)
-                          }
-                          selected={optionsType.find(
-                            (option) =>
-                              option.label ===
-                              segmentData.segment_rules[Number(elementIndex)]
-                                .type
-                          )}
-                        />
-                      </TableCell>
-
-                      <TableCell>
-                        <Input
-                          type="number"
-                          name="min"
-                          placeholder="Min..."
-                          onChange={(e) =>
-                            handleRuleChange(
-                              Number(elementIndex),
-                              "min",
-                              Number(e.target.value)
-                            )
-                          }
-                        />
-                      </TableCell>
-
-                      <TableCell>
-                        <Input
-                          type="number"
-                          name="max"
-                          placeholder="Max..."
-                          onChange={(e) =>
-                            handleRuleChange(
-                              Number(elementIndex),
-                              "max",
-                              Number(e.target.value)
-                            )
-                          }
-                        />
-                      </TableCell>
-                    </TableRow>
-
-                    {showRules[Number(elementIndex)] && (
-                      <>
-                        {Object.keys(currentElement)
-                          .filter(
-                            (ruleName) =>
-                              !["type", "mandatory", "min", "max"].includes(
-                                ruleName
+                        <TableCell>
+                          <ComboboxDropdown
+                            content={optionsType}
+                            handleSelect={(option: IDropdown) =>
+                              handleTypeChange(
+                                Number(elementIndex),
+                                option.label
                               )
-                          )
-                          .map((ruleName) => (
-                            <React.Fragment key={ruleName}>
-                              <TableRow
-                                className="bg-slate-600/10"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <TableCell colSpan={7}>
-                                  <span className="w-full flex items-center justify-center gap-x-5 px-2">
-                                    {ruleNamesMap[ruleName] || ruleName}
+                            }
+                            selected={optionsType.find(
+                              (option) =>
+                                option.label ===
+                                segmentData.segment_rules[Number(elementIndex)]
+                                  .type
+                            )}
+                          />
+                        </TableCell>
 
-                                    {(() => {
-                                      switch (ruleName) {
-                                        case "oneOf":
-                                          return (
-                                            <div className="w-[50%] flex justify-around">
-                                              <MultipleTagsInput
-                                                key={`tags${currentElement}-${ruleName}`}
-                                                tags={
-                                                  (currentElement[
-                                                    ruleName
-                                                  ] as []) || []
-                                                }
-                                                onTagsChange={(newTags) =>
-                                                  handleTagsChange(
-                                                    elementIndex,
-                                                    newTags
-                                                  )
-                                                }
-                                              />
-                                            </div>
-                                          );
+                        <TableCell>
+                          <Input
+                            type="number"
+                            name="min"
+                            placeholder="Min..."
+                            onChange={(e) =>
+                              handleRuleChange(
+                                Number(elementIndex),
+                                "min",
+                                Number(e.target.value)
+                              )
+                            }
+                          />
+                        </TableCell>
 
-                                        case "dateHasFormat":
-                                          return (
-                                            <div className="w-[50%]">
-                                              <ComboboxDropdown
-                                                content={optionsDTFormats}
-                                                handleSelect={(
-                                                  selectedOption: IDropdown
-                                                ) => {
-                                                  handleRuleChange(
-                                                    Number(elementIndex),
-                                                    "dateHasFormat",
-                                                    selectedOption.label
-                                                  );
-                                                }}
-                                                selected={optionsDTFormats.find(
-                                                  (option) =>
-                                                    option.label ===
-                                                    segmentData.segment_rules[
-                                                      Number(elementIndex)
-                                                    ].dateHasFormat
-                                                )}
-                                              />
-                                            </div>
-                                          );
+                        <TableCell>
+                          <Input
+                            type="number"
+                            name="max"
+                            placeholder="Max..."
+                            onChange={(e) =>
+                              handleRuleChange(
+                                Number(elementIndex),
+                                "max",
+                                Number(e.target.value)
+                              )
+                            }
+                          />
+                        </TableCell>
+                      </TableRow>
 
-                                        case "timeHasFormat":
-                                          return (
-                                            <div className="w-[50%]">
-                                              <ComboboxDropdown
-                                                content={optionsTMFormats}
-                                                handleSelect={(
-                                                  selectedOption: IDropdown
-                                                ) => {
-                                                  handleRuleChange(
-                                                    Number(elementIndex),
-                                                    "timeHasFormat",
-                                                    selectedOption.label
-                                                  );
-                                                }}
-                                                selected={optionsTMFormats.find(
-                                                  (option) =>
-                                                    option.label ===
-                                                    segmentData.segment_rules[
-                                                      Number(elementIndex)
-                                                    ].timeHasFormat
-                                                )}
-                                              />
-                                            </div>
-                                          );
+                      {showRules[Number(elementIndex)] && (
+                        <>
+                          {Object.keys(currentElement)
+                            .filter(
+                              (ruleName) =>
+                                !["type", "mandatory", "min", "max"].includes(
+                                  ruleName
+                                )
+                            )
+                            .map((ruleName) => (
+                              <React.Fragment key={ruleName}>
+                                <TableRow
+                                  className="bg-slate-600/10"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <TableCell colSpan={7}>
+                                    <span className="w-full flex items-center justify-center gap-x-5 px-2">
+                                      {ruleNamesMap[ruleName] || ruleName}
 
-                                        default:
-                                          return (
-                                            <div className="w-[50%] flex justify-around">
-                                              <Input
-                                                className="border border-gray-300 rounded-md p-2 flex-grow"
-                                                type="text"
-                                                name={ruleName}
-                                                placeholder={ruleName}
-                                                value={
-                                                  currentElement[
-                                                    ruleName
-                                                  ] as string
-                                                }
-                                                onChange={(e) =>
-                                                  handleRuleChange(
-                                                    Number(elementIndex),
-                                                    ruleName,
-                                                    e.target.value
-                                                  )
-                                                }
-                                              />
-                                            </div>
-                                          );
-                                      }
-                                    })()}
-                                  </span>
-                                </TableCell>
-                              </TableRow>
-                            </React.Fragment>
-                          ))}
-                      </>
-                    )}
-                  </React.Fragment>
-                );
-              })}
+                                      {(() => {
+                                        switch (ruleName) {
+                                          case "oneOf":
+                                            return (
+                                              <div className="w-[50%] flex justify-around">
+                                                <MultipleTagsInput
+                                                  key={`tags${currentElement}-${ruleName}`}
+                                                  tags={
+                                                    (currentElement[
+                                                      ruleName
+                                                    ] as []) || []
+                                                  }
+                                                  onTagsChange={(newTags) =>
+                                                    handleTagsChange(
+                                                      elementIndex,
+                                                      newTags
+                                                    )
+                                                  }
+                                                />
+                                              </div>
+                                            );
+
+                                          case "dateHasFormat":
+                                            return (
+                                              <div className="w-[50%]">
+                                                <ComboboxDropdown
+                                                  content={optionsDTFormats}
+                                                  handleSelect={(
+                                                    selectedOption: IDropdown
+                                                  ) => {
+                                                    handleRuleChange(
+                                                      Number(elementIndex),
+                                                      "dateHasFormat",
+                                                      selectedOption.label
+                                                    );
+                                                  }}
+                                                  selected={optionsDTFormats.find(
+                                                    (option) =>
+                                                      option.label ===
+                                                      segmentData.segment_rules[
+                                                        Number(elementIndex)
+                                                      ].dateHasFormat
+                                                  )}
+                                                />
+                                              </div>
+                                            );
+
+                                          case "timeHasFormat":
+                                            return (
+                                              <div className="w-[50%]">
+                                                <ComboboxDropdown
+                                                  content={optionsTMFormats}
+                                                  handleSelect={(
+                                                    selectedOption: IDropdown
+                                                  ) => {
+                                                    handleRuleChange(
+                                                      Number(elementIndex),
+                                                      "timeHasFormat",
+                                                      selectedOption.label
+                                                    );
+                                                  }}
+                                                  selected={optionsTMFormats.find(
+                                                    (option) =>
+                                                      option.label ===
+                                                      segmentData.segment_rules[
+                                                        Number(elementIndex)
+                                                      ].timeHasFormat
+                                                  )}
+                                                />
+                                              </div>
+                                            );
+
+                                          default:
+                                            return (
+                                              <div className="w-[50%] flex justify-around">
+                                                <Input
+                                                  className="border border-gray-300 rounded-md p-2 flex-grow"
+                                                  type="text"
+                                                  name={ruleName}
+                                                  placeholder={ruleName}
+                                                  value={
+                                                    currentElement[
+                                                      ruleName
+                                                    ] as string
+                                                  }
+                                                  onChange={(e) =>
+                                                    handleRuleChange(
+                                                      Number(elementIndex),
+                                                      ruleName,
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                />
+                                              </div>
+                                            );
+                                        }
+                                      })()}
+                                    </span>
+                                  </TableCell>
+                                </TableRow>
+                              </React.Fragment>
+                            ))}
+                        </>
+                      )}
+                    </React.Fragment>
+                  );
+                })
+              )}
             </TableBody>
           </Table>
         </div>

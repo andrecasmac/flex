@@ -89,6 +89,24 @@ export default function Page() {
         size="lg"
         className="rounded-2xl active:scale-95 transition-all"
       >
+        <a href="/examples/segment-edit">Edit Segment</a>
+      </Button>
+
+      <Button
+        asChild
+        variant="default"
+        size="lg"
+        className="rounded-2xl active:scale-95 transition-all"
+      >
+        <a href="/examples/document-config"> Document Configuration</a>
+      </Button>
+      
+      <Button
+        asChild
+        variant="default"
+        size="lg"
+        className="rounded-2xl active:scale-95 transition-all"
+      >
         <a href="/examples/DA">Data Access</a>
       </Button>
     </div>
