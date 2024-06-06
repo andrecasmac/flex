@@ -8,6 +8,7 @@ export default function Page() {
     <div className="flex gap-x-4">
         <p>
         <Button onClick={() => router.push('/client/partnerships')}>Partnerships</Button>
+        <Button onClick={() => router.push('/client/PartnershipsOnboardingPage')}>Onboarding</Button>
         </p>
     </div>
   );

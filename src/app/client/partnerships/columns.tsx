@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -44,10 +45,11 @@ export const columns: ColumnDef<PartnerShipsClientContent>[] = [
         cell: ({ row }) => {
             //Variable where we store the content of the row
             const rowContent = row.original;
-
+                
+            //<ModalViewDocuments ButtonContent="View" PartnerShipRowInfo={rowContent} />
             return (
                 <div className="flex justify-end">
-                    <ModalViewDocuments ButtonContent="View" PartnerShipRowInfo={rowContent} />
+                    <Button><Link href="/client/partnerships/[partnerId]" as="/client/partnerships/partnerId">VIEW</Link></Button>
                 </div>
             );
         },

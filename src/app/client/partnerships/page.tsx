@@ -53,7 +53,7 @@ export default function Page() {
                 <div className="flex w-[75%] justify-center items-center pt-5">
                     {/*This is where we display the Table with the Partnerships*/}
                     <DataTable columns={columns} data={data} />
-                </div>
+                </div> 
             </ModalContextProvider>
         </div>
     )
