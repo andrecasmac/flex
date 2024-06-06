@@ -1,23 +1,30 @@
-/* import * as fs from 'fs';
-import * as edi_schema from "./segments.json";
+// import * as fs from 'fs';
+// import * as edi_schema from "./855-segments.json";
 
-const input_file = './new-test.edi'; */
+// const input_file = './855.edi';
 
+// these are to be variable if the trading partners
+// choose different delimeters
 const el_delim = '*';
 const sg_delim = '~';
 
 // ------------------- PARSING FUNCTIONS -----------------------
 
+// gets current character in source stream (with the current logic this is
+// just the first character)
 function current_char(source: string): string {
 	return source[0];
 }
 
 
+// advances source stream by one char
 function advance(source: string): string {
 	return source.substring(1);
 }
 
 
+// skips all newlines and carriages returns in source stream to 
+// allow for newlines when testing or for prettier formatting
 function skip_newlines(source: string): string {
 	while (current_char(source) === '\n' || current_char(source) === '\r') {
 		source = advance(source);
@@ -27,9 +34,19 @@ function skip_newlines(source: string): string {
 }
 
 
-function next_token(source: string): string[] {
+// gets the next token to process in the EDI input file
+// which is going to be an element inside the corresponding
+// segment
+function next_token(source: string, segment_index: number): any[] {
 	let token = '';
 	while (current_char(source) != el_delim && current_char(source) != sg_delim) {
+
+		if (current_char(source) == '\n' || current_char(source) == '\r' || source.length == 0) {
+			let error = `missing segment delimeter '${sg_delim}' at segment ${segment_index}`;
+			source = skip_newlines(source);
+			return [token, source, true, error];
+		}
+
 		token +=  current_char(source);
 		source = advance(source);
 	}
@@ -43,36 +60,74 @@ function next_token(source: string): string[] {
 }
 
 
-function parse_segment(source: string): [string[], string] {
+// get all tokens/elements of a segment and return them in an array
+// (the segment name counts as the first "element" and will be at the
+// beginning of the array)
+function parse_segment(source: string, segment_index: number): [string[], string, string[]] {
 	let tokens: string[] = [];
-	while (current_char(source) != sg_delim) {
+	let errors: string[] = [];
+	let should_break = false;
+	while (current_char(source) != sg_delim && source.length != 0 && !should_break) {
 		let token: string;
-		[token, source] = next_token(source);
+		let error: string;
+
+		[token, source, should_break, error] = next_token(source, segment_index);
 		tokens.push(token);
+
+		if (error) {
+			errors.push(error);
+		}
 	}
 
-	return [tokens, advance(source)];
+	// this is:
+	if (current_char(source) == sg_delim) {
+		source = advance(source);
+	}
+
+	return [tokens, source, errors];
 }
 
 
+// parses EDI input file. It returns an array containing
+// each segment's tokens with the structure:
+// [ [segment_name, segment element tokens...],
+//   [segment_name, segment element tokens...],
+//   ...
+//   [segment_name, segment element tokens...],
+// ]
 export function parse_edi(source: string) {
 	let edi_object: string[][] = [];
+	let parse_errors: string[] = [];
 
-	while (source !== '') {
+	let segment_index = 1;
+	while (source.length !== 0) {
 		let segment_tokens: string[];
-		[segment_tokens, source] = parse_segment(source);
+		let segment_parse_errors: string[];
+
+		[segment_tokens, source, segment_parse_errors] = parse_segment(source, segment_index);
 
 		edi_object.push(segment_tokens);
 
+		segment_parse_errors.forEach((error) => {
+			parse_errors.push(error);
+		})
+
 		source = skip_newlines(source);
+
+		segment_index += 1;
 	}
 
-	return edi_object;
+	return [edi_object, parse_errors];
 }
 
 
 // ------------------- MISC FUNCTIONS -----------------------
 
+// all these helper functions are for accessing the segment
+// structure so that if the format changes these are the only
+// places that have to be modified
+
+// gets name of segment in the structure returned by parse_edi()
 function get_segment_name(segment: string[]) {
 
 	if (!segment) {
@@ -82,8 +137,8 @@ function get_segment_name(segment: string[]) {
 	return segment[0];
 }
 
-// get the name of the segment declared in the EDI schema
-// at index index
+// gets the name of the segment declared in the EDI schema
+// at the passed index
 function get_edi_segment_name(schema: any, index: number) {
 
 	if (!schema[index]) {
@@ -94,22 +149,29 @@ function get_edi_segment_name(schema: any, index: number) {
 }
 
 
+// gets the schema of the segment (the schema that determines the 
+// structure of the segment, which elements belong it, etc.)
 function get_segment_schema(schema: any, index: number) {
 	return schema[index].segment_rules;
 }
 
 
+// gets whether the segment is mandatory in the EDI file or not
 function get_segment_mandatory(schema: any, index: number) {
 	return schema[index].mandatory;
 }
 
 
+// gets max amount of appearances a segment can have in a row 
 function get_segment_max(schema: any, index: number) {
 	return schema[index].max;
 }
 
 
 // ------------------- VALIDATING FUNCTIONS -----------------------
+
+// all the following is_x functions validate whether an element is of type 
+// x, using the EDI x12 standard
 
 function is_special(char: string): boolean {
 	if (char != ' '  && char != '"'  &&
@@ -310,6 +372,8 @@ function is_numeric(string: string, type: any): boolean {
 }
 
 
+// checks whether element is equal to one of the values specified in the oneOf field 
+// of the schema for that element
 function validate_one_of(element_schema: any, string: string): boolean {
 	if (!("oneOf" in element_schema)) {
 		return false;
@@ -319,6 +383,8 @@ function validate_one_of(element_schema: any, string: string): boolean {
 }
 
 
+// if element is mandatory and there is no element return false, otherwise 
+// return true
 function validate_mandatory(element_schema: any, string: string): boolean {
 	if (element_schema.mandatory) {
 		return string.length != 0;
@@ -328,6 +394,7 @@ function validate_mandatory(element_schema: any, string: string): boolean {
 }
 
 
+// checks that element length is within bounds specified in element schema
 function validate_length(element_schema: any, string: string): boolean {
 	return	(!element_schema.mandatory && string.length === 0) ||
 			(string.length >= element_schema.min && 
@@ -335,6 +402,7 @@ function validate_length(element_schema: any, string: string): boolean {
 }
 
 
+// helper function to call type validator of the correct type
 function validate_type(element_schema: any, string: string): boolean {
 	switch (element_schema.type) {
 		case "ID":
@@ -371,50 +439,53 @@ function validate_type(element_schema: any, string: string): boolean {
 	}
 }
 
-
+// validates an individual element by a series of calls to each validator function,
+// if one fails the function throws an error since element is wrong
 function validate_element(element_schema: any, element: string, index: number) {
 	if (!validate_mandatory(element_schema, element)) {
-		throw new Error(`Element ${index} is mandatory and was missing`);
+		throw new Error(`element ${index} mandatory`); 
 	}
 
 	if (!validate_length(element_schema, element)) {
-		throw new Error(`Wrong length at element ${index} '${element}'`); 
+		throw new Error(`bad length at element ${index} '${element}'`); 
 	}
 
 	if (!validate_type(element_schema, element)) {
 		if (element_schema.type == "ID") {
 			if ("oneOf" in element_schema) {
-				throw new Error(`Wrong type at ${index} '${element}' - value should be one of [${element_schema.oneOf}]`); 
+				throw new Error(`bad type at ${index} '${element}': value should be one of ${element_schema.oneOf}`); 
 			} else {
-				throw new Error(`Wrong type at ${index} '${element}'`); 
+				throw new Error(`bad type at ${index} '${element}'`); 
 			}
 		} else if (element_schema.type == "DT") {
 			switch (element.length) {
 				case 6:
-					throw new Error(`Wrong type at ${index} '${element}' - value should be date in format YYMMDD`); 
+					throw new Error(`bad type at ${index} '${element}': value should be date in format YYMMDD`); 
 				case 8:
-					throw new Error(`Wrong type at ${index} '${element}' - value should be date in format CCYYMMDD`); 
+					throw new Error(`bad type at ${index} '${element}': value should be date in format CCYYMMDD`); 
 			}
 
 		} else if (element_schema.type == "TM") {
 			switch (element.length) {
 				case 4:
-					throw new Error(`Wrong type at ${index} '${element}' - value should be time in format HHMM`); 
+					throw new Error(`bad type at ${index} '${element}': value should be time in format HHMM`); 
 				case 6:
-					throw new Error(`Wrong type at ${index} '${element}' - value should be time in format HHMMSS`); 
+					throw new Error(`bad type at ${index} '${element}': value should be time in format HHMMSS`); 
 				case 7:
-					throw new Error(`Wrong type at ${index} '${element}' - value should be time in format HHMMSSD`); 
+					throw new Error(`bad type at ${index} '${element}': value should be time in format HHMMSSD`); 
 				case 8:
-					throw new Error(`Wrong type at ${index} '${element}' - value should be time in format HHMMSSDD`); 
+					throw new Error(`bad type at ${index} '${element}': value should be time in format HHMMSSDD`); 
 			}
 		}
 
-		throw new Error(`Wrong type at ${index} '${element}' - type should be ${element_schema.type}`); 
+		throw new Error(`bad type at ${index} '${element}': type should be ${element_schema.type}`); 
 	}
 
 }
 
 
+// goes through all elements in segment and validates each, also checks that the segment
+// has the correct amount of elements
 function validate_segment(segment_schema: any, segment: string[], segment_index: number) {
 	let errors: string[] = []
 
@@ -424,28 +495,32 @@ function validate_segment(segment_schema: any, segment: string[], segment_index:
 		let element_schema = segment_schema[element_index];
 
 		if (element_schema == undefined) {
-			errors.push(`Error at segment #${segment_index} ${get_segment_name(segment)}: unexpected element '${element}' at position ${element_index}`);
+			errors.push(`error at segment #${segment_index} ${get_segment_name(segment)}: unexpected element '${element}' at position ${element_index}`);
 			continue;
 		}
 
 		try {
 			validate_element(element_schema, element, element_index)
 		} catch (e: any) {
-			errors.push(`Error at segment #${segment_index} ${get_segment_name(segment)}: ${e.message}`);
+			errors.push(`error at segment #${segment_index} ${get_segment_name(segment)}: ${e.message}`);
 		}
 	}
 
-	// - 1 because of the segment_data field. Probably could be done in a better way TODO
 	while (element_index <= (Object.keys(segment_schema).length - 1)) {
+
 		if (segment_schema[element_index].mandatory) {
-			errors.push(`Error at segment #${segment_index} ${get_segment_name(segment)}: missing element at index ${element_index}`);
+			errors.push(`error at segment #${segment_index} ${get_segment_name(segment)}: missing element at index ${element_index}`);
 		}
+
 		element_index += 1;
 	}
 
 	return errors;
 }
 
+// this functions is what does the actual validation of the EDI after the input has been parsed
+// and its structure has been mapped to the schema. It calls validate_segment for each segment in the
+// EDI file and returns all errors in an array
 export function validate_segments(structure: any, edi_schema: any) {
 	let segment_errors: string[] = []
 
@@ -500,6 +575,8 @@ export function parse_input_structure(parsed_edi: any, schema: any, segment_inde
 		// handle loops
 		if (expected_token == "LOOP") {
 			let loop_schema = get_segment_schema(schema, edi_segment_index);
+			let loop_max = get_segment_max(schema, edi_segment_index);
+			let loop_current = 1;
 
 			let [l_structure, 
 				l_segment_i, 
@@ -536,6 +613,15 @@ export function parse_input_structure(parsed_edi: any, schema: any, segment_inde
 															loop_schema, 
 															segment_index, 
 															true);
+
+				// increment iteration count
+				loop_current += 1;
+
+				// break out of loop if we reach the max amount
+				// of iterations
+				if (loop_max && loop_current > loop_max) {
+					l_continue = false;
+				}
 			}
 
 			// go to next segment immediately
@@ -560,7 +646,7 @@ export function parse_input_structure(parsed_edi: any, schema: any, segment_inde
 
 			else {
 				if (!in_loop) {
-					errors.push(`Unexpected segment #${segment_index + 1} '${current_token}': expected ${expected_token}`);
+					errors.push(`unexpected segment #${segment_index + 1} '${current_token}' expected ${expected_token}`);
 					segment_index += 1;
 				} else {
 					return [null, null, false];
@@ -582,7 +668,7 @@ export function parse_input_structure(parsed_edi: any, schema: any, segment_inde
 				
 				for (edi_segment_index += 1; edi_segment_index < edi_n_segments; edi_segment_index++) {
 					if (get_segment_mandatory(schema, edi_segment_index)) {
-						errors.push(`Missing segment #${segment_index} '${get_edi_segment_name(schema, edi_segment_index)}'`);
+						errors.push(`missing segment #${segment_index} '${get_edi_segment_name(schema, edi_segment_index)}'`);
 					}
 				}
 
@@ -600,7 +686,7 @@ export function parse_input_structure(parsed_edi: any, schema: any, segment_inde
 	if (!in_loop) {
 		// log errors of extra input segments that were left
 		for (segment_index; segment_index < input_n_segments; segment_index++) {
-			errors.push(`Unexpected segment #${segment_index + 1} '${get_segment_name(parsed_edi[segment_index])}'`);
+			errors.push(`unexpected segment #${segment_index + 1} '${get_segment_name(parsed_edi[segment_index])}'`);
 		}
 	}
 
@@ -616,19 +702,24 @@ export function parse_input_structure(parsed_edi: any, schema: any, segment_inde
 }
 
 
-/* const edi_source = fs.readFileSync(input_file).toString()
+// const edi_source = fs.readFileSync(input_file).toString()
 
-let parsed_edi = parse_edi(edi_source);
-let [structure, structure_errors]: any[] = parse_input_structure(parsed_edi, edi_schema);
-let segment_errors: any[] = validate_segments(structure, edi_schema);
+// // parse input EDI
+// let [parsed_edi, parse_errors] = parse_edi(edi_source);
+
+// // parse/validate structure of input edi according to the respective EDI schema
+// let [structure, structure_errors]: any[] = parse_input_structure(parsed_edi, edi_schema);
+
+// // validate each segment's structure along with its elements that was
+// // successfully placed in its position according to the EDI schema
+// let segment_errors: any[] = validate_segments(structure, edi_schema);
+
+// let errors  = {
+// 	parse_errors: parse_errors,
+// 	structure_errors: structure_errors,
+// 	segment_errors: segment_errors
+// }
+
+// // console.log(parsed_edi);
 // console.log(structure);
-
-
-let errors  = {
-	structure_errors: structure_errors,
-	segment_errors: segment_errors
-}
-
-console.log(errors);
- */
-
+// console.log(errors);

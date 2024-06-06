@@ -19,8 +19,8 @@ import { UploadIcon } from "@radix-ui/react-icons";
 import { ErrorList } from "../tables/table/colums";
 import { ModalSuccess } from "./modalSuccess";
 
-import { parse_edi, parse_input_structure, validate_segments } from "@/lib/parser"
-import * as edi_schema from "@/lib/855_schema.json" 
+import { parse_edi, parse_input_structure, validate_segments } from "@/lib/validator"
+import * as edi_schema from "@/lib/855_schema.json"
 import { Description } from "@radix-ui/react-dialog";
 
 
@@ -50,13 +50,14 @@ export function ModalUpload({
 
     //Function to send data using useContext
     function sendData(txtFileContent:string) {
-        let parsed_edi = parse_edi(txtFileContent);
+		let [parsed_edi, parse_errors]: any[] = parse_edi(txtFileContent);
         let [structure, structure_errors]: any[] = parse_input_structure(parsed_edi, edi_schema);
         let segment_errors: any[] = validate_segments(structure, edi_schema);
         //Variable where we send the values with useContext
+		const parse_errors_data = parse_errors.map((err: string) => ({name: "Parser Error", description: err}))
         const structure_errors_data = structure_errors.map((err: string) => ({name: "Structure Error", description: err}))
         const segment_errors_data = segment_errors.map((err: string) => ({name: "Segment Error", description: err}))
-        const errors_data = structure_errors_data.concat(segment_errors_data)
+        const errors_data = parse_errors_data.concat(structure_errors_data, segment_errors_data)
         // If there are errors, error table will be opened
         if (errors_data.length > 0) {
             setErrorListShareData(errors_data)
