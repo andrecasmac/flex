@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { ComboboxDropdown } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
@@ -21,7 +21,7 @@ import {
   GripVertical,
 } from "lucide-react";
 
-import { SortableContext, useSortable } from "@dnd-kit/sortable";
+import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 import {
@@ -33,7 +33,6 @@ import {
 
 interface Props {
   row: Row;
-
   allRows: Row[];
   // isLoop: boolean;
   deleteRow: (id: Id) => void;
@@ -53,7 +52,7 @@ interface Props {
 }
 
 export default function RowContainer(props: Props) {
-  const [showSegmentLoops, setShowSegmentLoops] = useState<{
+  const [showSegmentLoops, setShowSegmentLoops] = React.useState<{
     [key: string]: boolean;
   }>({});
 
@@ -181,7 +180,7 @@ export default function RowContainer(props: Props) {
                   deleteRow(row.id);
                 }}
               >
-                <MinusCircle className=" fill-red-300" />
+                <MinusCircle className=" fill-red-300 dark:fill-red-800" />
               </Button>
             </div>
           </div>
@@ -290,7 +289,7 @@ export default function RowContainer(props: Props) {
                   deleteRow(row.id);
                 }}
               >
-                <MinusCircle className="  fill-red-300" />
+                <MinusCircle className="  fill-red-300 dark:fill-red-800" />
               </Button>
             </div>
           </div>
