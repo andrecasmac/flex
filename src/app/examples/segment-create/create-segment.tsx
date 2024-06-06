@@ -5,12 +5,12 @@ import { ComboboxDropdown } from "@/components/ui/combobox";
 import MultipleTagsInput from "@/components/multiple-tags";
 
 import { IDropdown, optionsUsage } from "../../../../types/segmentTypes";
-import { ChevronRight, MinusCircle, PlusCircle } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+
 import {
   Table,
   TableBody,
@@ -29,7 +29,7 @@ import {
   ruleNamesMap,
   optionsDTFormats,
   optionsTMFormats,
-} from "../../../../types/segmentTypes"; // Asegúrate de tener este archivo de tipos
+} from "../../../../types/segmentTypes"; 
 
 function SegmentGenerator() {
   const [segmentData, setSegmentData] = useState<SegmentData>({
