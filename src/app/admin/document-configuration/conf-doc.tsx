@@ -264,7 +264,7 @@ export default function DocConfig() {
       <div className="pb-4 gap-x-2 flex justify-end">
         <div className="flex-1 ">
           <Link href={"./segment-template"}>
-          <Button variant={"default"}>Create Segment +</Button>
+            <Button variant={"default"}>Create Segment +</Button>
           </Link>
         </div>
 
@@ -357,6 +357,17 @@ export default function DocConfig() {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="flex justify-center pt-10">
+        <Button
+          variant={"default"}
+          onClick={() => {
+            alert("no hace nada");
+          }}
+        >
+          Save Segment
+        </Button>
       </div>
 
       <pre className="pt-10 texxt-xs flex justify-center">
