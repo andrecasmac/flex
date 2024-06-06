@@ -29,7 +29,7 @@ import {
   ruleNamesMap,
   optionsDTFormats,
   optionsTMFormats,
-} from "../../../../types/segmentTypes"; 
+} from "../../../../types/segmentTypes";
 
 function SegmentGenerator() {
   const [segmentData, setSegmentData] = useState<SegmentData>({
@@ -453,6 +453,18 @@ function SegmentGenerator() {
             </TableBody>
           </Table>
         </div>
+
+        <div className="flex justify-center pt-10">
+          <Button
+            variant={"default"}
+            onClick={() => {
+              alert("no hace nada");
+            }}
+          >
+            Save Segment
+          </Button>
+        </div>
+
         <pre className="pt-10 text-xs flex justify-center">
           {JSON.stringify(segmentData, null, 2)}
         </pre>
