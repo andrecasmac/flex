@@ -40,6 +40,7 @@ export type EDI_Document = {
     type: string;
     template: boolean;
     structure: Segment[];
+    mandatory: boolean;
 };
 
 export type Segment = {
