@@ -52,7 +52,14 @@ export async function getAllPartners(){
 export async function getPartnerById(id:string){
     try{
         const partner = await prisma.partner.findUnique({
-            where: {id: id}
+            where: {id: id},
+            include: {
+                EDI_documents: {
+                    include: {
+                        structure: true
+                    }
+                }
+              }
         });
         if(!partner){
             throw new Error("Failed to fetch partner");

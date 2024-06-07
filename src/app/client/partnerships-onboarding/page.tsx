@@ -5,7 +5,7 @@ import partnershipsData from "./partnershipsData.json";
 import Badge from '@/components/badge';
 import { DataTable } from '@/app/examples/tables/table/data-table';
 import { columns } from './columns'
-import { PartnerShipClientTableContent } from '../../../../types/TableTypes';
+import { PartnerShipClientTableContent } from '../../../types/TableTypes';
 import { Button } from '@/components/ui/button';
 const data: PartnerShipClientTableContent[] = [
   {

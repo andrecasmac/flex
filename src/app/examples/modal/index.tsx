@@ -9,6 +9,10 @@ import { ModalAddDoc } from "./modalAddDoc";
 import { ModalSuccess } from "./modalSuccess";
 
 import { ModalSave } from "./modalSave";
+import ModalsPartners from "../partner-list";
+import { ModalAddPartner } from "./modalAddPartner";
+import { ModalDeletePartner } from "./modalDeletePartner";
+import { ModalDeleteDocument } from "./modalDeleteDocument";
 interface ModalsProps {
   modalPartner?: boolean;
   modalAddDoc?: boolean;
@@ -24,6 +28,11 @@ interface ModalsProps {
   showError?: boolean;
   isOpen?: boolean;
   setIsOpen?: (open: boolean) => void;
+  modalAddPartner?: boolean;
+  modalDeletePartner?: boolean;
+  selectedItemName?: string;
+  selectedItemId?:string;
+  modalDeleteDocument?: boolean;
 }
 
 export default function Modals({
@@ -38,6 +47,11 @@ export default function Modals({
   onSave,
   ErrorData,
   showSuccess,
+  modalAddPartner,
+  modalDeletePartner,
+  selectedItemName,
+  selectedItemId,
+  modalDeleteDocument
 }: ModalsProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -93,6 +107,30 @@ export default function Modals({
           showError={showError}
           ErrorData={ErrorData}
           showSuccess={showSuccess}
+        />
+      )}
+      {modalAddPartner && (
+        <ModalAddPartner
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          ButtonContent="Add Partner +"
+        />
+      )}
+      {modalDeletePartner && selectedItemName &&(
+        <ModalDeletePartner
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          ButtonContent="Delete"
+          itemName={selectedItemName}
+        />
+      )}
+      {modalDeleteDocument && selectedItemName && selectedItemId &&(
+        <ModalDeleteDocument
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          ButtonContent="Delete"
+          itemName={selectedItemName}
+          itemId={selectedItemId}
         />
       )}
     </div>

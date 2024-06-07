@@ -20,7 +20,7 @@ model Partner {
   EDI_documents EDI_Document[]
 
   partnershipsId String             @unique @db.ObjectId
-  partnerships   associated_partner @relation(fields: [partnershipsId], references: [id])
+  partnerships   associated_partner @relation(fields: [partnershipsId], references: [id], onDelete: NoAction)
 }
 
 model Client {
@@ -38,7 +38,7 @@ model associated_partner {
   uploaded_documents document[]
 
   clientId String @unique @db.ObjectId
-  client   Client @relation(fields: [clientId], references: [id])
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
 }
 
 model document {
@@ -47,7 +47,7 @@ model document {
   json_document Json
 
   partnershipId String             @unique @db.ObjectId
-  partnership   associated_partner @relation(fields: [partnershipId], references: [id])
+  partnership   associated_partner @relation(fields: [partnershipId], references: [id], onDelete: Cascade)
 
   errors error[]
 }
@@ -58,18 +58,19 @@ model error {
   message String
 
   documentId String   @unique @db.ObjectId
-  document   document @relation(fields: [documentId], references: [id])
+  document   document @relation(fields: [documentId], references: [id], onDelete: Cascade)
 }
 
 model EDI_Document {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
   type     String
   template Boolean @default(true)
+  mandatory Boolean @default(true)
 
   structure Segment[]
 
   partnerId String  @unique @db.ObjectId
-  partner   Partner @relation(fields: [partnerId], references: [id])
+  partner   Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
 }
 
 model Segment {
@@ -80,7 +81,7 @@ model Segment {
   template  Boolean @default(true)
 
   EDI_DocumentId String       @unique @db.ObjectId
-  EDI_Document   EDI_Document @relation(fields: [EDI_DocumentId], references: [id])
+  EDI_Document   EDI_Document @relation(fields: [EDI_DocumentId], references: [id], onDelete: Cascade)
 
   rules Json @default("{}")
 }

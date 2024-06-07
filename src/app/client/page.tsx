@@ -7,7 +7,7 @@ import { DataTable } from "@/app/examples/tables/table/data-table";
 import { columns } from "@/app/client/columns"
 import ModalContextProvider from "@/app/context/modalContextProvider";
 import { ModalAddPartnerships } from "@/app/examples/modal/modalAddPartnership";
-import { PartnerShipsClientContent } from "./../../../types/TableTypes";
+import { PartnerShipsClientContent } from "../../types/TableTypes";
 const data: PartnerShipsClientContent[] = [
     {
         id: "1",

@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { getAllPartners } from '../../../../da/Partners/partner-da'; // Adjust the import path according to your project structure
-import { Partner } from '../../../../../types/DbTypes';
+import { Partner } from '../../../../types/DbTypes';
 
 const PartnersList: React.FC = () => {
   const [partners, setPartners] = useState<Partner[]>([]);

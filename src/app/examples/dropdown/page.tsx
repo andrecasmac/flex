@@ -1,6 +1,6 @@
 'use client'
 import { ComboboxDropdown } from "@/components/ui/combobox";
-import { IComboboxContent } from "../../../../types/ComboboxContent";
+import { IComboboxContent } from "../../../types/ComboboxContent";
 import * as React from "react"
 
 export default function Page() {

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { PageTitle } from "@/components/page-title";
 import { columnsSegmentTemplate } from "@/app/examples/tables/table/colums";
-import { SegmentTemplatesContent } from "../../../../types/TableTypes";
+import { SegmentTemplatesContent } from "../../../types/TableTypes";
 
 /*List where the data for Segment Templates is stored*/
 const data: SegmentTemplatesContent[] = [

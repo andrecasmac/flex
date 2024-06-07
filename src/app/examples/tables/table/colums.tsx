@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Pencil,MinusCircle } from "lucide-react";
-import { SegmentTemplatesContent } from "../../../../../types/TableTypes";
+import { SegmentTemplatesContent } from "../../../../types/TableTypes";
 import Link from "next/link";
 
 export type ProductsT = {

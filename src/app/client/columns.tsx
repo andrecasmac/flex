@@ -11,7 +11,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../../types/TableTypes";
+import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../types/TableTypes";
 import Badge from "@/components/badge";
 import { ModalViewDocuments } from "@/app/examples/modal/modalViewDocuments";
 

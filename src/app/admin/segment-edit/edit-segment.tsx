@@ -4,7 +4,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import { ComboboxDropdown } from "@/components/ui/combobox";
 import MultipleTagsInput from "@/components/multiple-tags";
 
-import { IDropdown, optionsUsage } from "../../../../types/segmentTypes";
+import { IDropdown, optionsUsage } from "../../../types/segmentTypes";
 import { ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ import {
   ruleNamesMap,
   optionsDTFormats,
   optionsTMFormats,
-} from "../../../../types/segmentTypes";
+} from "../../../types/segmentTypes";
 
 interface SegmentEditProps {
   initialSegmentData: SegmentData;

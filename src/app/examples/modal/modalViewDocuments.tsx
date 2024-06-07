@@ -12,7 +12,7 @@ import {
 import ModalContext from "@/app/context/modalContext";
 import { Button } from "@/components/ui/button";
 import { columnsViewDocouments } from "@/app/client/columns";
-import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../../../types/TableTypes";
+import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../../types/TableTypes";
 import { DataTable } from "../tables/table/data-table";
 interface ModalViewDocuments {
   ButtonContent: string;

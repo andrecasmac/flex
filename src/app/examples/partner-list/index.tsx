@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react";
-import { ModalAddPartner } from "./modalAddPartner";
-import { ModalDeletePartner } from "./modalDeletePartner";
+import { ModalAddPartner } from "../modal/modalAddPartner";
+import { ModalDeletePartner } from "../modal/modalDeletePartner";
 
 interface ModalsPartnersProps {
   modalAddPartner?: boolean;

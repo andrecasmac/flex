@@ -6,7 +6,7 @@ import Badge from "@/components/badge";
 import React from "react";
 import ModalContextProvider from "@/app/context/modalContextProvider";
 import {ModalUpload} from "@/app/examples/modal/modalUpload"
-import { PartnerShipClientTableContent } from "../../../../types/TableTypes";
+import { PartnerShipClientTableContent } from "../../../types/TableTypes";
 
 export const columns: ColumnDef<PartnerShipClientTableContent>[] = [
   {
