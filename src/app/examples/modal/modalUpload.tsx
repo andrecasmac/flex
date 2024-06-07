@@ -18,6 +18,7 @@ import { useDropzone } from "react-dropzone";
 import { UploadIcon } from "@radix-ui/react-icons";
 import { ErrorList } from "../tables/table/colums";
 import { ModalSuccess } from "./modalSuccess";
+import ModalContext from "@/app/context/modalContext";
 
 import { parse_edi, parse_input_structure, validate_segments } from "@/lib/validator"
 import * as edi_schema from "@/lib/855_schema.json"
@@ -25,17 +26,14 @@ import { Description } from "@radix-ui/react-dialog";
 
 
 interface ModalUploadProps {
-    isOpen?: boolean;
-    setIsOpen: (open: boolean) => void;
     ButtonContent: string;
 }
 
 export function ModalUpload({
-    isOpen,
-    setIsOpen,
     ButtonContent,
 }: ModalUploadProps) {
     //State that stores the content of errorlist and sharing it with another component using useContext
+    const { isThisOpen, setisThisOpen } = useContext(ModalContext)
     const { errorlistShareData, setErrorListShareData } = useContext(ErrorContext)
     const {isErrorsOpen, setErrorsOpen}= useContext(ErrorContext)
     const {isSuccessfulOpen, setIsSuccessfulOpen}= useContext(ErrorContext)
@@ -67,7 +65,7 @@ export function ModalUpload({
             setIsSuccessfulOpen(true)
         }
         // Close this modal
-        setIsOpen(false);
+        setisThisOpen(false);
         };
 
     // Callback function to handle file drop event
@@ -120,7 +118,7 @@ export function ModalUpload({
 
     return (
         // Render the Modal for Uploading Documents with Dropzone
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog open={isThisOpen} onOpenChange={setisThisOpen}>
 
             {/* Button to open Modal */}
             <DialogTrigger asChild>

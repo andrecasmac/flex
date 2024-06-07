@@ -1,11 +1,5 @@
 [
     {
-        "document_name": "EDI 850 PO",
-        "status" : "Cancelled",
-        "validated":false,
-        "file": ""
-    },
-    {
         "document_name": "EDI 855 PO",
         "status": "Complete",
         "validated": true,

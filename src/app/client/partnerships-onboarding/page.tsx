@@ -6,15 +6,8 @@ import Badge from '@/components/badge';
 import { DataTable } from '@/app/examples/tables/table/data-table';
 import { columns } from './columns'
 import { PartnerShipClientTableContent } from '../../../../types/TableTypes';
+import { Button } from '@/components/ui/button';
 const data: PartnerShipClientTableContent[] = [
-  {
-    id: "1",
-    document_name: "EDI 850 PO",
-    mandatory:null,
-    status: "Cancelled",
-    validated: false,
-    file: ""
-  },
   {
     id: "2",
     document_name: "EDI 855 PO",
@@ -46,6 +39,10 @@ export default function PartnershipsOnboarding({searchParams/*Parameters we rece
   return (
     <div className="flex flex-col w-full justify-center items-center">
       <PageTitle title={rowName+" "+"Partnership"} />
+      <div className="flex w-[80%] justify-end pt-5 pb-5">
+                    {/*This is the Modal that adds partnerships*/}
+                    <Button>Download PO Test</Button>
+                </div>
       <div className="w-[80%] overflow-auto border rounded-xl">
         <DataTable columns={columns} data={data}></DataTable>
       </div>
