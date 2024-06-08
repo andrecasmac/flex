@@ -26,12 +26,15 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import { deletePartner } from "@/da/Partners/partner-da"
+
 
 interface ModalDeletePartnerProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   ButtonContent: string;
   itemName: string;
+  itemId: string;
 }
 
 export function ModalDeletePartner({
@@ -39,6 +42,7 @@ export function ModalDeletePartner({
     setIsOpen,
     ButtonContent,
     itemName,
+    itemId
   }: ModalDeletePartnerProps) {
     const itemNameSize = itemName.length
 
@@ -55,8 +59,20 @@ export function ModalDeletePartner({
       },
     });
   
+    const handleDelete = async (id:string) => {
+      try {
+          const data = await deletePartner(id);
+          if(!data){
+            throw new Error("Failed to delete Partner")
+          }
+      } catch (err) {
+          throw err;
+      }
+    }
+
     function onSubmit(values: z.infer<typeof formSchema>) {
       console.log(values);
+      handleDelete(itemId);
       setIsOpen(false);
     }
 

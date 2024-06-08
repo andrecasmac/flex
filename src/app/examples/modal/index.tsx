@@ -116,12 +116,13 @@ export default function Modals({
           ButtonContent="Add Partner +"
         />
       )}
-      {modalDeletePartner && selectedItemName &&(
+      {modalDeletePartner && selectedItemName && selectedItemId &&(
         <ModalDeletePartner
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           ButtonContent="Delete"
           itemName={selectedItemName}
+          itemId={selectedItemId}
         />
       )}
       {modalDeleteDocument && selectedItemName && selectedItemId &&(

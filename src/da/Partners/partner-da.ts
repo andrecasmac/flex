@@ -3,7 +3,7 @@ import { PrismaClient, Prisma } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //Create partner
-export async function createPartner(name:string, edi_version:string, delimiters:string, EOL:string, type_of_connection:string, PO_Test:JSON){
+export async function createPartner(name:string, edi_version:string, delimiters:string, EOL:string, type_of_connection:string, PO_Test:JSON, hidden: boolean){
     try{
         const partner = await prisma.partner.create({
             data: {
@@ -13,7 +13,7 @@ export async function createPartner(name:string, edi_version:string, delimiters:
                 EOL: EOL,
                 type_of_connection: type_of_connection,
                 PO_Test: JSON.stringify(PO_Test),
-                partnerships: {}
+                hidden: hidden
             }
         });
         if(!partner){
