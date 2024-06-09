@@ -1,8 +1,0 @@
-[
-    {"name":"EDI 850 Purchase Order", "toggle":true, "id":"1"},
-    {"name":"EDI 860 Purchase Order Change Request", "toggle":true, "id":"2"},
-    {"name":"EDI 855 Purchase Order Acknowledgment", "toggle":false, "id":"3"},
-    {"name":"EDI 856 Ship Notice/Manifest", "toggle":true, "id":"4"},
-    {"name":"EDI 810 Invoice", "toggle":false, "id":"5"},
-    {"name":"EDI 820 Payment Order/Remittance Advice", "toggle":true, "id":"6"}
-]

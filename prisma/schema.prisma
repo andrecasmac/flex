@@ -33,13 +33,11 @@ model partnership {
 
   uploaded_documents document[]
 
-  clientId String @unique @db.ObjectId
-  partnerId String @unique @db.ObjectId
+  clientId String @db.ObjectId
+  partnerId String @db.ObjectId
 
   client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
   partner Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
-  
-  @@unique([clientId, partnerId])
 }
 
 model document {
@@ -47,7 +45,7 @@ model document {
   type          String
   json_document Json
 
-  partnershipId String             @unique @db.ObjectId
+  partnershipId String      @unique @db.ObjectId
   partnership   partnership @relation(fields: [partnershipId], references: [id], onDelete: Cascade)
 
   errors error[]

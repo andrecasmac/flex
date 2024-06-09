@@ -42,7 +42,7 @@ export const columns: ColumnDef<Partner>[] = [
     header: () => {
       return (
         <div className="flex justify-center">
-          <p>Hidden</p>
+          <p>Visible</p>
         </div>
       );
     },

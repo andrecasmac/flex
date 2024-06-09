@@ -40,7 +40,7 @@ export default function Page() {
             <PageTitle title="Partner's List" />
             <div className="w-[80%]">
                 <div className="flex flex-row-reverse mb-5 ">
-                    <ModalsPartners modalAddPartner={true} />
+                    <ModalsPartners modalAddPartner={true}/>
                 </div>
                 <DataTable columns={columns} data={partners} />
             </div>

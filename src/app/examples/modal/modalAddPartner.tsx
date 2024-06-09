@@ -172,9 +172,7 @@ export function ModalAddPartner({
                             <SelectValue placeholder="Select Delimiter" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Delimiter 1">Delimiter 1</SelectItem>
-                            <SelectItem value="Delimiter 2">Delimiter 2</SelectItem>
-                            <SelectItem value="Delimiter 3">Delimiter 3</SelectItem>
+                            <SelectItem value="*">*</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>
@@ -195,9 +193,7 @@ export function ModalAddPartner({
                             <SelectValue placeholder="Select Connection Type" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Connection Type 1">Connection Type 1</SelectItem>
-                            <SelectItem value="Connection Type 2">Connection Type 2</SelectItem>
-                            <SelectItem value="Connection Type 3">Connection Type 3</SelectItem>
+                            <SelectItem value="FTP">FTP</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>
@@ -218,9 +214,7 @@ export function ModalAddPartner({
                             <SelectValue placeholder="Select EDI Version" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="EDI Version 1">EDI Version 1</SelectItem>
-                            <SelectItem value="EDI Version 2">EDI Version 2</SelectItem>
-                            <SelectItem value="EDI Version 3">EDI Version 3</SelectItem>
+                            <SelectItem value="X12 4010">X12 4010</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>
@@ -255,9 +249,7 @@ export function ModalAddPartner({
                             <SelectValue placeholder="Select EOL" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="EOL 1">EOL 1</SelectItem>
-                            <SelectItem value="EOL 2">EOL 2</SelectItem>
-                            <SelectItem value="EOL 3">EOL 3</SelectItem>
+                            <SelectItem value="~">~</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>
