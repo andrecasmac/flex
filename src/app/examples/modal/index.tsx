@@ -13,6 +13,7 @@ import ModalsPartners from "../partner-list";
 import { ModalAddPartner } from "./modalAddPartner";
 import { ModalDeletePartner } from "./modalDeletePartner";
 import { ModalDeleteDocument } from "./modalDeleteDocument";
+import { ModalAddPartnerships } from "./modalAddPartnership";
 interface ModalsProps {
   modalPartner?: boolean;
   modalAddDoc?: boolean;
@@ -34,6 +35,8 @@ interface ModalsProps {
   selectedItemId?:string;
   modalDeleteDocument?: boolean;
   partnerId?: string;
+  clientId?:string;
+  modalAddPartnership?: boolean;
 }
 
 export default function Modals({
@@ -53,7 +56,9 @@ export default function Modals({
   selectedItemName,
   selectedItemId,
   modalDeleteDocument,
-  partnerId
+  partnerId,
+  clientId,
+  modalAddPartnership
 }: ModalsProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -135,6 +140,12 @@ export default function Modals({
           ButtonContent="Delete"
           itemName={selectedItemName}
           itemId={selectedItemId}
+        />
+      )}
+      {modalAddPartnership && clientId && (
+        <ModalAddPartnerships 
+          ButtonContent="Add Partnership +"
+          clientId={clientId}
         />
       )}
     </div>

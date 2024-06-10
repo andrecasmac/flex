@@ -49,6 +49,31 @@ export async function getAllPartners(){
       };
 }
 
+//Read all partners
+export async function getAllPartnersAvailable(){
+    try {
+        const partners = await prisma.partner.findMany({
+            where:{
+                hidden: true
+            },
+            include: {
+                EDI_documents: {
+                    include: {
+                        structure: true
+                    }
+                }
+            }
+        });
+        if (!partners) {
+          throw new Error("Failed to fetch data");
+        }
+        return partners;
+      } catch (error) {
+        console.error('Error fetching clients:', error);
+        throw error; 
+      };
+}
+
 //Read partner by id
 export async function getPartnerById(id:string){
     try{

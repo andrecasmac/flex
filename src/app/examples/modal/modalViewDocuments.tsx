@@ -14,9 +14,11 @@ import { Button } from "@/components/ui/button";
 import { columnsViewDocouments } from "@/app/client/columns";
 import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../../types/TableTypes";
 import { DataTable } from "../tables/table/data-table";
+import { Partner } from "@/types/DbTypes";
+
 interface ModalViewDocuments {
   ButtonContent: string;
-  PartnerShipRowInfo: PartnerShipsClientContent | null;
+  PartnerShipRowInfo: Partner;
 }
 //Local Data
 const data: ModalViewDocumentsContent[] = [
@@ -86,7 +88,7 @@ export function ModalViewDocuments({
         </DialogHeader>
         <div className="flex items-center justify-center pt-2">
           {/*This is where we display the EDI and Delimeters*/}
-          EDI Version: {PartnerShipRowInfo ? <>{PartnerShipRowInfo.edi}</> : null} Delimeters(*,{'>'},~)
+          EDI Version: {PartnerShipRowInfo ? <>{PartnerShipRowInfo.edi_version}</> : null} Delimeters(*,{'>'},~)
         </div>
         <div className="flex items-center w-[70%] justify-center pt-2">
           {/*This is where we display the Table with the Documents*/}
