@@ -78,9 +78,8 @@ model Segment {
   mandatory String  @default("M")
   max       Int
   template  Boolean @default(true)
+  rules Json @default("{}")
 
   EDI_DocumentId String       @unique @db.ObjectId
   EDI_Document   EDI_Document @relation(fields: [EDI_DocumentId], references: [id], onDelete: Cascade)
-
-  rules Json @default("{}")
 }

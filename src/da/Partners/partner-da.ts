@@ -1,4 +1,5 @@
 "use server"
+import { EDI_Document } from "@/types/DbTypes";
 import { PrismaClient, Prisma } from "@prisma/client";
 const prisma = new PrismaClient();
 
@@ -88,6 +89,48 @@ export async function updatePartner(id:string, name:string){
         return updatedPartner;
     } catch(error) {
         console.log("Error updating partner's name: ",error);
+        throw error;
+    }
+}
+
+//Create or connect edi document
+export async function updatePartnerDocuments(id:string, EdiDocument: any){
+    try {
+        const updatedPartner = await prisma.partner.update({
+            where: {
+                id: id
+            },
+            data: {
+                EDI_documents: {
+                    create: {
+                        type: EdiDocument.type,
+                        template: false,
+                        mandatory: EdiDocument.mandatory,
+                        structure: EdiDocument.structure?.length > 0 ? {
+                            create: EdiDocument.structure.map((segment: { name: any; mandatory: any; max: any; template: any; rules: any; }) => ({
+                                name: segment.name,
+                                mandatory: segment.mandatory,
+                                max: segment.max,
+                                template: segment.template,
+                                rules: segment.rules
+                            }))
+                        } : {},
+                    }
+                }
+            },
+            include: {
+                EDI_documents: {
+                    include: {
+                        structure: true
+                    }
+                }
+            }
+        })
+        if(!updatedPartner){
+            throw new Error("Failed to add edi document");
+        }
+    } catch(error) {
+        console.log("Error adding EDI_Document: ", error);
         throw error;
     }
 }

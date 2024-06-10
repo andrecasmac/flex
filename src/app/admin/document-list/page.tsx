@@ -50,7 +50,7 @@ export default function Page({searchParams/*Parameters we receive from Partnerhs
             <PageTitle title={partners?.name + " Documents"} />
             <div className="w-[80%]">
                 <div className="flex flex-row-reverse mb-5 ">
-                    <Modals modalAddDoc={true} />
+                    <Modals modalAddDoc={true} partnerId={partnerId}/>
                 </div>
                 <DataTable columns={columns} data={data} />
             </div>

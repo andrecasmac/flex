@@ -48,4 +48,6 @@ export type Segment = {
     name: string;
     template: boolean;
     rules: any;
+    mandatory: string;
+    max: number;
 }

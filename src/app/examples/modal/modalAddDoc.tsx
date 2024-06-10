@@ -26,6 +26,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import { updatePartnerDocuments } from "@/da/Partners/partner-da";
+import { EDI_Document } from "@/types/DbTypes";
+
 const formSchema = z.object({
   content: z.string().min(1, {
     message: "Must input the name of Document",
@@ -36,12 +39,14 @@ interface ModalAddDocProps {
   ButtonContent: string;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  partnerId: string;
 }
 
 export function ModalAddDoc({
   ButtonContent,
   isOpen,
   setIsOpen,
+  partnerId
 }: ModalAddDocProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,8 +55,28 @@ export function ModalAddDoc({
     },
   });
 
+  const handleUpdate = async (values:z.infer<typeof formSchema>, id:string) => {
+    try{
+      const partnerId = id;
+      const name = values.content;
+      const document = {
+        type: name,
+        template: false,
+        mandatory: true,
+        structure: {}
+      };
+      const data = updatePartnerDocuments(partnerId, document);
+      if(!data){
+        throw new Error("Failed to update edi document")
+      }
+    } catch (error) {
+
+    }
+  }
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    handleUpdate(values, partnerId)
     setIsOpen(false);
   }
 

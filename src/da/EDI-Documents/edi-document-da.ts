@@ -2,7 +2,7 @@
 import { PrismaClient, Segment } from "@prisma/client";
 const prisma = new PrismaClient();
 
-//Create EDI-Document
+//Create EDI-Document template
 export async function createEDIdocument(type: string, template: boolean){
     try{
         const EDI_document = prisma.eDI_Document.create({

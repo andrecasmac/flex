@@ -99,7 +99,8 @@ export const columns: ColumnDef<EDI_Document>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
               <Link href={{pathname: "/admin/document-configuration", query: {
-                id: edi_document.id
+                id: edi_document.id,
+                name: edi_document.type
               }}}>
                 <DropdownMenuItem>
                   View

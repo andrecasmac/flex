@@ -33,6 +33,7 @@ interface ModalsProps {
   selectedItemName?: string;
   selectedItemId?:string;
   modalDeleteDocument?: boolean;
+  partnerId?: string;
 }
 
 export default function Modals({
@@ -51,7 +52,8 @@ export default function Modals({
   modalDeletePartner,
   selectedItemName,
   selectedItemId,
-  modalDeleteDocument
+  modalDeleteDocument,
+  partnerId
 }: ModalsProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -73,11 +75,12 @@ export default function Modals({
           ButtonContent="Modal"
         />
       )}
-      {modalAddDoc && (
+      {modalAddDoc && partnerId && (
         <ModalAddDoc
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           ButtonContent="Add Document +"
+          partnerId={partnerId}
         />
       )}
       {modalTest && (
