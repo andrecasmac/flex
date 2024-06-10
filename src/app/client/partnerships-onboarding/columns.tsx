@@ -12,6 +12,13 @@ export const columns: ColumnDef<PartnerShipClientTableContent>[] = [
   {
     accessorKey: "document_name",
     header: "Documents",
+    cell: ({ row }) => {
+      return(
+        <div className="flex">
+          {row.original.type}
+        </div>
+      )
+    }
   },
   {
     accessorKey: "mandatory",
@@ -48,11 +55,13 @@ export const columns: ColumnDef<PartnerShipClientTableContent>[] = [
     header: "Action",
     cell: ({ row }) => {
       //Variable where we store the status value
-      const rowValidated = row.original.validated
+      const rowValidated = row.original.status;
+      var validated = false;
+      rowValidated === "Validated" ? validated = true : validated = false
 
       return (
           <div className="flex justify-center">
-            {!rowValidated ? <ModalContextProvider>
+            {!validated ? <ModalContextProvider>
               <ModalUpload ButtonContent="Validate"></ModalUpload>
             </ModalContextProvider> : (<></>)}
           </div>

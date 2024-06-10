@@ -3,13 +3,13 @@ import { document, PrismaClient,Prisma, Partner } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //Create partnership
-export async function createPartnership(){
+export async function createPartnership(partnerId:string, clientId: string){
     try{
         const partnership = await prisma.partnership.create({
             data: {
-                partner: {},
-                uploaded_documents: {},
-                client: {}
+                partnerId: partnerId,
+                clientId: clientId,
+                uploaded_documents: {}
             }
         })
         if(!partnership){
@@ -25,7 +25,15 @@ export async function createPartnership(){
 //Read partnerships
 export async function getAllPartnerships(){
     try{
-        const partnerships = await prisma.partnership.findMany();
+        const partnerships = await prisma.partnership.findMany({
+            include: {
+                uploaded_documents: {
+                    include: {
+                        errors: true
+                    }
+                }
+            }
+        });
         if(!partnerships){
             throw new Error("Failed to fetch partnerships");
         }
@@ -42,6 +50,22 @@ export async function getPartnershipById(id:string){
         const partnership = await prisma.partnership.findUnique({
             where: {
                 id:id
+            }, 
+            include: {
+                uploaded_documents: {
+                    include: {
+                        errors: true
+                    }
+                },
+                partner: {
+                    include: {
+                        EDI_documents:{
+                            include: {
+                                structure: true
+                            }
+                        }
+                    }
+                }
             }
         });
         if(!partnership){

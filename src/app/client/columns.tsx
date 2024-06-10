@@ -11,6 +11,13 @@ export const columns: ColumnDef<partnership>[] = [
     {
         accessorKey: "name",
         header: () => <div className="flex w-[100%]">Partnerships</div>,
+        cell: ({ row }) => {
+            return (
+                <div>
+                    {row.original.partner.name}
+                </div>
+            )
+        }
     }
     , {
         accessorKey: "empty",
@@ -99,7 +106,7 @@ export const columnsModal: ColumnDef<Partner>[] = [
 
             return (
                 <div className="flex justify-end">
-                    <ModalViewDocuments ButtonContent="View Documents" PartnerShipRowInfo={rowContent} />
+                    <ModalViewDocuments ButtonContent="View Documents" PartnerShipRowInfo={rowContent}/>
                 </div>
             );
         },

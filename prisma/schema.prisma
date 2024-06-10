@@ -32,7 +32,7 @@ model partnership {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
   uploaded_documents document[]
-  status String @default("In Process")
+  status             String     @default("In Process")
 
   clientId  String @db.ObjectId
   partnerId String @db.ObjectId
@@ -42,9 +42,10 @@ model partnership {
 }
 
 model document {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
   type          String
   json_document Json
+  status        String @default("pending")
 
   partnershipId String      @unique @db.ObjectId
   partnership   partnership @relation(fields: [partnershipId], references: [id], onDelete: Cascade)

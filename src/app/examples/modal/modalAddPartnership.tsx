@@ -39,7 +39,7 @@ export function ModalAddPartnerships({
   useEffect(() => {
       const fetchData = async () => {
       try {
-          const data = await getAllPartnersAvailable();
+          const data = await getAllPartnersAvailable(clientId);
           setPartners(data);
       } catch (err) {
           setError('Failed to fetch data');
@@ -49,7 +49,7 @@ export function ModalAddPartnerships({
       };
 
       fetchData();
-  }, []);
+  }, [clientId]);
 
   if (loading) {
       return <p>Loading...</p>;

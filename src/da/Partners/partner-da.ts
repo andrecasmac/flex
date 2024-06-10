@@ -50,10 +50,10 @@ export async function getAllPartners(){
 }
 
 //Read all partners
-export async function getAllPartnersAvailable(){
+export async function getAllPartnersAvailable(clientId:string){
     try {
-        const partners = await prisma.partner.findMany({
-            where:{
+        const allPartners = await prisma.partner.findMany({
+            where: {
                 hidden: true
             },
             include: {
@@ -64,6 +64,32 @@ export async function getAllPartnersAvailable(){
                 }
             }
         });
+
+        if (!allPartners) {
+            throw new Error("Failed to fetch data");
+          }
+
+        const clientPartners = await prisma.client.findUnique({
+            where: {
+                id: clientId
+            },
+            include: {
+                partnerships: {
+                    select: {
+                        partnerId: true
+                    }
+                }
+            }
+        })
+
+        if (!clientPartners) {
+            throw new Error("Failed to fetch data");
+          }
+
+        const clientPartnersIds = clientPartners.partnerships.map(partnership => partnership.partnerId);
+
+        const partners = allPartners.filter(partner => !clientPartnersIds.includes(partner.id));
+
         if (!partners) {
           throw new Error("Failed to fetch data");
         }

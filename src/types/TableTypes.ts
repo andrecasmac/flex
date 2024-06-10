@@ -1,3 +1,5 @@
+import { EDI_Document } from "./DbTypes"
+
 export type SegmentTemplatesContent={
     name: string,
     max:number,
@@ -17,11 +19,6 @@ export type ModalViewDocumentsContent={
     mandatory:string,
 }
 
-export type PartnerShipClientTableContent={
-    id:string,
-    document_name: string,
-    mandatory: string|null,
-    status: string,
-    validated:boolean,
-    file: string,
+export type PartnerShipClientTableContent= EDI_Document & {
+    status: string
 }

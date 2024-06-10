@@ -16,53 +16,21 @@ import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../../t
 import { DataTable } from "../tables/table/data-table";
 import { EDI_Document, Partner } from "@/types/DbTypes";
 import { getEDIdocumentsByPartnerId } from "@/da/EDI-Documents/edi-document-da";
+import { createPartnership } from "@/da/Partnerships/partnerships-da";
+import { useSearchParams } from "next/navigation";
 
 interface ModalViewDocumentsProps {
   ButtonContent: string;
   PartnerShipRowInfo: Partner;
 }
-//Local Data
-const data: ModalViewDocumentsContent[] = [
-  {
-    id: '1',
-    name: 'EDI 850 Purchase Order',
-    mandatory: '',
-  },
-  {
-    id: '2',
-    name: 'EDI 860 Purchase Order Change Request',
-    mandatory: 'Optional',
-  },
-  {
-    id: '3',
-    name: 'EDI 855 Purchase Order Acknowledgment',
-    mandatory: 'Mandatory',
-  },
-  {
-    id: '4',
-    name: 'EDI 856 Ship Notice/Manifest',
-    mandatory: 'Mandatory',
-  },
-  {
-    id: '5',
-    name: 'EDI 810 Invoice',
-    mandatory: 'Mandatory',
-  },
-  {
-    id: '6',
-    name: 'EDI 820 Payment Order/Remittance Advice',
-    mandatory: 'Optional',
-  },
-
-]
-
-
 
 export function ModalViewDocuments({
   ButtonContent,
-  PartnerShipRowInfo,
+  PartnerShipRowInfo
 }: ModalViewDocumentsProps) {
 
+  const searchParams = useSearchParams();
+  const clientId = searchParams.get('id') as string;
   const [ediDocuments, setEdiDocuments] = useState<EDI_Document[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -95,11 +63,25 @@ export function ModalViewDocuments({
       return <p>{error}</p>;
   }
 
+  const handleConnection = async (partnerId:string, clientId:string) => {
+    try {
+      const partnership = await createPartnership(partnerId, clientId);
+      if(!partnership){
+        throw new Error("Failed to create partnership");
+      }
+      return partnership;
+    } catch(error) {
+      console.log("Error creating connection: ", error);
+      throw error;
+    }
+  }
+
   //Function that handles onClick of the Button 'Confirm'
-  function handleConfirm(){
+  function handleConfirm(id:string){
     //It closes both Modal Add Partnerships and Modal View Documents
-    setisThisOpen(false)
-    setIsModalOpen(false)
+    handleConnection(PartnerShipRowInfo.id,id);
+    setisThisOpen(false);
+    setIsModalOpen(false);
   }
   return (
 
@@ -130,7 +112,7 @@ export function ModalViewDocuments({
             </Button>
           </DialogClose>
           {/*Button that closes both Modals*/}
-          <Button onClick={()=>handleConfirm()} size="lg" className="flex h-10">
+          <Button onClick={()=>handleConfirm(clientId)} size="lg" className="flex h-10">
             Confirm
           </Button>
         </DialogFooter>
