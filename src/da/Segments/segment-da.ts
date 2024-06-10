@@ -42,7 +42,7 @@ export async function readAllSegments(){
 };
 
 //Read segment templates
-export async function readAllSegmentsTemplates(template:boolean){
+export async function getAllSegmentsTemplates(template:boolean){
     try{
         const segments = await prisma.segment.findMany({
             where: {

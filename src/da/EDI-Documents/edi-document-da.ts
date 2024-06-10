@@ -39,9 +39,12 @@ export async function getEDIdocuments(){
 //Read EDI-Document by ID
 export async function getEDIdocumentsById(id: string){
     try {
-        const EDI_document = prisma.eDI_Document.findUnique({
+        const EDI_document = await prisma.eDI_Document.findUnique({
             where: {
                 id: id
+            },
+            include: {
+                structure: true
             }
         });
         if(!EDI_document){
