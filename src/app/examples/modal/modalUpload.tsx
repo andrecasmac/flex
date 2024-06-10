@@ -60,11 +60,14 @@ export function ModalUpload({
         if (errors_data.length > 0) {
             setErrorListShareData(errors_data)
             setErrorsOpen(true);
+            console.log("errores")
         } else {
         // If no errors were found, validated modal will be opened
-            setIsSuccessfulOpen(true)
+            setIsSuccessfulOpen(true);
+            console.log("validated correctly!!!");
         }
         // Close this modal
+        console.log("acabo");
         setisThisOpen(false);
         };
 
