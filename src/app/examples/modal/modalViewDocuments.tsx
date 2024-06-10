@@ -1,5 +1,5 @@
 "use client";
-import { useContext,useState } from "react";
+import { useContext,useEffect,useState } from "react";
 import {
   DialogContent,
   DialogHeader,
@@ -14,9 +14,10 @@ import { Button } from "@/components/ui/button";
 import { columnsViewDocouments } from "@/app/client/columns";
 import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../../types/TableTypes";
 import { DataTable } from "../tables/table/data-table";
-import { Partner } from "@/types/DbTypes";
+import { EDI_Document, Partner } from "@/types/DbTypes";
+import { getEDIdocumentsByPartnerId } from "@/da/EDI-Documents/edi-document-da";
 
-interface ModalViewDocuments {
+interface ModalViewDocumentsProps {
   ButtonContent: string;
   PartnerShipRowInfo: Partner;
 }
@@ -60,12 +61,39 @@ const data: ModalViewDocumentsContent[] = [
 export function ModalViewDocuments({
   ButtonContent,
   PartnerShipRowInfo,
-}: ModalViewDocuments) {
+}: ModalViewDocumentsProps) {
+
+  const [ediDocuments, setEdiDocuments] = useState<EDI_Document[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   //Variable that is shared with Modal Add Partnership
   const {isThisOpen,setisThisOpen}=useContext(ModalContext)
 
   //Variable that defines if the ModalViewDocuments is open
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  useEffect(() => {
+      const fetchData = async () => {
+      try {
+          const data = await getEDIdocumentsByPartnerId(PartnerShipRowInfo.id);
+          setEdiDocuments(data);
+      } catch (err) {
+          setError('Failed to fetch data');
+      } finally {
+          setLoading(false);
+      }
+      };
+
+      fetchData();
+  }, [PartnerShipRowInfo.id]);
+
+  if (loading) {
+      return <p>Loading...</p>;
+  }
+
+  if (error) {
+      return <p>{error}</p>;
+  }
 
   //Function that handles onClick of the Button 'Confirm'
   function handleConfirm(){
@@ -92,7 +120,7 @@ export function ModalViewDocuments({
         </div>
         <div className="flex items-center w-[70%] justify-center pt-2">
           {/*This is where we display the Table with the Documents*/}
-          <DataTable columns={columnsViewDocouments} data={data} />
+          <DataTable columns={columnsViewDocouments} data={ediDocuments} />
         </div>
         <DialogFooter className="flex items-center justify-center">
           <DialogClose asChild>

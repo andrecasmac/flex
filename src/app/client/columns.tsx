@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ModalViewDocumentsContent } from "../../types/TableTypes";
 import Badge from "@/components/badge";
 import { ModalViewDocuments } from "@/app/examples/modal/modalViewDocuments";
-import { Partner, partnership } from "@/types/DbTypes";
+import { EDI_Document, Partner, partnership } from "@/types/DbTypes";
 
 export const columns: ColumnDef<partnership>[] = [
     {
@@ -106,20 +106,25 @@ export const columnsModal: ColumnDef<Partner>[] = [
     },
 ];
 
-export const columnsViewDocouments: ColumnDef<ModalViewDocumentsContent>[] = [
+export const columnsViewDocouments: ColumnDef<EDI_Document>[] = [
     {
         accessorKey: "name",
         header: () => <div className="flex w-[100%]">Name</div>,
+        cell: ({row}) => {
+            return (
+                <div className="flex">{row.original.type}</div>
+            );
+        }
     }
     , {
         accessorKey: "mandatory",
-        header: () => <div className="flex w-[100%] justify-center"></div>,
+        header: () => <div className="flex w-[100%] justify-center">Type</div>,
         cell: ({ row }) => {
             const rowMandatory = row.original.mandatory
             return (
                 <div className="flex justify-center">
                     {/*Badge that reflects if the document is mandatory*/}
-                    <Badge label={rowMandatory} />
+                    <Badge label={rowMandatory ? "Mandatory" : "Optional"} />
                 </div>
             );
         }

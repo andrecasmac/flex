@@ -63,6 +63,9 @@ export async function getEDIdocumentsByPartnerId(Partner_id:string){
         const EDI_documents = prisma.eDI_Document.findMany({
             where: {
                 partnerId: Partner_id
+            },
+            include:{
+                structure: true
             }
         });
         if(!EDI_documents){
