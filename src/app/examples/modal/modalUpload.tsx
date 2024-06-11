@@ -18,22 +18,25 @@ import { useDropzone } from "react-dropzone";
 import { UploadIcon } from "@radix-ui/react-icons";
 import { ErrorList } from "../tables/table/colums";
 import { ModalSuccess } from "./modalSuccess";
-import ModalContext from "@/app/context/modalContext";
 
 import { parse_edi, parse_input_structure, validate_segments } from "@/lib/validator"
-import * as edi_schema from "@/lib/855_schema.json"
+import * as edi_schema from "@/lib/855_schema.json" 
 import { Description } from "@radix-ui/react-dialog";
+import * as fs from 'fs';
 
 
 interface ModalUploadProps {
+    isOpen: boolean;
+    setIsOpen: (open: boolean) => void;
     ButtonContent: string;
 }
 
 export function ModalUpload({
+    isOpen,
+    setIsOpen,
     ButtonContent,
 }: ModalUploadProps) {
     //State that stores the content of errorlist and sharing it with another component using useContext
-    const { isThisOpen, setisThisOpen } = useContext(ModalContext)
     const { errorlistShareData, setErrorListShareData } = useContext(ErrorContext)
     const {isErrorsOpen, setErrorsOpen}= useContext(ErrorContext)
     const {isSuccessfulOpen, setIsSuccessfulOpen}= useContext(ErrorContext)
@@ -48,27 +51,23 @@ export function ModalUpload({
 
     //Function to send data using useContext
     function sendData(txtFileContent:string) {
-		let [parsed_edi, parse_errors]: any[] = parse_edi(txtFileContent);
+        let parsed_edi = parse_edi(txtFileContent);
         let [structure, structure_errors]: any[] = parse_input_structure(parsed_edi, edi_schema);
         let segment_errors: any[] = validate_segments(structure, edi_schema);
         //Variable where we send the values with useContext
-		const parse_errors_data = parse_errors.map((err: string) => ({name: "Parser Error", description: err}))
         const structure_errors_data = structure_errors.map((err: string) => ({name: "Structure Error", description: err}))
         const segment_errors_data = segment_errors.map((err: string) => ({name: "Segment Error", description: err}))
-        const errors_data = parse_errors_data.concat(structure_errors_data, segment_errors_data)
+        const errors_data = structure_errors_data.concat(segment_errors_data)
         // If there are errors, error table will be opened
         if (errors_data.length > 0) {
             setErrorListShareData(errors_data)
             setErrorsOpen(true);
-            console.log("errores")
         } else {
         // If no errors were found, validated modal will be opened
-            setIsSuccessfulOpen(true);
-            console.log("validated correctly!!!");
+            setIsSuccessfulOpen(true)
         }
         // Close this modal
-        console.log("acabo");
-        setisThisOpen(false);
+        setIsOpen(false);
         };
 
     // Callback function to handle file drop event
@@ -112,6 +111,7 @@ export function ModalUpload({
         else {
             if (txtFileContent) {
                 sendData(txtFileContent)
+                console.log(txtFileContent);
             }
             else {
                 console.log("No Content Found In File")
@@ -121,7 +121,7 @@ export function ModalUpload({
 
     return (
         // Render the Modal for Uploading Documents with Dropzone
-        <Dialog open={isThisOpen} onOpenChange={setisThisOpen}>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
 
             {/* Button to open Modal */}
             <DialogTrigger asChild>

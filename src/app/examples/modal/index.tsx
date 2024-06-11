@@ -104,6 +104,8 @@ export default function Modals({
       )}
       {modalUpload && (
         <ModalUpload
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
           ButtonContent="Subir Documento"
         />
       )}
