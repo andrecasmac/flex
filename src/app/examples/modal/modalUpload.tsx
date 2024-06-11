@@ -23,6 +23,7 @@ import { parse_edi, parse_input_structure, validate_segments } from "@/lib/valid
 import * as edi_schema from "@/lib/855_schema.json"
 import { Description } from "@radix-ui/react-dialog";
 import { updatePartnershipDocuments, getPartnershipById } from "@/da/Partnerships/partnerships-da";
+import {error} from "console";
 
 
 interface ModalUploadProps {
@@ -56,10 +57,6 @@ export function ModalUpload({
 
 			});
 
-			console.log(value);
-			console.log(ediType);
-			console.log(partnershipDocs);
-			console.log(documentSchema);
 		});
 
 
@@ -80,7 +77,7 @@ export function ModalUpload({
     const [errorValidate, setErrorValidate] = useState<string | null>(null);
     
     //Function to send data using useContext
-    function sendData(txtFileContent:string) {
+	function sendData(txtFileContent:string) {
 		let [parsed_edi, parse_errors]: any[] = parse_edi(txtFileContent);
         let [structure, structure_errors]: any[] = parse_input_structure(parsed_edi, documentSchema);
         let segment_errors: any[] = validate_segments(structure, documentSchema);
@@ -99,6 +96,8 @@ export function ModalUpload({
         }
         // Close this modal
         setIsOpen(false);
+
+		return errors_data;
         };
 
     // Callback function to handle file drop event
@@ -141,14 +140,14 @@ export function ModalUpload({
         // Will validate the file, send data and close the Dropzone
         else {
             if (txtFileContent && documentSchema) {
-                sendData(txtFileContent)
+				let errors: any[] = sendData(txtFileContent)
 
-				let errors: any[] = []
+				let format_errors: any[] = []
 
-				errorlistShareData.forEach((error) => {
-					errors.push({
-						code: "code",
-						message: error
+				errors.forEach((error) => {
+					format_errors.push({
+						code: error.name,
+						message: error.description
 					});
 				})
 
@@ -156,9 +155,9 @@ export function ModalUpload({
 					type: ediType,
 					json_document: txtFileContent,
 					status: "Pending"
-				}, errors)
+				}, format_errors)
 				.then(() => {
-					console.log("file updated");
+					console.log("File updated.");
 				})
 				.catch((err) => {
 					console.log(err);
