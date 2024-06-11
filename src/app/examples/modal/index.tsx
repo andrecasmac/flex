@@ -37,6 +37,8 @@ interface ModalsProps {
   partnerId?: string;
   clientId?:string;
   modalAddPartnership?: boolean;
+  partnershipId?: string;
+  ediType?: string;
 }
 
 export default function Modals({
@@ -58,7 +60,9 @@ export default function Modals({
   modalDeleteDocument,
   partnerId,
   clientId,
-  modalAddPartnership
+  modalAddPartnership,
+  partnershipId,
+  ediType
 }: ModalsProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -106,6 +110,8 @@ export default function Modals({
         <ModalUpload
           isOpen={isOpen}
           setIsOpen={setIsOpen}
+		  partnershipId={partnershipId}
+		  ediType={ediType}
           ButtonContent="Subir Documento"
         />
       )}

@@ -47,7 +47,7 @@ model document {
   json_document String
   status        String @default("pending")
 
-  partnershipId String      @unique @db.ObjectId
+  partnershipId String      @db.ObjectId
   partnership   partnership @relation(fields: [partnershipId], references: [id], onDelete: Cascade)
 
   errors error[]
