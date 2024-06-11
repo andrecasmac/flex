@@ -1,10 +1,9 @@
 "use server"
-import { cornersOfRectangle } from "@dnd-kit/core/dist/utilities/algorithms/helpers";
 import { PrismaClient, Prisma } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //Create segment
-export async function createSegment(name:string, template:boolean, max:number, mandatory:string){
+export async function createSegment(name:string, template:boolean, max:number, mandatory:boolean, isLoop:boolean){
     try{
         const segment = await prisma.segment.create({
             data: {
@@ -13,6 +12,7 @@ export async function createSegment(name:string, template:boolean, max:number, m
                 max: max,
                 mandatory: mandatory,
                 template: template,
+                isLoop: isLoop,
                 rules: {}
             }
         });
