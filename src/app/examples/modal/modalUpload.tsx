@@ -60,8 +60,7 @@ export function ModalUpload({
 		});
 
 
-	}, [])
-
+	}, [ediType, partnershipId])
 
     //State that stores the content of errorlist and sharing it with another component using useContext
     const {errorlistShareData, setErrorListShareData } = useContext(ErrorContext)

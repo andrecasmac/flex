@@ -106,12 +106,12 @@ export default function Modals({
           ButtonContent="Modal Lista Error"
         />
       )}
-      {modalUpload && (
+      {modalUpload && partnershipId && ediType && (
         <ModalUpload
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-		  partnershipId={partnershipId}
-		  ediType={ediType}
+		      partnershipId={partnershipId}
+		      ediType={ediType}
           ButtonContent="Subir Documento"
         />
       )}
