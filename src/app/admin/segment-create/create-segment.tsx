@@ -40,7 +40,7 @@ function SegmentGenerator() {
     max: 1,
     template: false,
     isLoop: false,
-    segment_rules: {},
+    rules: {},
   });
 
   const [numElements, setNumElements] = useState(0);
@@ -66,7 +66,7 @@ function SegmentGenerator() {
     const newSegmentRules: { [key: number]: SegmentRule } = {};
     for (let i = 1; i <= clampedNum; i++) {
       // Start at 1, not 0
-      newSegmentRules[i] = segmentData.segment_rules[i] || {
+      newSegmentRules[i] = segmentData.rules[i] || {
         ...initialRuleByType,
         type: "",
       };
@@ -75,7 +75,7 @@ function SegmentGenerator() {
     setNumElements(clampedNum);
     setSegmentData((prevData) => ({
       ...prevData,
-      segment_rules: newSegmentRules,
+      rules: newSegmentRules,
     }));
   };
 
@@ -94,10 +94,10 @@ function SegmentGenerator() {
   ) => {
     setSegmentData((prevData) => ({
       ...prevData,
-      segment_rules: {
-        ...prevData.segment_rules,
+      rules: {
+        ...prevData.rules,
         [elementIndex]: {
-          ...prevData.segment_rules[elementIndex],
+          ...prevData.rules[elementIndex],
           [ruleName]: value,
         },
       },
@@ -107,8 +107,8 @@ function SegmentGenerator() {
   const handleTypeChange = (elementIndex: number, newType: string) => {
     setSegmentData((prevData) => ({
       ...prevData,
-      segment_rules: {
-        ...prevData.segment_rules,
+      rules: {
+        ...prevData.rules,
         [elementIndex]: {
           ...initialRuleByType,
           ...additionalRulesByType[newType].rules,
@@ -127,10 +127,10 @@ function SegmentGenerator() {
     (elementIndex: string, newTags: string[]) => {
       setSegmentData((prevData) => ({
         ...prevData,
-        segment_rules: {
-          ...prevData.segment_rules,
+        rules: {
+          ...prevData.rules,
           [elementIndex]: {
-            ...prevData.segment_rules[elementIndex],
+            ...prevData.rules[elementIndex],
             oneOf: newTags,
           },
         },
@@ -235,16 +235,16 @@ function SegmentGenerator() {
             </TableHeader>
 
             <TableBody>
-              {Object.keys(segmentData.segment_rules).length === 0 ? (
+              {Object.keys(segmentData.rules).length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center opacity-40">
                     No elements. Please add elements.
                   </TableCell>
                 </TableRow>
               ) : (
-                Object.keys(segmentData.segment_rules).map((elementIndex) => {
+                Object.keys(segmentData.rules).map((elementIndex) => {
                   const currentElement =
-                    segmentData.segment_rules[Number(elementIndex)];
+                    segmentData.rules[Number(elementIndex)];
                   const allowedRules =
                     additionalRulesByType[currentElement.type]?.allowedRules ||
                     [];
@@ -286,7 +286,7 @@ function SegmentGenerator() {
                             selected={optionsUsage.find(
                               (option) =>
                                 option.label ===
-                                segmentData.segment_rules[Number(elementIndex)]
+                                segmentData.rules[Number(elementIndex)]
                                   .mandatory
                             )}
                           /> */}
@@ -302,7 +302,7 @@ function SegmentGenerator() {
                             selected={optionsUsage.find(
                               (option) =>
                                 option.label ===
-                                (segmentData.segment_rules[Number(elementIndex)]
+                                (segmentData.rules[Number(elementIndex)]
                                   .mandatory
                                   ? "M"
                                   : "O")
@@ -322,7 +322,7 @@ function SegmentGenerator() {
                             selected={optionsType.find(
                               (option) =>
                                 option.label ===
-                                segmentData.segment_rules[Number(elementIndex)]
+                                segmentData.rules[Number(elementIndex)]
                                   .type
                             )}
                           />
@@ -417,7 +417,7 @@ function SegmentGenerator() {
                                                   selected={optionsDTFormats.find(
                                                     (option) =>
                                                       option.label ===
-                                                      segmentData.segment_rules[
+                                                      segmentData.rules[
                                                         Number(elementIndex)
                                                       ].dateHasFormat
                                                   )}
@@ -442,7 +442,7 @@ function SegmentGenerator() {
                                                   selected={optionsTMFormats.find(
                                                     (option) =>
                                                       option.label ===
-                                                      segmentData.segment_rules[
+                                                      segmentData.rules[
                                                         Number(elementIndex)
                                                       ].timeHasFormat
                                                   )}
