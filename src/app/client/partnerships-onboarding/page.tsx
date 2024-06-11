@@ -32,6 +32,7 @@ export default function PartnershipsOnboarding({searchParams/*Parameters we rece
             return{
               ...ediDoc,
               status: uploadedDoc ? uploadedDoc.status : "Pending",
+              partnershipId: searchParams.id
             };
           });
           setDataPacket(filteredData);

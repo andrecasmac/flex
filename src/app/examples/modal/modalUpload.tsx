@@ -20,13 +20,13 @@ import { ErrorList } from "../tables/table/colums";
 import { ModalSuccess } from "./modalSuccess";
 
 import { parse_edi, parse_input_structure, validate_segments } from "@/lib/validator"
-import * as edi_schema from "@/lib/855_schema.json" 
+import * as edi_schema from "@/lib/855_schema.json"
 import { Description } from "@radix-ui/react-dialog";
-import * as fs from 'fs';
+import { updatePartnershipDocuments } from "@/da/Partnerships/partnerships-da";
 
 
 interface ModalUploadProps {
-    isOpen: boolean;
+    isOpen?: boolean;
     setIsOpen: (open: boolean) => void;
     ButtonContent: string;
 }
@@ -48,16 +48,17 @@ export function ModalUpload({
 
     // State to send error when pressing the validate button with no file in the Dropzone
     const [errorValidate, setErrorValidate] = useState<string | null>(null);
-
+    
     //Function to send data using useContext
     function sendData(txtFileContent:string) {
-        let parsed_edi = parse_edi(txtFileContent);
+		let [parsed_edi, parse_errors]: any[] = parse_edi(txtFileContent);
         let [structure, structure_errors]: any[] = parse_input_structure(parsed_edi, edi_schema);
         let segment_errors: any[] = validate_segments(structure, edi_schema);
         //Variable where we send the values with useContext
+		const parse_errors_data = parse_errors.map((err: string) => ({name: "Parser Error", description: err}))
         const structure_errors_data = structure_errors.map((err: string) => ({name: "Structure Error", description: err}))
         const segment_errors_data = segment_errors.map((err: string) => ({name: "Segment Error", description: err}))
-        const errors_data = structure_errors_data.concat(segment_errors_data)
+        const errors_data = parse_errors_data.concat(structure_errors_data, segment_errors_data)
         // If there are errors, error table will be opened
         if (errors_data.length > 0) {
             setErrorListShareData(errors_data)
@@ -111,7 +112,6 @@ export function ModalUpload({
         else {
             if (txtFileContent) {
                 sendData(txtFileContent)
-                console.log(txtFileContent);
             }
             else {
                 console.log("No Content Found In File")
