@@ -20,5 +20,6 @@ export type ModalViewDocumentsContent={
 }
 
 export type PartnerShipClientTableContent= EDI_Document & {
-    status: string
+    status: string,
+    partnershipId: string
 }
