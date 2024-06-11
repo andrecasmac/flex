@@ -1,7 +1,3 @@
-export interface IDropdown {
-    id: string;
-    label: string;
-}
 
 export type Id = string | number
 
@@ -17,12 +13,19 @@ export interface SegmentRow {
 
 export interface LoopRow {
     id: Id;
-    ParentId?: Id,
+    parentId?: Id,
     name: string;
     max: number;
     segments: SegmentRow[];
     internLoops: LoopRow[];
     mandatory?: string;
+}
+export function generateSegmentId() {
+    return `semgemt-${String(Math.floor(Math.random() * 10001))}`
+}
+
+export function generateLoopId() {
+    return `loop-${String(Math.floor(Math.random() * 10001))}`
 }
 
 const exampleSegment = [
@@ -36,14 +39,11 @@ const exmapleLoops = [
     { name: "LOOP" },
 ];
 
-export function generateSegmentId() {
-    return `semgemt-${String(Math.floor(Math.random() * 10001))}`
-}
 
-export function generateLoopId() {
-    return `loop-${String(Math.floor(Math.random() * 10001))}`
+export interface IDropdown {
+    id: string;
+    label: string;
 }
-
 
 export function getSegments(): IDropdown[] {
     const optionsSegments: IDropdown[] = exampleSegment.map((data, index) => ({

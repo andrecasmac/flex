@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-
+import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   LoopRow,
@@ -11,7 +10,6 @@ import {
   Row,
   IDropdown,
 } from "./doc-types";
-
 import {
   DndContext,
   DragStartEvent,
@@ -23,17 +21,15 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
-
 import RowContainer from "./row-container-base";
 import Link from "next/link";
-
 
 function convertJsonToRows(jsonRows: any[], parentId?: Id): Row[] {
   return jsonRows.map((jsonRow) => {
     const row: Row = {
       id: jsonRow.id,
-      name: jsonRow.name.toLowerCase(),  // Convert name back to lowercase
-      mandatory: jsonRow.mandatory ? "M" : "O",  // Convert boolean back to "M"/"O"
+      name: jsonRow.name, // Convert name back to lowercase
+      mandatory: jsonRow.mandatory ? "M" : "O", // Convert boolean back to "M"/"O"
       max: jsonRow.max,
     };
 
@@ -51,7 +47,7 @@ function convertJsonToRows(jsonRows: any[], parentId?: Id): Row[] {
 
       return {
         ...row,
-        segments: convertJsonToRows(segments, jsonRow.id),  // Recursive call
+        segments: convertJsonToRows(segments, jsonRow.id), // Recursive call
         internLoops: convertJsonToRows(internLoops, jsonRow.id), // Recursive call
       } as LoopRow;
     } else {
@@ -60,23 +56,18 @@ function convertJsonToRows(jsonRows: any[], parentId?: Id): Row[] {
   });
 }
 
+export default function DocConfig({ initialConfig }: any) {
+  const [rows, setRows] = useState<Row[]>([]);
 
-export default function DocConfig() {
-  const [rows, setRows] = React.useState<Row[]>([]);
+  useEffect(() => {
+    // Assuming `initialConfig` is a JSON string, parse it
+    const jsonData = initialConfig;
+    const initialRows = convertJsonToRows(jsonData);
+    setRows(initialRows);
+  }, [initialConfig]);
 
-  // React.useEffect(() => {
-  //   // Fetch JSON data (replace with your actual fetch logic)
-  //   fetch("/your-api-endpoint")
-  //     .then((response) => response.json())
-  //     .then((jsonData) => {
-  //       const initialRows = convertJsonToRows(jsonData); 
-  //       setRows(initialRows);
-  //     });
-  // }, []); 
-
-
-  const rowsId = React.useMemo(() => rows.map((row) => row.id), [rows]);
-  const [activeRow, setActiveRow] = React.useState<Row | null>(null);
+  const rowsId = useMemo(() => rows.map((row) => row.id), [rows]);
+  const [activeRow, setActiveRow] = useState<Row | null>(null);
 
   function createSegmentRow() {
     const segmentToAdd: Row = {
@@ -132,6 +123,7 @@ export default function DocConfig() {
       })
       .filter(Boolean) as Row[]; // Filtrar undefined y convertir a Row[]
   }
+
   function addSegmentToLoop(parentId: Id) {
     const newSegment: SegmentRow = {
       id: `${generateSegmentId()}`, // Incluir parentId en el ID
@@ -171,7 +163,7 @@ export default function DocConfig() {
   function addLoopToLoop(parentId: Id) {
     const newLoop: LoopRow = {
       id: `${generateLoopId()}`,
-      ParentId: parentId,
+      parentId: parentId,
       name: "loop",
       max: 1,
       segments: [],
@@ -447,6 +439,7 @@ export default function DocConfig() {
         {/* {JSON.stringify(rows, null, 2)} */}
         {JSON.stringify(
           transformRowsToDesiredFormat(rows), // Aplicar la transformación aquí
+          // rows,
           null,
           2
         )}
