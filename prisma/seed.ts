@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 // import { client_seed } from './seeder'
 // import * as edi_schema from '../src/lib/855_schema.json'
 const prisma = new PrismaClient()
