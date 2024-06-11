@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client"
+// import { Prisma } from "@prisma/client"
 import * as edi_schema from "@/lib/855_schema.json"
 
 export const client_seed = [{ //Client
