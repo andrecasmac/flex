@@ -11,38 +11,6 @@ import { PartnerShipsClientContent } from "../../types/TableTypes";
 import { getPartnersOfClient } from "@/da/Clients/client-da";
 import { partnership } from "@/types/DbTypes";
 
-const data: PartnerShipsClientContent[] = [
-    {
-        id: "1",
-        name: "Amazon",
-        status: "Complete",
-        edi: "X12 4010",
-        connection: "FTP",
-    },
-    {
-        id: "2",
-        name: "Partnership 2",
-        status: "In Process",
-        edi: "X12 4010",
-        connection: "...",
-    },
-    {
-        id: "3",
-        name: "Partnership 3",
-        status: "In Process",
-        edi: "X12 4010",
-        connection: "...",
-    },
-    {
-        id: "4",
-        name: "Partnership 4",
-        status: "In Process",
-        edi: "X12 4010",
-        connection: "...",
-    },
-
-]
-
 export default function Page({searchParams/*Parameters we receive from Partnerhsips Page*/}:{
     searchParams :{
     id:string

@@ -29,7 +29,7 @@ import {error} from "console";
 interface ModalUploadProps {
     isOpen?: boolean;
 	partnershipId: string;
-	ediType?: string;
+	ediType: string;
     setIsOpen: (open: boolean) => void;
     ButtonContent: string;
 }
