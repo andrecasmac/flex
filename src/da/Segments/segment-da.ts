@@ -4,7 +4,7 @@ import { PrismaClient, Prisma } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //Create segment
-export async function createSegment(name:string, template:boolean, max:number, mandatory:string, isLoop:boolean){
+export async function createSegment(name:string, template:boolean, max:number, mandatory:boolean, isLoop:boolean){
     try{
         const segment = await prisma.segment.create({
             data: {

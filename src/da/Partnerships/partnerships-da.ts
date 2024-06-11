@@ -1,5 +1,5 @@
 "use server"
-import { document, PrismaClient,Prisma, Partner } from "@prisma/client";
+import { document, PrismaClient,Prisma, Partner, error } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //Create partnership
@@ -79,7 +79,7 @@ export async function getPartnershipById(id:string){
 }
 
 //Update partnership uploaded documents
-export async function updatePartnershipDocuments(id:string, document:document){
+export async function updatePartnershipDocuments(id:string, document:document, errors:error){
     try{
         const uploadedPartner = await prisma.partnership.update({
             where: {
@@ -89,7 +89,12 @@ export async function updatePartnershipDocuments(id:string, document:document){
                 uploaded_documents: {
                     create: {
                         type: document.type,
-                        json_document: document.json_document as Prisma.JsonObject,
+                        json_document: document.json_document,
+                        errors: {
+                            createMany: {
+                                data: errors
+                            }
+                        }
                     }
                 },
             },
