@@ -9,10 +9,11 @@ import {
   Row,
   Id,
   IDropdown,
-  getSegments,
-  getLoops,
   optionsUsage,
+  getLoops,
+  getSegments,
 } from "./doc-types";
+
 import {
   MinusCircle,
   Pencil,

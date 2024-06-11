@@ -27,8 +27,53 @@ import { createPortal } from "react-dom";
 import RowContainer from "./row-container-base";
 import Link from "next/link";
 
+
+function convertJsonToRows(jsonRows: any[], parentId?: Id): Row[] {
+  return jsonRows.map((jsonRow) => {
+    const row: Row = {
+      id: jsonRow.id,
+      name: jsonRow.name.toLowerCase(),  // Convert name back to lowercase
+      mandatory: jsonRow.mandatory ? "M" : "O",  // Convert boolean back to "M"/"O"
+      max: jsonRow.max,
+    };
+
+    if (jsonRow.segment_rules) {
+      // It's a LoopRow
+      const segments: SegmentRow[] = [];
+      const internLoops: LoopRow[] = [];
+      jsonRow.segment_rules.forEach((rule: any) => {
+        if (rule.name.toLowerCase() === "loop") {
+          internLoops.push(rule);
+        } else {
+          segments.push(rule);
+        }
+      });
+
+      return {
+        ...row,
+        segments: convertJsonToRows(segments, jsonRow.id),  // Recursive call
+        internLoops: convertJsonToRows(internLoops, jsonRow.id), // Recursive call
+      } as LoopRow;
+    } else {
+      return row as SegmentRow; // It's a SegmentRow
+    }
+  });
+}
+
+
 export default function DocConfig() {
   const [rows, setRows] = React.useState<Row[]>([]);
+
+  // React.useEffect(() => {
+  //   // Fetch JSON data (replace with your actual fetch logic)
+  //   fetch("/your-api-endpoint")
+  //     .then((response) => response.json())
+  //     .then((jsonData) => {
+  //       const initialRows = convertJsonToRows(jsonData); 
+  //       setRows(initialRows);
+  //     });
+  // }, []); 
+
 
   const rowsId = React.useMemo(() => rows.map((row) => row.id), [rows]);
   const [activeRow, setActiveRow] = React.useState<Row | null>(null);
@@ -259,6 +304,34 @@ export default function DocConfig() {
     })
   );
 
+  function transformRowsToDesiredFormat(
+    rows: Row[],
+    parentId?: string | number
+  ): any[] {
+    return rows.map((row) => {
+      const newRow: any = {
+        id: row.id,
+        parentId: parentId,
+        name: row.name.toUpperCase(),
+        mandatory: row.mandatory === "M",
+        max: row.max,
+      };
+
+      if ("segments" in row) {
+        // Combine both segments and internLoops into segment_rules
+        newRow.segment_rules = [
+          ...transformRowsToDesiredFormat(row.segments, row.id),
+          ...transformRowsToDesiredFormat(row.internLoops, row.id),
+        ];
+
+        delete newRow.segments;
+        delete newRow.internLoops;
+      }
+
+      return newRow;
+    });
+  }
+
   return (
     <div className="w-[80%] h-[auto] justify-center">
       <div className="pb-4 gap-x-2 flex justify-end">
@@ -371,7 +444,12 @@ export default function DocConfig() {
       </div>
 
       <pre className="pt-10 texxt-xs flex justify-center">
-        {JSON.stringify(rows, null, 2)}
+        {/* {JSON.stringify(rows, null, 2)} */}
+        {JSON.stringify(
+          transformRowsToDesiredFormat(rows), // Aplicar la transformación aquí
+          null,
+          2
+        )}
       </pre>
     </div>
   );

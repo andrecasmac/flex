@@ -22,17 +22,18 @@ export interface LoopRow {
     max: number;
     segments: SegmentRow[];
     internLoops: LoopRow[];
-    mandatory?: string; 
+    mandatory?: string;
 }
 
 const exampleSegment = [
-    { name: "ISA - No se" },
-    { name: "DMT - Date time" }
+    { name: "ISA" },
+    { name: "DMT" },
+    { name: "ID" },
+    { name: "MT" },
 ];
 
 const exmapleLoops = [
-    { name: "LOOP ID- No se" },
-    { name: "LOOP TM - No se 2" }
+    { name: "LOOP" },
 ];
 
 export function generateSegmentId() {
