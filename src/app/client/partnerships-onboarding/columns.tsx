@@ -65,7 +65,7 @@ export const columns: ColumnDef<PartnerShipClientTableContent>[] = [
           <div className="flex justify-center">
             {!validated ? <ModalContextProvider>
               <ErrorContextProvider>
-                <Modals modalUpload={true} partnershipId={row.original.partnershipId}/>
+                <Modals modalUpload={true}/>
                 <Modals modalErrorList={true} />
                 <Modals modalSuccess={true}/>
               </ErrorContextProvider>

@@ -28,6 +28,7 @@ export type document = {
     id: string;
     type: string;
     json_document: any;
+    status: string;
     errors: Error[];
 }
 
@@ -50,6 +51,6 @@ export type Segment = {
     name: string;
     template: boolean;
     rules: any;
-    mandatory: string;
+    mandatory: boolean;
     max: number;
 }

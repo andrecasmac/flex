@@ -44,7 +44,7 @@ model partnership {
 model document {
   id            String  @id @default(auto()) @map("_id") @db.ObjectId
   type          String
-  json_document Json
+  json_document String
   status        String @default("pending")
 
   partnershipId String      @unique @db.ObjectId
@@ -77,7 +77,7 @@ model EDI_Document {
 model Segment {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  mandatory String  @default("M")
+  mandatory Boolean @default(true)
   max       Int
   template  Boolean @default(true)
   rules     Json    @default("{}")
