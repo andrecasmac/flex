@@ -31,12 +31,15 @@ import {
   optionsTMFormats,
 } from "../../../../types/segmentTypes";
 
+import { createSegment } from "@/da/Segments/segment-da";
+
 function SegmentGenerator() {
   const [segmentData, setSegmentData] = useState<SegmentData>({
     name: "ISA",
-    mandatory: "M",
+    mandatory: false,
     max: 1,
     template: false,
+    isLoop: false,
     segment_rules: {},
   });
 
@@ -143,6 +146,20 @@ function SegmentGenerator() {
     }));
   };
 
+  const postSegment = async () => {
+    try {
+      await createSegment(
+        segmentData.name,
+        segmentData.template,
+        Number(segmentData.max),
+        segmentData.mandatory,
+        segmentData.isLoop
+      );
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
   return (
     <div className="flex w-[80%] gap-x-5 justify-center">
       <div className="flex flex-col w-full">
@@ -181,11 +198,12 @@ function SegmentGenerator() {
                 handleSelect={(option: IDropdown) => {
                   setSegmentData((prev) => ({
                     ...prev,
-                    mandatory: option.label,
+                    mandatory: option.label === "M",
                   }));
                 }}
                 selected={optionsUsage.find(
-                  (option) => option.label === segmentData.mandatory
+                  (option) =>
+                    option.label === (segmentData.mandatory ? "M" : "O")
                 )}
               />
             </div>
@@ -256,7 +274,7 @@ function SegmentGenerator() {
                         </TableCell>
 
                         <TableCell>
-                          <ComboboxDropdown
+                          {/* <ComboboxDropdown
                             content={optionsUsage}
                             handleSelect={(selectedOption: IDropdown) => {
                               handleRuleChange(
@@ -270,6 +288,24 @@ function SegmentGenerator() {
                                 option.label ===
                                 segmentData.segment_rules[Number(elementIndex)]
                                   .mandatory
+                            )}
+                          /> */}
+                          <ComboboxDropdown
+                            content={optionsUsage}
+                            handleSelect={(selectedOption: IDropdown) => {
+                              handleRuleChange(
+                                Number(elementIndex),
+                                "mandatory",
+                                selectedOption.label === "M" // Convert label to boolean
+                              );
+                            }}
+                            selected={optionsUsage.find(
+                              (option) =>
+                                option.label ===
+                                (segmentData.segment_rules[Number(elementIndex)]
+                                  .mandatory
+                                  ? "M"
+                                  : "O")
                             )}
                           />
                         </TableCell>
@@ -458,7 +494,7 @@ function SegmentGenerator() {
           <Button
             variant={"default"}
             onClick={() => {
-              alert("no hace nada");
+              postSegment();
             }}
           >
             Save Segment

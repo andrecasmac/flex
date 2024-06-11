@@ -29,30 +29,33 @@ import {
   optionsTMFormats,
 } from "../../../../types/segmentTypes";
 
+import { updateSegmentRule } from "@/da/Segments/segment-da";
+
 interface SegmentEditProps {
   initialSegmentData: SegmentData;
+  segmentId: string;
 }
 
-function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
+function SegmentEdit({ initialSegmentData, segmentId }: SegmentEditProps) {
   const [segmentData, setSegmentData] =
     useState<SegmentData>(initialSegmentData);
 
   const [numElements, setNumElements] = useState(
-    Object.keys(initialSegmentData.segment_rules).length
+    Object.keys(initialSegmentData.rules).length
   );
 
   const [showRules, setShowRules] = useState<{ [key: number]: boolean }>(() => {
     const initialShowRules: { [key: number]: boolean } = {};
-    Object.keys(initialSegmentData.segment_rules).forEach((key) => {
+    Object.keys(initialSegmentData.rules).forEach((key) => {
       initialShowRules[Number(key)] = true;
     });
     return initialShowRules;
   });
 
   useEffect(() => {
-    setNumElements(Object.keys(segmentData.segment_rules).length);
+    setNumElements(Object.keys(segmentData.rules).length);
     const newShowRules: { [key: number]: boolean } = {};
-    Object.keys(segmentData.segment_rules).forEach((key) => {
+    Object.keys(segmentData.rules).forEach((key) => {
       newShowRules[Number(key)] = true;
     });
     setShowRules(newShowRules);
@@ -65,10 +68,10 @@ function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
   ) => {
     setSegmentData((prevData) => ({
       ...prevData,
-      segment_rules: {
-        ...prevData.segment_rules,
+      rules: {
+        ...prevData.rules,
         [elementIndex]: {
-          ...prevData.segment_rules[elementIndex],
+          ...prevData.rules[elementIndex],
           [ruleName]: value,
         },
       },
@@ -78,8 +81,8 @@ function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
   const handleTypeChange = (elementIndex: number, newType: string) => {
     setSegmentData((prevData) => ({
       ...prevData,
-      segment_rules: {
-        ...prevData.segment_rules,
+      rules: {
+        ...prevData.rules,
         [elementIndex]: {
           ...initialRuleByType,
           ...additionalRulesByType[newType].rules,
@@ -98,10 +101,10 @@ function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
     (elementIndex: string, newTags: string[]) => {
       setSegmentData((prevData) => ({
         ...prevData,
-        segment_rules: {
-          ...prevData.segment_rules,
+        rules: {
+          ...prevData.rules,
           [elementIndex]: {
-            ...prevData.segment_rules[elementIndex],
+            ...prevData.rules[elementIndex],
             oneOf: newTags,
           },
         },
@@ -115,6 +118,38 @@ function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
       ...prevShowRules,
       [elementIndex]: !prevShowRules[elementIndex],
     }));
+  };
+
+  const handleSaveSegment = async () => {
+    try {
+      const updatedRules: any = segmentData.rules;
+
+      // Filter rules to remove empty/undefined values
+      for (const key in updatedRules) {
+        const rule = updatedRules[key];
+        Object.keys(rule).forEach((ruleKey) => {
+          if (rule[ruleKey] === "" || rule[ruleKey] === undefined) {
+            delete rule[ruleKey];
+          }
+        });
+      }
+
+      // Update the segment rules in the database
+      const response = await updateSegmentRule(segmentId, updatedRules);
+
+      if (response) {
+        // Success - you could show a confirmation message to the user here
+        console.log("Segment updated successfully:", response);
+        alert("Segment updated successfully");
+      } else {
+        // Handle the error from the controller (if any)
+        console.error("Failed to update segment.");
+      }
+    } catch (error) {
+      // Handle any network or other errors that occur during the request
+      console.error("Error updating segment:", error);
+      // You could display a generic error message to the user
+    }
   };
 
   return (
@@ -135,9 +170,8 @@ function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
             </TableHeader>
 
             <TableBody>
-              {Object.keys(segmentData.segment_rules).map((elementIndex) => {
-                const currentElement =
-                  segmentData.segment_rules[Number(elementIndex)];
+              {Object.keys(segmentData.rules).map((elementIndex) => {
+                const currentElement = segmentData.rules[Number(elementIndex)];
                 const allowedRules =
                   additionalRulesByType[currentElement.type]?.allowedRules ||
                   [];
@@ -177,8 +211,9 @@ function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
                           selected={optionsUsage.find(
                             (option) =>
                               option.label ===
-                              segmentData.segment_rules[Number(elementIndex)]
-                                .mandatory
+                              (segmentData.rules[Number(elementIndex)].mandatory
+                                ? "M"
+                                : "O")
                           )}
                         />
                       </TableCell>
@@ -192,8 +227,7 @@ function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
                           selected={optionsType.find(
                             (option) =>
                               option.label ===
-                              segmentData.segment_rules[Number(elementIndex)]
-                                .type
+                              segmentData.rules[Number(elementIndex)].type
                           )}
                         />
                       </TableCell>
@@ -289,7 +323,7 @@ function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
                                                 selected={optionsDTFormats.find(
                                                   (option) =>
                                                     option.label ===
-                                                    segmentData.segment_rules[
+                                                    segmentData.rules[
                                                       Number(elementIndex)
                                                     ].dateHasFormat
                                                 )}
@@ -314,7 +348,7 @@ function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
                                                 selected={optionsTMFormats.find(
                                                   (option) =>
                                                     option.label ===
-                                                    segmentData.segment_rules[
+                                                    segmentData.rules[
                                                       Number(elementIndex)
                                                     ].timeHasFormat
                                                 )}
@@ -362,11 +396,19 @@ function SegmentEdit({ initialSegmentData }: SegmentEditProps) {
         </div>
 
         <div className="flex justify-center pt-10">
-          <Button
+          {/* <Button
             variant={"default"}
             onClick={() => {
               alert("no hace nada");
             }}
+          >
+            Save Segment
+          </Button> */}
+          <Button
+            variant={"default"}
+            onClick={() => {
+              handleSaveSegment();
+            }} // Call the handler on button click
           >
             Save Segment
           </Button>

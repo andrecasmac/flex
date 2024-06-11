@@ -100,6 +100,26 @@ export async function updateSegmentRule(id:string, rule:Prisma.JsonObject){
     }
 }
 
+
+
+export async function readSegmentById(id:string){
+    try{
+        const deletedSegment = await prisma.segment.findUnique({
+            where:{
+                id:id
+            }
+        });
+        if(!deletedSegment){
+            throw new Error("Failed to read segment");
+        }
+        return deletedSegment;
+    } catch(error) {
+        console.log("Error reading segment: ", error);
+        throw error;
+    }
+}
+
+
 //Delete segment by id
 export async function deleteSegmentById(id:string){
     try{

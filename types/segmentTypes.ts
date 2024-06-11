@@ -1,6 +1,6 @@
 
 export interface SegmentRule {
-    mandatory: string;
+    mandatory: boolean;
     min: number;
     max: number;
     type: string;
@@ -9,14 +9,15 @@ export interface SegmentRule {
 
 export interface SegmentData {
     name: string;
-    mandatory: string;
+    mandatory: boolean;
     max: number;
     template: boolean;
-    segment_rules: { [key: string]: SegmentRule }; // Corrección aquí
+    isLoop: boolean;
+    rules:{ [key: string]: SegmentRule }; // Corrección aquí
 }
 
 export const initialRuleByType: SegmentRule = {
-    mandatory: "M",
+    mandatory: true,
     min: 1,
     max: 1,
     type: "",
