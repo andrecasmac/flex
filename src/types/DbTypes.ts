@@ -28,6 +28,7 @@ export type document = {
     id: string;
     type: string;
     json_document: any;
+    status: string;
     errors: Error[];
 }
 

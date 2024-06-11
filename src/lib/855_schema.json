@@ -4,7 +4,8 @@
         "mandatory": true,
         "max": 1,
         "template": false,
-        "segment_rules": {
+        "isLoop": false,
+        "rules": {
             "1": {
                 "mandatory": true,
                 "min": 2,
@@ -129,7 +130,8 @@
         "mandatory": true,
         "max": 1,
         "template": false,
-        "segment_rules": {
+        "isLoop":false,
+        "rules": {
             "1": {
                 "mandatory": true,
                 "min": 2,
@@ -194,7 +196,8 @@
         "mandatory": true,
         "max": 1,
         "template": false,
-        "segment_rules": {
+        "isLoop":false,
+        "rules": {
             "1": {
                 "mandatory": true,
                 "min": 3,
@@ -216,7 +219,9 @@
         "name": "BAK",
         "mandatory": true,
         "max": 1,
-        "segment_rules": {
+        "template":false,
+        "isLoop":false,
+        "rules": {
             "1": {
                 "mandatory": false,
                 "min": 2,
@@ -255,13 +260,15 @@
         "name": "LOOP",
 		"mandatory": true,
 		"max": 100000,
-        "segment_rules": [
+        "template":false,
+        "isLoop":false,
+        "rules": [
             {
                 "name": "PO1",
                 "mandatory": true,
                 "max": 1,
                 "template": false,
-                "segment_rules": {
+                "rules": {
                     "1": {
                         "mandatory": false,
                         "min": 1,
@@ -331,7 +338,7 @@
                 "mandatory": false,
                 "max": 1,
                 "template": false,
-                "segment_rules": {
+                "rules": {
                     "1": {
                         "mandatory": false,
                         "min": 0,
@@ -394,13 +401,13 @@
                 "name": "LOOP",
                 "mandatory": true,
                 "max": 104,
-                "segment_rules": [
+                "rules": [
                     {
                         "name": "ACK",
                         "mandatory": true,
                         "max": 1, 
                         "template": false,
-                        "segment_rules": {
+                        "rules": {
                             "1": {
                                 "mandatory": true,
                                 "min": 2,
@@ -455,7 +462,7 @@
                         "mandatory": false,
                         "max": 1, 
                         "template": false,
-                        "segment_rules": {
+                        "rules": {
                             "1": {
                                 "mandatory": true,
                                 "min": 3,
@@ -482,7 +489,8 @@
         "mandatory": false,
         "max": 1, 
         "template": false,
-        "segment_rules": {
+        "isLoop":false,
+        "rules": {
             "1": {
                 "mandatory": false,
                 "min": 1,
@@ -502,7 +510,8 @@
         "mandatory": true,
         "max": 1, 
         "template": false,
-        "segment_rules": {
+        "isLoop": false,
+        "rules": {
             "1": {
                 "mandatory": true,
                 "min": 1,
@@ -522,7 +531,8 @@
         "mandatory": true,
         "max": 1, 
         "template": false,
-        "segment_rules": {
+        "isLoop": false,
+        "rules": {
             "1": {
                 "mandatory": true,
                 "min": 1,
@@ -542,7 +552,8 @@
         "mandatory": true,
         "max": 1, 
         "template": false,
-        "segment_rules": {
+        "isLoop": false,
+        "rules": {
             "1": {
                 "mandatory": true,
                 "min": 1,
