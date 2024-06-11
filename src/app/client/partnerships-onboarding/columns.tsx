@@ -7,6 +7,8 @@ import React from "react";
 import ModalContextProvider from "@/app/context/modalContextProvider";
 import {ModalUpload} from "@/app/examples/modal/modalUpload"
 import { PartnerShipClientTableContent } from "../../../types/TableTypes";
+import Modals from "@/app/examples/modal";
+import ErrorContextProvider from "@/app/context/errorContextProvider";
 
 export const columns: ColumnDef<PartnerShipClientTableContent>[] = [
   {
@@ -62,7 +64,11 @@ export const columns: ColumnDef<PartnerShipClientTableContent>[] = [
       return (
           <div className="flex justify-center">
             {!validated ? <ModalContextProvider>
-              <ModalUpload ButtonContent="Validate"></ModalUpload>
+              <ErrorContextProvider>
+                <Modals modalUpload={true} />
+                <Modals modalErrorList={true} />
+                <Modals modalSuccess={true}/>
+              </ErrorContextProvider>
             </ModalContextProvider> : (<></>)}
           </div>
       )
