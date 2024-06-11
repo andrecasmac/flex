@@ -152,7 +152,7 @@ function get_edi_segment_name(schema: any, index: number) {
 // gets the schema of the segment (the schema that determines the 
 // structure of the segment, which elements belong it, etc.)
 function get_segment_schema(schema: any, index: number) {
-	return schema[index].segment_rules;
+	return schema[index].rules;
 }
 
 
