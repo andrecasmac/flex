@@ -7,7 +7,7 @@ export default function Page() {
       <PageTitle title="Create Segment" />
 
       <div className="flex w-screen justify-center pb-20">
-        <SegmentGenerator />
+        <SegmentGenerator EDI_Id="6667bc53806b0ece0051374e" />
       </div>
     </div>
   );

@@ -3,17 +3,21 @@ import { PrismaClient, Prisma } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //Create segment
-export async function createSegment(name:string, template:boolean, max:number, mandatory:boolean, isLoop:boolean){
+export async function createSegment(name:string, template:boolean, max:number, mandatory:boolean, isLoop:boolean, EDI_Id: string, rules: Prisma.JsonObject){
     try{
         const segment = await prisma.segment.create({
             data: {
                 name: name,
-                EDI_Document: {},
+                EDI_Document: {
+                    connect: {
+                        id: EDI_Id,
+                    }
+                },
                 max: max,
                 mandatory: mandatory,
                 template: template,
                 isLoop: isLoop,
-                rules: {}
+                rules: rules
             }
         });
         if(!segment){
@@ -24,7 +28,6 @@ export async function createSegment(name:string, template:boolean, max:number, m
         console.log("Error creating segment: ", error);
         throw error;
     }
-
 }
 
 //Read all segments

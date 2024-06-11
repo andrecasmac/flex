@@ -33,13 +33,20 @@ import {
 
 import { createSegment } from "@/da/Segments/segment-da";
 
-function SegmentGenerator() {
+import { Prisma } from "@prisma/client";
+
+interface SegmentGenerator {
+  EDI_Id: string;
+}
+
+function SegmentGenerator({ EDI_Id }: SegmentGenerator) {
   const [segmentData, setSegmentData] = useState<SegmentData>({
     name: "ISA",
     mandatory: false,
     max: 1,
     template: false,
     isLoop: false,
+
     rules: {},
   });
 
@@ -148,13 +155,33 @@ function SegmentGenerator() {
 
   const postSegment = async () => {
     try {
+      const convertSegmentRuleToJson = (obj: any, seen = new WeakSet()) => {
+        if (typeof obj === "object" && obj !== null) {
+          if (seen.has(obj)) {
+            return "[Circular Reference]"; // Or any other placeholder
+          }
+          seen.add(obj);
+
+          const result: Prisma.JsonObject = {};
+          for (const key in obj) {
+            result[key] = convertSegmentRuleToJson(obj[key], seen);
+          }
+          return result;
+        }
+        return obj; // Return primitive values as-is
+      };
+
       await createSegment(
         segmentData.name,
         segmentData.template,
         Number(segmentData.max),
         segmentData.mandatory,
-        segmentData.isLoop
+        segmentData.isLoop,
+        EDI_Id,
+        convertSegmentRuleToJson(segmentData.rules)
       );
+
+      console.log("success");
     } catch (error) {
       console.log("Error", error);
     }
@@ -322,8 +349,7 @@ function SegmentGenerator() {
                             selected={optionsType.find(
                               (option) =>
                                 option.label ===
-                                segmentData.rules[Number(elementIndex)]
-                                  .type
+                                segmentData.rules[Number(elementIndex)].type
                             )}
                           />
                         </TableCell>
