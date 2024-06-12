@@ -17,6 +17,7 @@ export default function Page({searchParams/*Parameters we receive from Partnerhs
     }
     }) {
 
+    const clientId = searchParams.id;
     const [partnerships, setPartnerships] = useState<partnership[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -24,7 +25,7 @@ export default function Page({searchParams/*Parameters we receive from Partnerhs
     useEffect(() => {
         const fetchData = async () => {
         try {
-            const data = await getPartnersOfClient("665136131277e5b9ce47e849");
+            const data = await getPartnersOfClient(searchParams.id);
             const filteredData = data.partnerships
             setPartnerships(filteredData);
         } catch (err) {

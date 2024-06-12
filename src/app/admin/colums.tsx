@@ -92,7 +92,6 @@ export const columns: ColumnDef<Partner>[] = [
               }}}>
                 <DropdownMenuItem>View</DropdownMenuItem>
               </Link>
-              <DropdownMenuItem>Edit</DropdownMenuItem>
               <ModalsPartners modalDeletePartner={true} selectedItemName={partner.name} selectedItemId={partner.id} />
             </DropdownMenuContent>
           </DropdownMenu>
