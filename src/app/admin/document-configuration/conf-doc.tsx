@@ -338,7 +338,9 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
     <div className="w-[80%] h-[auto] justify-center">
       <div className="pb-4 gap-x-2 flex justify-end">
         <div className="flex-1 ">
-          <Link href={"./segment-template"}>
+          <Link
+            href={{ pathname: "./segment-template", query: { EDI_Id: EDI_Id } }}
+          >
             <Button variant={"default"}>Create Segment +</Button>
           </Link>
         </div>

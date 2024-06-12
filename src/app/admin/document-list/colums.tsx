@@ -37,11 +37,21 @@ export const columns: ColumnDef<EDI_Document>[] = [
     cell({ row }) {
       return (
         <div className="flex justify-center">
-          <Link href={{pathname: "/admin/document-configuration", query: {
-            id: row.original.id,
-            name: row.original.type
-          }}}>
-            <Button className="w-auto h-auto p-0 border-0 bg-inherit text-primary hover:bg-inherit hover:text-primary">
+          <Link
+            href={{
+              pathname: "/admin/document-configuration",
+              query: {
+                EDI_Id: row.original.id,
+                // name: row.original.type
+              },
+            }}
+          >
+            <Button
+              className="w-auto h-auto p-0 border-0 bg-inherit text-primary hover:bg-inherit hover:text-primary"
+              onClick={() => {
+                console.log(row.original.id);
+              }}
+            >
               <FaGear className="w-8 h-8" />
             </Button>
           </Link>
@@ -61,17 +71,19 @@ export const columns: ColumnDef<EDI_Document>[] = [
 
     // The function for the state of the Toggle selected
     cell: ({ row }) => {
-
       // Define the handler for the toggle action selected
       const handleToggleCell = (checked: boolean) => {
         // For now, it only works on the console log of the page
         console.log(`Row ${row.original.id} has changed to: ${checked}`);
-      }
+      };
 
       // Allows to visualize the Toggle of each row
       return (
         <div className="flex justify-center">
-          <Toggle actionToggle={row.original.mandatory} onChange={handleToggleCell} />
+          <Toggle
+            actionToggle={row.original.mandatory}
+            onChange={handleToggleCell}
+          />
         </div>
       );
     },
@@ -98,16 +110,23 @@ export const columns: ColumnDef<EDI_Document>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-              <Link href={{pathname: "/admin/document-configuration", query: {
-                id: edi_document.id,
-                name: edi_document.type
-              }}}>
-                <DropdownMenuItem>
-                  View
-                </DropdownMenuItem>
+              <Link
+                href={{
+                  pathname: "/admin/document-configuration",
+                  query: {
+                    id: edi_document.id,
+                    name: edi_document.type,
+                  },
+                }}
+              >
+                <DropdownMenuItem>View</DropdownMenuItem>
               </Link>
               <DropdownMenuSeparator />
-              <Modals modalDeleteDocument={true} selectedItemName={edi_document.type} selectedItemId={edi_document.id}/>
+              <Modals
+                modalDeleteDocument={true}
+                selectedItemName={edi_document.type}
+                selectedItemId={edi_document.id}
+              />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

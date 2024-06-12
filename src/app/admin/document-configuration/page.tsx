@@ -5,8 +5,12 @@ import DocConfig from "./conf-doc";
 import exampleJson from "./doc-test.json";
 import { getEDIdocumentsById } from "@/da/EDI-Documents/edi-document-da";
 
-export default function Page() {
-  const EDI_Id: string = "6667c6ad72933ee3dd6c5d46";
+export default function Page({
+  searchParams,
+}: {
+  searchParams: { EDI_Id: string };
+}) {
+  const EDI_Id = searchParams.EDI_Id
   const [allSegment, setAllSegments] = React.useState<any[] | null>(null);
   const [error, setError] = React.useState<Error | null>(null);
 

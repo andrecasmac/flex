@@ -32,7 +32,7 @@ import {
 
 import Link from "next/link";
 import { readSegmentByEDIDocumentId } from "@/da/Segments/segment-da";
-
+import { getAllSegmentsTemplates } from "@/da/Segments/segment-da";
 interface Props {
   row: Row;
   EDI_Id: string;
@@ -92,11 +92,15 @@ export default function RowContainer(props: Props) {
   React.useEffect(() => {
     const fetchSegments = async () => {
       try {
-        const segmentData = await readSegmentByEDIDocumentId(EDI_Id);
+        const segmentData = await getAllSegmentsTemplates(true);
+
+        // const data = await getAllSegmentsTemplates(true);
+        // console.log(segmentData)
         const formattedOptions = segmentData.map((seg) => ({
           id: seg.id, // Convert id to string for IDropdown
           label: seg.name,
         }));
+
         setOptionsSegments(formattedOptions);
       } catch (err) {
         console.error("Error reading segment:", err);

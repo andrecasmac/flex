@@ -17,7 +17,7 @@ export async function createSegment(name: string, template: boolean, max: number
                 max: max,
                 mandatory: mandatory,
                 template: template,
-                rules: {},
+                rules: rules,
                 isLoop: isLoop
             }
         });

@@ -44,9 +44,8 @@ function SegmentGenerator({ EDI_Id }: SegmentGenerator) {
     name: "ISA",
     mandatory: false,
     max: 1,
-    template: false,
+    template: true,
     isLoop: false,
-
     rules: {},
   });
 
