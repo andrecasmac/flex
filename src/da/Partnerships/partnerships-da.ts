@@ -153,6 +153,36 @@ export async function updatePartnershipDocumentValid(id:string, document:any){
     }
 }
 
+//Update partnership document validated
+export async function updatePartnershipDocumentValid(id:string, document:any){
+    try{
+        const uploadedPartner = await prisma.partnership.update({
+            where: {
+                id:id
+            },
+            data: {
+                uploaded_documents: {
+                    create: {
+                        type: document.type,
+                        json_document: document.json_document,
+                        errors: {}
+                    }
+                },
+            },
+            include: {
+                uploaded_documents: true
+            }
+        })
+        if(!uploadedPartner){
+            throw new Error("Failed to update partnership document");
+        }
+        return uploadedPartner;
+    } catch(error) {
+        console.log("Error updating partnership document: ", error);
+        throw error;
+    }
+}
+
 //Delete partnership
 export async function deletePartnership(id:string){
     try{

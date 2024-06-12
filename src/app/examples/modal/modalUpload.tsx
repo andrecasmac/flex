@@ -22,7 +22,7 @@ import { ModalSuccess } from "./modalSuccess";
 import { parse_edi, parse_input_structure, validate_segments } from "@/lib/validator"
 import * as edi_schema from "@/lib/855_schema.json"
 import { Description } from "@radix-ui/react-dialog";
-import { updatePartnershipDocuments, getPartnershipById } from "@/da/Partnerships/partnerships-da";
+import { updatePartnershipDocuments, getPartnershipById, updatePartnershipDocumentValid } from "@/da/Partnerships/partnerships-da";
 import {error} from "console";
 
 
@@ -126,7 +126,7 @@ export function ModalUpload({
     const { getRootProps, getInputProps } = useDropzone({ onDrop, maxFiles: 1 });
 
     // Function to handle the Valitate Button
-    const handleValidate = () => {
+    const handleValidate = async () => {
 
         // If Dropzone doesn't have a file
         if (!uploadedFile) {
@@ -150,17 +150,31 @@ export function ModalUpload({
 					});
 				})
 
-				updatePartnershipDocuments(partnershipId,  {
-					type: ediType,
-					json_document: txtFileContent,
-					status: "Pending"
-				}, format_errors)
-				.then(() => {
-					console.log("File updated.");
-				})
-				.catch((err) => {
-					console.log(err);
-				});
+                if(format_errors.length > 0){
+                    updatePartnershipDocuments(partnershipId,  {
+                        type: ediType,
+                        json_document: txtFileContent,
+                        status: "Pending"
+                    }, format_errors)
+                    .then(() => {
+                        console.log("File updated.");
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+                } else {
+                    updatePartnershipDocumentValid(partnershipId, {
+                        type: ediType,
+                        json_document: txtFileContent,
+                        status: "Validated"
+                    }).then(() => {
+                        console.log("File Uploaded");
+                    }).catch((err) => {
+                        console.log(err)
+                    });
+                }
+
+				
             }
             else {
                 console.log("No Content Found In File")
