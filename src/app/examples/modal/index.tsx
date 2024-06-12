@@ -112,8 +112,8 @@ export default function Modals({
         <ModalUpload
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-		      partnershipId={partnershipId}
-		      ediType={ediType}
+		  partnershipId={partnershipId}
+		  ediType={ediType}
           ButtonContent="Subir Documento"
         />
       )}
