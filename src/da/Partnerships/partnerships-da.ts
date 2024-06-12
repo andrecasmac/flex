@@ -82,6 +82,11 @@ export async function getPartnershipById(id:string){
 //Update partnership uploaded documents
 export async function updatePartnershipDocuments(id:string, document:any, errors:any){
     try{
+        await prisma.error.deleteMany({
+            where: {
+                documentId: id
+            }
+        })
         const uploadedPartner = await prisma.partnership.update({
             where: {
                 id:id
@@ -131,7 +136,7 @@ export async function updatePartnershipDocuments(id:string, document:any, errors
 //Update partnership document validated
 export async function updatePartnershipDocumentValid(id:string, document:any){
     try{
-        const deletedErrors = await prisma.error.deleteMany({
+        await prisma.error.deleteMany({
             where: {
                 documentId: id
             }
