@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "./ui/button";
 import { Undo2 } from "lucide-react";
 import { useRouter } from "next/navigation";
