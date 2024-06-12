@@ -56,14 +56,24 @@ function convertJsonToRows(jsonRows: any[], parentId?: Id): Row[] {
   });
 }
 
-export default function DocConfig({ initialConfig }: any) {
+interface DocConfigProps {
+  initialConfig?: any;
+  EDI_Id: string;
+}
+
+export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
   const [rows, setRows] = useState<Row[]>([]);
 
   useEffect(() => {
-    // Assuming `initialConfig` is a JSON string, parse it
-    const jsonData = initialConfig;
-    const initialRows = convertJsonToRows(jsonData);
-    setRows(initialRows);
+    // Parse and process initialConfig ONLY if it exists and is not empty
+    if (initialConfig && initialConfig.length > 0) {
+      const jsonData = initialConfig;
+      const initialRows = convertJsonToRows(jsonData);
+      setRows(initialRows);
+    } else {
+      // Handle cases where there's no initial configuration (e.g., set to an empty array)
+      setRows([]);
+    }
   }, [initialConfig]);
 
   const rowsId = useMemo(() => rows.map((row) => row.id), [rows]);
@@ -390,6 +400,7 @@ export default function DocConfig({ initialConfig }: any) {
                         <RowContainer
                           row={row}
                           allRows={rows}
+                          EDI_Id={EDI_Id}
                           deleteRow={deleteRow}
                           handleSelect={handleSelect}
                           handleInputChange={handleInputChange}
@@ -408,6 +419,7 @@ export default function DocConfig({ initialConfig }: any) {
                         <RowContainer
                           row={activeRow}
                           allRows={rows}
+                          EDI_Id={EDI_Id}
                           deleteRow={deleteRow}
                           handleSelect={handleSelect}
                           handleInputChange={handleInputChange}

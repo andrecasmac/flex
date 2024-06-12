@@ -1,8 +1,6 @@
 
 export type Id = string | number
-
 export type Row = SegmentRow | LoopRow
-
 export interface SegmentRow {
     id: Id;
     LoopId?: Id,
@@ -45,7 +43,7 @@ export interface IDropdown {
     label: string;
 }
 
-export function getSegments(): IDropdown[] {
+export function getSegmentsTest(): IDropdown[] {
     const optionsSegments: IDropdown[] = exampleSegment.map((data, index) => ({
         id: String(index),
         label: data.name,

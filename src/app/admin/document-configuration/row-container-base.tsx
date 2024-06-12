@@ -10,8 +10,6 @@ import {
   Id,
   IDropdown,
   optionsUsage,
-  getLoops,
-  getSegments,
 } from "./doc-types";
 
 import {
@@ -32,8 +30,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import Link from "next/link";
+
+import { readSegmentByEDIDocumentId } from "@/da/Segments/segment-da";
+import { queryObjects } from "v8";
+
 interface Props {
   row: Row;
+  EDI_Id: string;
   allRows: Row[];
   deleteRow: (id: Id) => void;
   handleSelect: (
@@ -66,6 +70,7 @@ export default function RowContainer(props: Props) {
     addLoopToLoop,
     parentId,
     allRows,
+    EDI_Id,
     isTopLevel = true, // Default to true for top-level rows
   } = props;
 
@@ -85,6 +90,24 @@ export default function RowContainer(props: Props) {
     disabled: !isTopLevel, // Disable sorting for non-top-level rows
   });
 
+  const [optionsSegments, setOptionsSegments] = React.useState<IDropdown[]>([]);
+  React.useEffect(() => {
+    const fetchSegments = async () => {
+      try {
+        const segmentData = await readSegmentByEDIDocumentId(EDI_Id);
+        const formattedOptions = segmentData.map((seg) => ({
+          id: seg.id, // Convert id to string for IDropdown
+          label: seg.name,
+        }));
+        setOptionsSegments(formattedOptions);
+      } catch (err) {
+        console.error("Error reading segment:", err);
+        // Handle the error (e.g., show a message to the user)
+      }
+    };
+    fetchSegments();
+  }, [EDI_Id]); // Fetch segments whenever EDI_Id changes
+
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -97,9 +120,6 @@ export default function RowContainer(props: Props) {
 
   const isLoop = (row: SegmentRow | LoopRow): row is LoopRow =>
     "segments" in row;
-
-  const segments = getSegments();
-  const loops = getLoops();
 
   const toggleRules = (loopId: Id) => {
     setShowSegmentLoops((prevShowLoops) => ({
@@ -134,11 +154,11 @@ export default function RowContainer(props: Props) {
             <div className="flex items-center justify-center w-2/4">
               <div className="w-4/5">
                 <ComboboxDropdown
-                  content={segments}
+                  content={optionsSegments}
                   handleSelect={(option: IDropdown) => {
                     handleSelect(row.id, option, "name");
                   }}
-                  selected={segments.find(
+                  selected={optionsSegments.find(
                     (option) => option.label === row.name
                   )}
                 />
@@ -171,9 +191,20 @@ export default function RowContainer(props: Props) {
             </div>
 
             <div className="flex items-center justify-center w-1/10 gap-x-8">
-              <Button variant={"ghost"} size={"icon"}>
-                <Pencil />
-              </Button>
+              <Link
+                href={{
+                  pathname: "./segment-edit",
+                  query: {
+                    segmentId: optionsSegments.find(
+                      (option) => option.label === row.name
+                    )?.id,
+                  },
+                }}
+              >
+                <Button variant={"ghost"} size={"icon"}>
+                  <Pencil />
+                </Button>
+              </Link>
               <Button
                 variant={"ghost"}
                 size={"icon"}
@@ -224,15 +255,7 @@ export default function RowContainer(props: Props) {
             </div>
 
             <div className="flex items-center justify-center w-2/4">
-              <div className="w-4/5">
-                <ComboboxDropdown
-                  content={loops}
-                  handleSelect={(option: IDropdown) => {
-                    handleSelect(row.id, option, "name");
-                  }}
-                  selected={loops.find((option) => option.label === row.name)}
-                />
-              </div>
+              <div className="w-4/5">LOOP</div>
             </div>
 
             <div className="flex items-center justify-center w-2/4">
@@ -303,6 +326,7 @@ export default function RowContainer(props: Props) {
                   <RowContainer
                     key={segment.id}
                     row={segment}
+                    EDI_Id={EDI_Id}
                     allRows={allRows}
                     deleteRow={deleteRow}
                     handleSelect={handleSelect}
@@ -321,6 +345,7 @@ export default function RowContainer(props: Props) {
                     <RowContainer
                       key={loop.id}
                       row={loop}
+                      EDI_Id={EDI_Id}
                       allRows={allRows}
                       deleteRow={deleteRow}
                       handleSelect={handleSelect}

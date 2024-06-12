@@ -20,12 +20,10 @@ export default function MultipleTagsInput({
   const [isFocused, setIsFocused] = useState(false); // focus del input
 
   const handleKeyDown = useCallback(
-    // callback del input
     (e: KeyboardEvent<HTMLInputElement>) => {
       const value = inputRef.current?.value.trim(); // const que guarda la informacion input
 
       if (
-        // si se preciona enter, coma o espacio y que el elemento no se encuentra
         (e.key === "Enter" || e.key === "," || e.key === " ") &&
         value &&
         !tags.includes(value)
@@ -33,14 +31,18 @@ export default function MultipleTagsInput({
         e.preventDefault();
         onTagsChange([...tags, value]); // llama a la funcion para añadir un nuevo valor a los tags
         inputRef.current!.value = ""; // resetea el intput
-      }
-      // si se preciona backspace
-      else if (e.key === "Backspace" && tags.length && !value) {
+      } else if (e.key === "Backspace" && tags.length && !value) {
         e.preventDefault();
         onTagsChange(tags.slice(0, -1)); // borra el ultimo elemnto de la lista
       }
     },
-    // Indica que esta función debe actualizarse si tags o onTagsChange cambian
+    [tags, onTagsChange]
+  );
+
+  const handleTagRemove = useCallback(
+    (index: number) => {
+      onTagsChange(tags.filter((_, i) => i !== index));
+    },
     [tags, onTagsChange]
   );
 
@@ -53,7 +55,6 @@ export default function MultipleTagsInput({
         }`}
         onClick={() => inputRef.current?.focus()} // focus al imput
       >
-        {/* mapeo de los tags */}
         {tags.map((tag, index) => (
           <span
             key={index}
@@ -64,12 +65,10 @@ export default function MultipleTagsInput({
               type="button"
               variant={"ghost"}
               className="ml-1 -mr-1 h-4 w-4 rounded-full p-0.3 text-white hover:bg-inherit hover:text-slate-300 focus:outline"
-              onClick={
-                (e) => {
-                  e.stopPropagation();
-                  onTagsChange(tags.filter((_, i) => i !== index));
-                } // borrar el tag correspondiente al index
-              }
+              onClick={(e) => {
+                e.stopPropagation();
+                handleTagRemove(index);
+              }}
             >
               <X />
             </Button>

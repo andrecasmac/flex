@@ -130,6 +130,22 @@ function SegmentGenerator({ EDI_Id }: SegmentGenerator) {
     }));
   };
 
+  // const handleTagsChange = useCallback(
+  //   (elementIndex: string, newTags: string[]) => {
+  //     setSegmentData((prevData) => ({
+  //       ...prevData,
+  //       rules: {
+  //         ...prevData.rules,
+  //         [elementIndex]: {
+  //           ...prevData.rules[elementIndex],
+  //           oneOf: newTags,
+  //         },
+  //       },
+  //     }));
+  //   },
+  //   []
+  // ); // Empty dependency array: memoize the function
+
   const handleTagsChange = useCallback(
     (elementIndex: string, newTags: string[]) => {
       setSegmentData((prevData) => ({
@@ -138,14 +154,13 @@ function SegmentGenerator({ EDI_Id }: SegmentGenerator) {
           ...prevData.rules,
           [elementIndex]: {
             ...prevData.rules[elementIndex],
-            oneOf: newTags,
+            oneOf: newTags, // Ensure oneOf is stored as an array
           },
         },
       }));
     },
     []
-  ); // Empty dependency array: memoize the function
-
+  );
   const toggleRules = (elementIndex: number) => {
     setShowRules((prevShowRules) => ({
       ...prevShowRules,
@@ -153,40 +168,44 @@ function SegmentGenerator({ EDI_Id }: SegmentGenerator) {
     }));
   };
 
-  const postSegment = async () => {
-    try {
-      const convertSegmentRuleToJson = (obj: any, seen = new WeakSet()) => {
-        if (typeof obj === "object" && obj !== null) {
-          if (seen.has(obj)) {
-            return "[Circular Reference]"; // Or any other placeholder
-          }
-          seen.add(obj);
 
-          const result: Prisma.JsonObject = {};
-          for (const key in obj) {
-            result[key] = convertSegmentRuleToJson(obj[key], seen);
-          }
-          return result;
-        }
-        return obj; // Return primitive values as-is
-      };
-
-      await createSegment(
-        segmentData.name,
-        segmentData.template,
-        Number(segmentData.max),
-        segmentData.mandatory,
-        segmentData.isLoop,
-        EDI_Id,
-        convertSegmentRuleToJson(segmentData.rules)
-      );
-
-      console.log("success");
-    } catch (error) {
-      console.log("Error", error);
+const convertSegmentRuleToJson : any = (obj: any, seen = new WeakSet()) => {
+  if (typeof obj === "object" && obj !== null) {
+    if (seen.has(obj)) {
+      return "[Circular Reference]"; // Or any other placeholder
     }
-  };
+    seen.add(obj);
 
+    if (Array.isArray(obj)) {
+      return obj.map(item => convertSegmentRuleToJson(item, seen));
+    }
+
+    const result: Prisma.JsonObject = {};
+    for (const key in obj) {
+      result[key] = convertSegmentRuleToJson(obj[key], seen);
+    }
+    return result;
+  }
+  return obj; // Return primitive values as-is
+};
+
+const postSegment = async () => {
+  try {
+    await createSegment(
+      segmentData.name,
+      segmentData.template,
+      Number(segmentData.max),
+      segmentData.mandatory,
+      segmentData.isLoop,
+      EDI_Id,
+      convertSegmentRuleToJson(segmentData.rules)
+    );
+
+    console.log("success");
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
   return (
     <div className="flex w-[80%] gap-x-5 justify-center">
       <div className="flex flex-col w-full">

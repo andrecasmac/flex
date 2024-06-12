@@ -12,20 +12,19 @@ function filterKeys(data: any) {
   return filteredData;
 }
 
-// interface SegmentEditPage {
-//   segmentId: string;
-// }
-
-// export default function Page({ segmentId }: SegmentEditPage) {
-export default function Page() {
-  const id: string = "6667bc53806b0ece0051374f";
+export default function Page({
+  searchParams,
+}: {
+  searchParams: { segmentId: string };
+}) {
+  const segmentId = searchParams.segmentId;
 
   const [data, setData] = useState<SegmentData | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const segmentData = await readSegmentById(id);
+        const segmentData = await readSegmentById(segmentId);
         const filteredData = filterKeys(segmentData);
 
         // Explicit null check before setting data
@@ -39,23 +38,21 @@ export default function Page() {
         console.error(error);
       }
     }
+    // console.log(data)
 
     fetchData();
-  }, [id]);
+  }, [segmentId]);
 
   return (
     <div className="flex flex-col w-full justify-center items-center">
       <PageTitle title="Edit Segment" />
 
       <div className="flex w-screen justify-center pb-20">
-        {/* Conditional rendering based on data availability */}
         {data ? (
-          <SegmentEdit initialSegmentData={data} segmentId={id} />
+          <SegmentEdit initialSegmentData={data} segmentId={segmentId} />
         ) : (
           <p>Loading segment data...</p> // Or an error message if data is null
         )}
-
-        <pre className="pt-10 text-xs flex justify-center">{/* ... */}</pre>
       </div>
     </div>
   );
