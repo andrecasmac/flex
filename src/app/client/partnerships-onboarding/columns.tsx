@@ -6,12 +6,21 @@ import Badge from "@/components/badge";
 import React from "react";
 import ModalContextProvider from "@/app/context/modalContextProvider";
 import {ModalUpload} from "@/app/examples/modal/modalUpload"
-import { PartnerShipClientTableContent } from "../../../../types/TableTypes";
+import { PartnerShipClientTableContent } from "../../../types/TableTypes";
+import Modals from "@/app/examples/modal";
+import ErrorContextProvider from "@/app/context/errorContextProvider";
 
 export const columns: ColumnDef<PartnerShipClientTableContent>[] = [
   {
     accessorKey: "document_name",
     header: "Documents",
+    cell: ({ row }) => {
+      return(
+        <div className="flex">
+          {row.original.type}
+        </div>
+      )
+    }
   },
   {
     accessorKey: "mandatory",
@@ -44,16 +53,22 @@ export const columns: ColumnDef<PartnerShipClientTableContent>[] = [
   }
   },
   {
-    accessorKey: "validated",
+    accessorKey: "status",
     header: "Action",
     cell: ({ row }) => {
       //Variable where we store the status value
-      const rowValidated = row.original.validated
+      const rowValidated = row.original.status;
+      var validated = false;
+      rowValidated === "Validated" ? validated = true : validated = false
 
       return (
           <div className="flex justify-center">
-            {!rowValidated ? <ModalContextProvider>
-              <ModalUpload ButtonContent="Validate"></ModalUpload>
+            {!validated ? <ModalContextProvider>
+              <ErrorContextProvider>
+                <Modals modalUpload={true} partnershipId={row.original.partnershipId} ediType={row.original.type}/>
+                <Modals modalErrorList={true} partnershipId={row.original.partnershipId} ediType={row.original.type} />
+                <Modals modalSuccess={true}/>
+              </ErrorContextProvider>
             </ModalContextProvider> : (<></>)}
           </div>
       )

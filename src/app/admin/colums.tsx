@@ -1,8 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,40 +12,29 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Toggle from "@/components/ui/toggle";
-import React from "react";
-import { FaGear } from "react-icons/fa6";
 import { HiDotsVertical } from "react-icons/hi";
-import Link from "next/link";
+import { Partner } from "@/types/DbTypes";
+import ModalsPartners from "@/app/examples/modal/index";
 
-export type ProductsT = {
-  id: string;
-  name: string;
-  delimeter: string;
-  ediversions: string;
-  eol: string;
-  connectiontype: string;
-  hidden: boolean;
-};
-
-export const columns: ColumnDef<ProductsT>[] = [
+export const columns: ColumnDef<Partner>[] = [
   {
     accessorKey: "name",
     header: "Partner",
   },
   {
-    accessorKey: "delimeter",
+    accessorKey: "delimiters",
     header: "Delimeter",
   },
   {
-    accessorKey: "ediversions",
+    accessorKey: "edi_version",
     header: "EDI Versions",
   },
   {
-    accessorKey: "eol",
+    accessorKey: "EOL",
     header: "EOL",
   },
   {
-    accessorKey: "connectiontype",
+    accessorKey: "type_of_connection",
     header: "Connection Type",
   },
   {
@@ -53,7 +42,7 @@ export const columns: ColumnDef<ProductsT>[] = [
     header: () => {
       return (
         <div className="flex justify-center">
-          <p>Hidden</p>
+          <p>Visible</p>
         </div>
       );
     },
@@ -70,7 +59,7 @@ export const columns: ColumnDef<ProductsT>[] = [
       // Allows to visualize the Toggle of each row
       return (
         <div className="flex justify-center">
-          <Toggle actionToggle={row.original.hidden} onChange={handleToggleCell} />
+          <Toggle actionToggle={row.original.hidden} onChange={handleToggleCell}/>
         </div>
       );
     },
@@ -85,7 +74,8 @@ export const columns: ColumnDef<ProductsT>[] = [
       );
     },
     cell: ({ row }) => {
-      const produtct = row.original;
+      const partner = row.original;
+
       return (
         <div className="flex justify-center">
           <DropdownMenu>
@@ -95,19 +85,15 @@ export const columns: ColumnDef<ProductsT>[] = [
                 <HiDotsVertical className="h-8 w-8 text-primary" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              <DropdownMenuItem
-                onClick={() =>
-                  navigator.clipboard.writeText(String(produtct.id))
-                }
-              >
-                Copy payment ID
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <Link href={"admin/document-list"}>
-                <DropdownMenuItem>View customer</DropdownMenuItem>
+            <DropdownMenuContent className="border-primary" align="start">
+            <DropdownMenuSeparator />
+              <Link href={{pathname:"admin/document-list", query:{
+                id:partner.id
+              }}}>
+                <DropdownMenuItem>View</DropdownMenuItem>
               </Link>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <ModalsPartners modalDeletePartner={true} selectedItemName={partner.name} selectedItemId={partner.id} />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

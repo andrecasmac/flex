@@ -27,11 +27,55 @@ import { createPortal } from "react-dom";
 import RowContainer from "./row-container-base";
 import Link from "next/link";
 
-export default function DocConfig() {
-  const [rows, setRows] = React.useState<Row[]>([]);
+import { getEDIdocumentsById } from "@/da/EDI-Documents/edi-document-da";
+import { useEffect, useState } from "react";
+import { EDI_Document } from "@/types/DbTypes";
 
+interface DocConfigProps{
+  documentId: string;
+}
+
+export default function DocConfig({documentId}:DocConfigProps) {
+  const [rows, setRows] = React.useState<Row[]>([]);
   const rowsId = React.useMemo(() => rows.map((row) => row.id), [rows]);
   const [activeRow, setActiveRow] = React.useState<Row | null>(null);
+
+  const id = documentId;
+  const [ediDocument, setDocument] = useState<EDI_Document>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+      const fetchData = async () => {
+      try {
+          const data = await getEDIdocumentsById(id);
+          setDocument(data);
+      } catch (err) {
+          setError('Failed to fetch data');
+      } finally {
+          setLoading(false);
+      }
+      };
+
+      fetchData();
+  }, [id]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 3, // 300 px
+      },
+    })
+  );
+
+  if (loading) {
+      return <p>Loading...</p>;
+  }
+
+  if (error) {
+      return <p>{error}</p>;
+  }
+
 
   function createSegmentRow() {
     const segmentToAdd: Row = {
@@ -250,14 +294,6 @@ export default function DocConfig() {
       return arrayMove(rows, activeRowIndex, overRowIndex);
     });
   }
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 3, // 300 px
-      },
-    })
-  );
 
   return (
     <div className="w-[80%] h-[auto] justify-center">

@@ -18,11 +18,7 @@ export async function getAllClients() {
                     }
                   }
                 },
-                uploaded_documents: {
-                  include: {
-                    errors: true
-                  }
-                }
+                uploaded_documents: true
               }
             }
           }
@@ -49,6 +45,40 @@ export async function getClientById(id:string) {
     return client;
   } catch (error) {
     console.log("Error fetching client: ",error);
+    throw error;
+  }
+}
+
+//Get partners from client
+export async function getPartnersOfClient(id:string){
+  try{
+    const client = await prisma.client.findUnique({
+      where: {
+        id: id
+      },
+      include: {
+        partnerships: {
+          include: {
+            partner: {
+              include: {
+                EDI_documents: {
+                  include: {
+                    structure: true
+                  }
+                }
+              }
+            },
+            uploaded_documents: true
+          }
+        }
+      }
+    })
+    if(!client){
+      throw new Error("Failed to fetch client");
+    }
+    return client;
+  } catch(error) {
+    console.log("Error fetching client: ", error);
     throw error;
   }
 }

@@ -11,30 +11,58 @@ import {
     DialogPortal,
 } from "@/components/ui/dialog";
 
-import React, { useContext, useCallback, useState } from "react";
+import React, { useContext, useCallback, useState, useEffect } from "react";
 import ErrorContext from "@/app/context/errorContext";
 import { Button } from "@/components/ui/button";
 import { useDropzone } from "react-dropzone";
 import { UploadIcon } from "@radix-ui/react-icons";
 import { ErrorList } from "../tables/table/colums";
 import { ModalSuccess } from "./modalSuccess";
-import ModalContext from "@/app/context/modalContext";
 
 import { parse_edi, parse_input_structure, validate_segments } from "@/lib/validator"
-import * as edi_schema from "@/lib/855_schema.json"
 import { Description } from "@radix-ui/react-dialog";
+import { updatePartnershipDocuments, getPartnershipById, updatePartnershipDocumentValid } from "@/da/Partnerships/partnerships-da";
+import {error} from "console";
 
 
 interface ModalUploadProps {
+    isOpen?: boolean;
+	partnershipId: string;
+	ediType: string;
+    setIsOpen: (open: boolean) => void;
     ButtonContent: string;
 }
 
 export function ModalUpload({
+    isOpen,
+	partnershipId,
+    setIsOpen,
     ButtonContent,
+	ediType
 }: ModalUploadProps) {
+
+	const [documentSchema, setDocumentSchema] = useState(null);
+
+	useEffect(() => {
+
+		getPartnershipById(partnershipId)
+		.then((value) => {
+			const partnershipDocs = value.partner.EDI_documents;
+			
+			partnershipDocs.forEach((doc: any) => {
+				if (doc.type == ediType) {
+					setDocumentSchema(doc.structure);
+				}
+
+			});
+
+		});
+
+
+	}, [ediType, partnershipId])
+
     //State that stores the content of errorlist and sharing it with another component using useContext
-    const { isThisOpen, setisThisOpen } = useContext(ModalContext)
-    const { errorlistShareData, setErrorListShareData } = useContext(ErrorContext)
+    const {errorlistShareData, setErrorListShareData } = useContext(ErrorContext)
     const {isErrorsOpen, setErrorsOpen}= useContext(ErrorContext)
     const {isSuccessfulOpen, setIsSuccessfulOpen}= useContext(ErrorContext)
     // State to store the selected file
@@ -45,12 +73,12 @@ export function ModalUpload({
 
     // State to send error when pressing the validate button with no file in the Dropzone
     const [errorValidate, setErrorValidate] = useState<string | null>(null);
-
+    
     //Function to send data using useContext
-    function sendData(txtFileContent:string) {
+	function sendData(txtFileContent:string) {
 		let [parsed_edi, parse_errors]: any[] = parse_edi(txtFileContent);
-        let [structure, structure_errors]: any[] = parse_input_structure(parsed_edi, edi_schema);
-        let segment_errors: any[] = validate_segments(structure, edi_schema);
+        let [structure, structure_errors]: any[] = parse_input_structure(parsed_edi, documentSchema);
+        let segment_errors: any[] = validate_segments(structure, documentSchema);
         //Variable where we send the values with useContext
 		const parse_errors_data = parse_errors.map((err: string) => ({name: "Parser Error", description: err}))
         const structure_errors_data = structure_errors.map((err: string) => ({name: "Structure Error", description: err}))
@@ -65,7 +93,9 @@ export function ModalUpload({
             setIsSuccessfulOpen(true)
         }
         // Close this modal
-        setisThisOpen(false);
+        setIsOpen(false);
+
+		return errors_data;
         };
 
     // Callback function to handle file drop event
@@ -95,7 +125,7 @@ export function ModalUpload({
     const { getRootProps, getInputProps } = useDropzone({ onDrop, maxFiles: 1 });
 
     // Function to handle the Valitate Button
-    const handleValidate = () => {
+    const handleValidate = async () => {
 
         // If Dropzone doesn't have a file
         if (!uploadedFile) {
@@ -107,8 +137,41 @@ export function ModalUpload({
 
         // Will validate the file, send data and close the Dropzone
         else {
-            if (txtFileContent) {
-                sendData(txtFileContent)
+            if (txtFileContent && documentSchema) {
+				let errors: any[] = sendData(txtFileContent)
+
+				let format_errors: any[] = []
+
+				errors.forEach((error) => {
+					format_errors.push({
+						code: error.name,
+						message: error.description
+					});
+				})
+
+                if(format_errors.length > 0){
+                    updatePartnershipDocuments(partnershipId,  {
+                        type: ediType,
+                        json_document: txtFileContent,
+                        status: "Pending"
+                    }, format_errors)
+                    .then(() => {
+                        console.log("File updated.");
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+                } else {
+                    updatePartnershipDocumentValid(partnershipId, {
+                        type: ediType,
+                        json_document: txtFileContent,
+                        status: "Validated"
+                    }).then(() => {
+                        console.log("File Uploaded");
+                    }).catch((err) => {
+                        console.log(err)
+                    });
+                }
             }
             else {
                 console.log("No Content Found In File")
@@ -118,7 +181,7 @@ export function ModalUpload({
 
     return (
         // Render the Modal for Uploading Documents with Dropzone
-        <Dialog open={isThisOpen} onOpenChange={setisThisOpen}>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
 
             {/* Button to open Modal */}
             <DialogTrigger asChild>
@@ -167,5 +230,3 @@ export function ModalUpload({
         
     )
 }
-
-export default ModalUpload;

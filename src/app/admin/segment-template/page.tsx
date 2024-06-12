@@ -5,29 +5,52 @@ import { DataTable } from "@/app/examples/tables/table/data-table";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { PageTitle } from "@/components/page-title";
-import { columnsSegmentTemplate } from "@/app/examples/tables/table/colums";
-import { SegmentTemplatesContent } from "../../../../types/TableTypes";
+import { columnsSegmentTemplate } from "./columns";
+import { SegmentTemplatesContent } from "../../../types/TableTypes";
+import { useEffect, useState } from "react";
+import { getAllSegmentsTemplates } from "@/da/Segments/segment-da";
+import { Segment } from "@/types/DbTypes";
 
 /*List where the data for Segment Templates is stored*/
 const data: SegmentTemplatesContent[] = [
     {
-        id: "DTM",
-        name: "Date/Time Reference",
-        nElements: 2,
-        usage: 0,
-        maxUse: 1
+        name: "DTM - Date/Time Reference",
+        max: 1
     },
     {
-        id: "ORG",
-        name: "Organization Name",
-        nElements: 1,
-        usage: 0,
-        maxUse: 1
+        name: "ORG - Organization Name",
+        max: 1
     }
 ]
 export default function Page() {
 
-    const router = useRouter();
+    const [segments, setSegments] = useState<Segment[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+        try {
+            const data = await getAllSegmentsTemplates(true);
+            setSegments(data);
+        } catch (err) {
+            setError('Failed to fetch data');
+        } finally {
+            setLoading(false);
+        }
+        };
+
+        fetchData();
+    }, []);
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
+
+    if (error) {
+        return <p>{error}</p>;
+    }
+
     return (
         <div className="flex flex-col w-full justify-center items-center">
             <PageTitle title="Segment Templates" />
@@ -40,7 +63,7 @@ export default function Page() {
                 </div>
                 <div className="flex justify-center items-center pt-5">
                     {/*Table where the Segment Templates are displayed*/}
-                    <DataTable columns={columnsSegmentTemplate} data={data} />
+                    <DataTable columns={columnsSegmentTemplate} data={segments} />
                 </div>
             </div>
         </div>

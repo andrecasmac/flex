@@ -18,69 +18,66 @@ model Partner {
   hidden             Boolean @default(true)
 
   EDI_documents EDI_Document[]
-
-  partnershipsId String             @unique @db.ObjectId
-  partnerships   associated_partner @relation(fields: [partnershipsId], references: [id])
+  partnerships  partnership[]
 }
 
 model Client {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String
 
-  partnerships associated_partner[]
+  partnerships partnership[]
 }
 
-model associated_partner {
+model partnership {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  partner Partner?
-
   uploaded_documents document[]
+  status             String     @default("In Process")
 
-  clientId String @unique @db.ObjectId
-  client   Client @relation(fields: [clientId], references: [id])
+  clientId  String @db.ObjectId
+  partnerId String @db.ObjectId
+
+  client  Client  @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  partner Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
 }
 
 model document {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
-  type          String
-  json_document Json
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  type          String  @unique
+  json_document String
+  status        String @default("Pending")
 
-  partnershipId String             @unique @db.ObjectId
-  partnership   associated_partner @relation(fields: [partnershipId], references: [id])
+  partnershipId String      @db.ObjectId
+  partnership   partnership @relation(fields: [partnershipId], references: [id], onDelete: Cascade)
 
-  errors error[]
-}
-
-model error {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  code    String
-  message String
-
-  documentId String   @unique @db.ObjectId
-  document   document @relation(fields: [documentId], references: [id])
+  errors Json @default("{}")
 }
 
 model EDI_Document {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  type     String
-  template Boolean @default(true)
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  type      String
+  template  Boolean @default(true)
+  mandatory Boolean @default(true)
 
   structure Segment[]
 
-  partnerId String  @unique @db.ObjectId
-  partner   Partner @relation(fields: [partnerId], references: [id])
+  partnerId String  @db.ObjectId
+  partner   Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
 }
 
 model Segment {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  mandatory String  @default("M")
+  mandatory Boolean @default(true)
   max       Int
   template  Boolean @default(true)
+  rules     Json    @default("{}")
 
-  EDI_DocumentId String       @unique @db.ObjectId
-  EDI_Document   EDI_Document @relation(fields: [EDI_DocumentId], references: [id])
+  isLoop       Boolean
+  parentLoopId String?   @db.ObjectId
+  parentLoop   Segment?  @relation("LoopSegments", fields: [parentLoopId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  loopSegment  Segment[] @relation("LoopSegments")
 
-  rules Json @default("{}")
+  EDI_DocumentId String       @db.ObjectId
+  EDI_Document   EDI_Document @relation(fields: [EDI_DocumentId], references: [id], onDelete: Cascade)
 }

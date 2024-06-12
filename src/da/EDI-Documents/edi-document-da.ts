@@ -2,7 +2,7 @@
 import { PrismaClient, Segment } from "@prisma/client";
 const prisma = new PrismaClient();
 
-//Create EDI-Document
+//Create EDI-Document template
 export async function createEDIdocument(type: string, template: boolean){
     try{
         const EDI_document = prisma.eDI_Document.create({
@@ -39,9 +39,12 @@ export async function getEDIdocuments(){
 //Read EDI-Document by ID
 export async function getEDIdocumentsById(id: string){
     try {
-        const EDI_document = prisma.eDI_Document.findUnique({
+        const EDI_document = await prisma.eDI_Document.findUnique({
             where: {
                 id: id
+            },
+            include: {
+                structure: true
             }
         });
         if(!EDI_document){
@@ -60,6 +63,9 @@ export async function getEDIdocumentsByPartnerId(Partner_id:string){
         const EDI_documents = prisma.eDI_Document.findMany({
             where: {
                 partnerId: Partner_id
+            },
+            include:{
+                structure: true
             }
         });
         if(!EDI_documents){

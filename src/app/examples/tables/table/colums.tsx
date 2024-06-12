@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Pencil,MinusCircle } from "lucide-react";
-import { SegmentTemplatesContent } from "../../../../../types/TableTypes";
+import { SegmentTemplatesContent } from "../../../../types/TableTypes";
 import Link from "next/link";
 
 export type ProductsT = {
@@ -78,12 +78,12 @@ export interface ErrorList {
 /* This is where we declare the key and the label for the columns of the Error Table*/
 export const columnsErrorList: ColumnDef<ErrorList>[] = [
   {
-    accessorKey: "name",/*Key*/
+    accessorKey: "code",/*Key*/
     header: ()=> <div className="text-start">Error</div>,/*Label*/
 
   },
   {
-    accessorKey: "description",/*Key*/
+    accessorKey: "message",/*Key*/
     header:()=> <div className="text-start">Error Description</div>,/*Label*/
   },
 ];

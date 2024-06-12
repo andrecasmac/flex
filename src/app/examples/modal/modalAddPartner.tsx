@@ -34,6 +34,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import { createPartner } from "@/da/Partners/partner-da";
+import * as fs from 'fs';
+import { useState } from "react";
+
 const formSchema = z.object({
   partner: z.string().min(1, {
     message: "*Please fill in Partner name",
@@ -70,6 +74,8 @@ export function ModalAddPartner({
   isOpen,
   setIsOpen,
 }: ModalAddPartnerProps) {
+
+  const [content, setContent] = useState<JSON>();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -83,8 +89,42 @@ export function ModalAddPartner({
     },
   });
 
+  const handleCreate = async (values: z.infer<typeof formSchema>) => {
+    try {
+        const name = values.partner;
+        const edi_version = values.edi_version;
+        const delimiters = values.delimiter;
+        const EOL = values.eol;
+        const type_of_connection = values.connection_type;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+              const text = event.target?.result as string;
+              const jsonData = JSON.parse(text);
+              setContent(jsonData);
+          } catch(err) {
+            console.log(err);
+          }
+        };
+        const PO_Test = content as JSON;
+        const hidden = true;
+
+        const data = await createPartner(name, edi_version, delimiters, EOL, type_of_connection, PO_Test, hidden);
+
+        if(!data){
+          throw new Error("Failed to create Partner")
+        }
+
+        console.log(data);
+    } catch (err) {
+        throw err;
+    }
+  }
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    handleCreate(values);
     setIsOpen(false);
   }
 
@@ -132,9 +172,7 @@ export function ModalAddPartner({
                             <SelectValue placeholder="Select Delimiter" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Delimiter 1">Delimiter 1</SelectItem>
-                            <SelectItem value="Delimiter 2">Delimiter 2</SelectItem>
-                            <SelectItem value="Delimiter 3">Delimiter 3</SelectItem>
+                            <SelectItem value="*">*</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>
@@ -155,9 +193,7 @@ export function ModalAddPartner({
                             <SelectValue placeholder="Select Connection Type" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Connection Type 1">Connection Type 1</SelectItem>
-                            <SelectItem value="Connection Type 2">Connection Type 2</SelectItem>
-                            <SelectItem value="Connection Type 3">Connection Type 3</SelectItem>
+                            <SelectItem value="FTP">FTP</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>
@@ -178,9 +214,7 @@ export function ModalAddPartner({
                             <SelectValue placeholder="Select EDI Version" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="EDI Version 1">EDI Version 1</SelectItem>
-                            <SelectItem value="EDI Version 2">EDI Version 2</SelectItem>
-                            <SelectItem value="EDI Version 3">EDI Version 3</SelectItem>
+                            <SelectItem value="X12 4010">X12 4010</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>
@@ -215,9 +249,7 @@ export function ModalAddPartner({
                             <SelectValue placeholder="Select EOL" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="EOL 1">EOL 1</SelectItem>
-                            <SelectItem value="EOL 2">EOL 2</SelectItem>
-                            <SelectItem value="EOL 3">EOL 3</SelectItem>
+                            <SelectItem value="~">~</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>

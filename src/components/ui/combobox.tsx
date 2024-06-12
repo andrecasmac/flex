@@ -17,7 +17,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { IComboboxContent } from "../../../types/ComboboxContent";
+import { IComboboxContent } from "../../types/ComboboxContent";
 
 // Interface to define the props structure
 interface Response {
