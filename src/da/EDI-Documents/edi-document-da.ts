@@ -9,7 +9,7 @@ export async function createEDIdocument(type: string, template: boolean){
             data: {
                 type: type,
                 partner: {},
-                template: template
+                template: template,
             }
         });
         if(!EDI_document){
@@ -56,6 +56,26 @@ export async function getEDIdocumentsById(id: string){
         throw error;
     }
 }
+
+
+// //Read EDI-Document by ID
+// export async function getEDIdocumentsById(id: string){
+//     try {
+//         const EDI_document = prisma.eDI_Document.findUnique({
+//             where: {
+//                 id: id
+//             }
+//         });
+//         if(!EDI_document){
+//             throw new Error("Failed to fetch EDI_Document");
+//         }
+//         return EDI_document;
+//     } catch(error) {
+//         console.log(error);
+//         throw error;
+//     }
+// }
+
 
 //Read EDI-Document by partner_id
 export async function getEDIdocumentsByPartnerId(Partner_id:string){
@@ -119,6 +139,29 @@ export async function updateEDIdocumentTemplate(id:string, template:boolean) {
         throw error;
     }
 }
+
+
+//Update EDI-document structure
+export async function updateEDIdocumentStructure(id:string, structure: any) {
+    try{
+        const EDI_document = prisma.eDI_Document.update({
+            where: {
+                id: id
+            },
+            data: {
+                structure: structure
+            }
+        });
+        if(!EDI_document){
+            throw new Error("Failed to update EDI_Document");
+        }
+        return EDI_document;
+    } catch(error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 
 //Delete EDI-Document by id
 export async function deleteEDIdocument(id: string){

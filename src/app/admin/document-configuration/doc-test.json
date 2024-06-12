@@ -1,0 +1,60 @@
+[
+    {
+        "id": "semgemt-3147",
+        "name": "DMT",
+        "mandatory": true,
+        "max": 10
+    },
+    {
+        "id": "semgemt-5126",
+        "name": "ID",
+        "mandatory": true,
+        "max": 10
+    },
+    {
+        "id": "loop-5424",
+        "name": "LOOP",
+        "mandatory": false,
+        "max": 10000,
+        "segment_rules": [
+            {
+                "id": "semgemt-8684",
+                "parentId": "loop-5424",
+                "name": "ID",
+                "mandatory": true,
+                "max": 10
+            },
+            {
+                "id": "semgemt-812",
+                "parentId": "loop-5424",
+                "name": "DMT",
+                "mandatory": true,
+                "max": 1
+            },
+            {
+                "id": "loop-6418",
+                "parentId": "loop-5424",
+                "name": "LOOP",
+                "mandatory": false,
+                "max": 100,
+                "segment_rules": [
+                    {
+                        "id": "semgemt-9214",
+                        "parentId": "loop-6418",
+                        "name": "ID",
+                        "mandatory": false,
+                        "max": 20
+                    },
+                    {
+                        "id": "loop-6657",
+                        "parentId": "loop-6418",
+                        "name": "LOOP",
+                        "mandatory": false,
+                        "max": 10,
+                        "segment_rules": []
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -9,10 +9,9 @@ import {
   Row,
   Id,
   IDropdown,
-  getSegments,
-  getLoops,
   optionsUsage,
 } from "./doc-types";
+
 import {
   MinusCircle,
   Pencil,
@@ -31,17 +30,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import Link from "next/link";
+import { readSegmentByEDIDocumentId } from "@/da/Segments/segment-da";
+import { getAllSegmentsTemplates } from "@/da/Segments/segment-da";
 interface Props {
   row: Row;
+  EDI_Id: string;
   allRows: Row[];
-  // isLoop: boolean;
   deleteRow: (id: Id) => void;
   handleSelect: (
     id: Id,
     option: IDropdown,
     value: keyof Row,
     parentId?: Id
-  ) => void; // Note that the keyof is now Row
+  ) => void;
   handleInputChange: (
     id: Id,
     event: React.ChangeEvent<HTMLInputElement>
@@ -49,6 +51,7 @@ interface Props {
   addSegmentsToLoop: (loopId: Id) => void;
   addLoopToLoop: (loopId: Id) => void;
   parentId?: Id;
+  isTopLevel?: boolean; // New prop to indicate if the row is top-level
 }
 
 export default function RowContainer(props: Props) {
@@ -65,6 +68,8 @@ export default function RowContainer(props: Props) {
     addLoopToLoop,
     parentId,
     allRows,
+    EDI_Id,
+    isTopLevel = true, // Default to true for top-level rows
   } = props;
 
   const {
@@ -80,8 +85,36 @@ export default function RowContainer(props: Props) {
       type: "Row",
       row,
     },
+    disabled: !isTopLevel, // Disable sorting for non-top-level rows
   });
 
+  const [optionsSegments, setOptionsSegments] = React.useState<IDropdown[]>([]);
+  React.useEffect(() => {
+    const fetchSegments = async () => {
+      try {
+        const segmentData = await getAllSegmentsTemplates(true);
+
+        // const data = await getAllSegmentsTemplates(true);
+        // console.log(segmentData)
+        const formattedOptions = segmentData.map((seg) => ({
+          id: seg.id, // Convert id to string for IDropdown
+          label: seg.name,
+        }));
+
+        setOptionsSegments(formattedOptions);
+      } catch (err) {
+        console.error("Error reading segment:", err);
+        // Handle the error (e.g., show a message to the user)
+      }
+    };
+    fetchSegments();
+  }, [EDI_Id]); // Fetch segments whenever EDI_Id changes
+  const handleSelectSegment = (option: IDropdown) => {
+    handleSelect(row.id, option, "name");
+    // Update SegmentId based on the selected option's segmentId:
+    handleSelect(row.id, { id: option.id, label:`${option.id}`}, "SegmentId"); 
+
+  };
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -95,9 +128,6 @@ export default function RowContainer(props: Props) {
   const isLoop = (row: SegmentRow | LoopRow): row is LoopRow =>
     "segments" in row;
 
-  const segments = getSegments();
-  const loops = getLoops();
-
   const toggleRules = (loopId: Id) => {
     setShowSegmentLoops((prevShowLoops) => ({
       ...prevShowLoops,
@@ -110,12 +140,12 @@ export default function RowContainer(props: Props) {
       {!isLoop(row) ? (
         <>
           <div
-            className="flex flex-row justify-around  h-20 px-5"
+            className="flex flex-row justify-around h-20 px-5"
             ref={setNodeRef}
             style={style}
           >
-            {!row.LoopId ? (
-              <div className=" flex items-center justify-start w-1/10">
+            {isTopLevel && (
+              <div className="flex items-center justify-start w-1/10">
                 <Button
                   variant={"ghost"}
                   size={"icon"}
@@ -126,39 +156,45 @@ export default function RowContainer(props: Props) {
                   <GripVertical />
                 </Button>
               </div>
-            ) : (
-              <div></div>
             )}
 
-            <div className=" flex items-center justify-center w-2/4">
+            <div className="flex items-center justify-center w-2/4">
               <div className="w-4/5">
-                <ComboboxDropdown
-                  content={segments}
+                {/* <ComboboxDropdown
+                  content={optionsSegments}
                   handleSelect={(option: IDropdown) => {
-                    handleSelect(row.id, option, "name");
+                    handleSelect(row.id, option, "name")
+                    // , handleSelect(row.id, option, "")
                   }}
-                  selected={segments.find(
+                  selected={optionsSegments.find(
+                    (option) => option.label === row.name
+                  )}
+                /> */}
+                <ComboboxDropdown
+                  content={optionsSegments}
+                  handleSelect={handleSelectSegment} // Use the new handler
+                  selected={optionsSegments.find(
                     (option) => option.label === row.name
                   )}
                 />
               </div>
             </div>
 
-            <div className=" flex items-center justify-center w-2/4">
+            <div className="flex items-center justify-center w-2/4">
               <div className="w-4/5">
                 <ComboboxDropdown
                   content={optionsUsage}
                   handleSelect={(option: IDropdown) => {
-                    handleSelect((row as SegmentRow).id, option, "mandatory");
+                    handleSelect(row.id, option, "mandatory");
                   }}
                   selected={optionsUsage.find(
-                    (option) => option.label === (row as SegmentRow).mandatory
+                    (option) => option.label === row.mandatory
                   )}
                 />
               </div>
             </div>
 
-            <div className=" flex items-center justify-center w-2/4">
+            <div className="flex items-center justify-center w-2/4">
               <div className="w-4/5">
                 <Input
                   type="number"
@@ -170,9 +206,20 @@ export default function RowContainer(props: Props) {
             </div>
 
             <div className="flex items-center justify-center w-1/10 gap-x-8">
-              <Button variant={"ghost"} size={"icon"}>
-                <Pencil />
-              </Button>
+              <Link
+                href={{
+                  pathname: "./segment-edit",
+                  query: {
+                    segmentId: optionsSegments.find(
+                      (option) => option.label === row.name
+                    )?.id,
+                  },
+                }}
+              >
+                <Button variant={"ghost"} size={"icon"}>
+                  <Pencil />
+                </Button>
+              </Link>
               <Button
                 variant={"ghost"}
                 size={"icon"}
@@ -180,7 +227,7 @@ export default function RowContainer(props: Props) {
                   deleteRow(row.id);
                 }}
               >
-                <MinusCircle className=" fill-red-300 dark:fill-red-800" />
+                <MinusCircle className="fill-red-300 dark:fill-red-800" />
               </Button>
             </div>
           </div>
@@ -188,12 +235,12 @@ export default function RowContainer(props: Props) {
       ) : (
         <>
           <div
-            className="flex flex-row justify-around  h-20 bg-slate-400/10 px-5"
+            className="flex flex-row justify-around h-20 bg-slate-400/10 px-5"
             ref={setNodeRef}
             style={style}
           >
-            {!row.ParentId ? (
-              <div className=" flex items-center justify-start w-1/10">
+            {isTopLevel && (
+              <div className="flex items-center justify-start w-1/10">
                 <Button
                   variant={"ghost"}
                   size={"icon"}
@@ -204,17 +251,14 @@ export default function RowContainer(props: Props) {
                   <GripVertical />
                 </Button>
               </div>
-            ) : (
-              <div></div>
             )}
-            <div className=" flex items-center justify-start w-1/10 ">
+            <div className="flex items-center justify-start w-1/10">
               <Button
-                className="flex items-center space-x-2 "
+                className="flex items-center space-x-2"
                 variant={"ghost"}
                 size={"icon"}
                 onClick={() => {
                   toggleRules(row.id);
-                  console.log(showSegmentLoops[row.id]);
                 }}
               >
                 <ChevronRight
@@ -225,19 +269,11 @@ export default function RowContainer(props: Props) {
               </Button>
             </div>
 
-            <div className=" flex items-center justify-center w-2/4">
-              <div className="w-4/5">
-                <ComboboxDropdown
-                  content={loops}
-                  handleSelect={(option: IDropdown) => {
-                    handleSelect(row.id, option, "name");
-                  }}
-                  selected={loops.find((option) => option.label === row.name)}
-                />
-              </div>
+            <div className="flex items-center justify-center w-2/4">
+              <div className="w-4/5">LOOP</div>
             </div>
 
-            <div className=" flex items-center justify-center w-2/4">
+            <div className="flex items-center justify-center w-2/4">
               <div className="w-4/5">
                 <Input
                   type="number"
@@ -259,11 +295,11 @@ export default function RowContainer(props: Props) {
                 <DropdownMenuContent align="start">
                   <DropdownMenuItem
                     onClick={() => {
-                      addSegmentsToLoop(row.id),
-                        setShowSegmentLoops((prevShowLoops) => ({
-                          ...prevShowLoops,
-                          [row.id]: true,
-                        }));
+                      addSegmentsToLoop(row.id);
+                      setShowSegmentLoops((prevShowLoops) => ({
+                        ...prevShowLoops,
+                        [row.id]: true,
+                      }));
                     }}
                   >
                     Add segment
@@ -289,7 +325,7 @@ export default function RowContainer(props: Props) {
                   deleteRow(row.id);
                 }}
               >
-                <MinusCircle className="  fill-red-300 dark:fill-red-800" />
+                <MinusCircle className="fill-red-300 dark:fill-red-800" />
               </Button>
             </div>
           </div>
@@ -305,23 +341,26 @@ export default function RowContainer(props: Props) {
                   <RowContainer
                     key={segment.id}
                     row={segment}
+                    EDI_Id={EDI_Id}
                     allRows={allRows}
                     deleteRow={deleteRow}
                     handleSelect={handleSelect}
                     handleInputChange={handleInputChange}
-                    addSegmentsToLoop={addLoopToLoop}
+                    addSegmentsToLoop={addSegmentsToLoop}
                     addLoopToLoop={addLoopToLoop}
                     parentId={row.id}
+                    isTopLevel={false} // Nested rows are not top-level
                   />
                 </div>
               ))}
 
               {row.internLoops &&
                 row.internLoops.map((loop) => (
-                  <div key={loop.id} className=" border-s  ms-10">
+                  <div key={loop.id} className="border-s ms-10">
                     <RowContainer
                       key={loop.id}
                       row={loop}
+                      EDI_Id={EDI_Id}
                       allRows={allRows}
                       deleteRow={deleteRow}
                       handleSelect={handleSelect}
@@ -329,6 +368,7 @@ export default function RowContainer(props: Props) {
                       addSegmentsToLoop={addSegmentsToLoop}
                       addLoopToLoop={addLoopToLoop}
                       parentId={row.id}
+                      isTopLevel={false} // Nested rows are not top-level
                     />
                   </div>
                 ))}

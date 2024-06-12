@@ -1,12 +1,13 @@
 
     {
         "name": "ISA",
-        "mandatory": "M",
+        "mandatory": true,
         "max": 1,
+        "isLoop": false,
         "template": true,
-        "segment_rules": {
+        "rules": {
             "1": {
-                "mandatory": "M",
+                "mandatory": true,
                 "min": 110,
                 "max": 100,
                 "type": "ID",
@@ -15,7 +16,7 @@
                 ]
             },
             "2": {
-                "mandatory": "M",
+                "mandatory": true,
                 "min": 200,
                 "max": 100,
                 "type": "AN",
@@ -27,14 +28,14 @@
                 ]
             },
             "3": {
-                "mandatory": "O",
+                "mandatory": false,
                 "min": 300,
                 "max": 100,
                 "type": "R",
                 "isHigherThan": "20"
             },
             "4": {
-                "mandatory": "O",
+                "mandatory": false,
                 "min": 300,
                 "max": 100,
                 "type": "AN",

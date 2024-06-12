@@ -31,13 +31,22 @@ import {
   optionsTMFormats,
 } from "../../../types/segmentTypes";
 
-function SegmentGenerator() {
+import { createSegment } from "@/da/Segments/segment-da";
+
+import { Prisma } from "@prisma/client";
+
+interface SegmentGenerator {
+  EDI_Id: string;
+}
+
+function SegmentGenerator({ EDI_Id }: SegmentGenerator) {
   const [segmentData, setSegmentData] = useState<SegmentData>({
     name: "ISA",
-    mandatory: "M",
+    mandatory: false,
     max: 1,
-    template: false,
-    segment_rules: {},
+    template: true,
+    isLoop: false,
+    rules: {},
   });
 
   const [numElements, setNumElements] = useState(0);
@@ -63,7 +72,7 @@ function SegmentGenerator() {
     const newSegmentRules: { [key: number]: SegmentRule } = {};
     for (let i = 1; i <= clampedNum; i++) {
       // Start at 1, not 0
-      newSegmentRules[i] = segmentData.segment_rules[i] || {
+      newSegmentRules[i] = segmentData.rules[i] || {
         ...initialRuleByType,
         type: "",
       };
@@ -72,7 +81,7 @@ function SegmentGenerator() {
     setNumElements(clampedNum);
     setSegmentData((prevData) => ({
       ...prevData,
-      segment_rules: newSegmentRules,
+      rules: newSegmentRules,
     }));
   };
 
@@ -91,10 +100,10 @@ function SegmentGenerator() {
   ) => {
     setSegmentData((prevData) => ({
       ...prevData,
-      segment_rules: {
-        ...prevData.segment_rules,
+      rules: {
+        ...prevData.rules,
         [elementIndex]: {
-          ...prevData.segment_rules[elementIndex],
+          ...prevData.rules[elementIndex],
           [ruleName]: value,
         },
       },
@@ -104,8 +113,8 @@ function SegmentGenerator() {
   const handleTypeChange = (elementIndex: number, newType: string) => {
     setSegmentData((prevData) => ({
       ...prevData,
-      segment_rules: {
-        ...prevData.segment_rules,
+      rules: {
+        ...prevData.rules,
         [elementIndex]: {
           ...initialRuleByType,
           ...additionalRulesByType[newType].rules,
@@ -120,22 +129,37 @@ function SegmentGenerator() {
     }));
   };
 
+  // const handleTagsChange = useCallback(
+  //   (elementIndex: string, newTags: string[]) => {
+  //     setSegmentData((prevData) => ({
+  //       ...prevData,
+  //       rules: {
+  //         ...prevData.rules,
+  //         [elementIndex]: {
+  //           ...prevData.rules[elementIndex],
+  //           oneOf: newTags,
+  //         },
+  //       },
+  //     }));
+  //   },
+  //   []
+  // ); // Empty dependency array: memoize the function
+
   const handleTagsChange = useCallback(
     (elementIndex: string, newTags: string[]) => {
       setSegmentData((prevData) => ({
         ...prevData,
-        segment_rules: {
-          ...prevData.segment_rules,
+        rules: {
+          ...prevData.rules,
           [elementIndex]: {
-            ...prevData.segment_rules[elementIndex],
-            oneOf: newTags,
+            ...prevData.rules[elementIndex],
+            oneOf: newTags, // Ensure oneOf is stored as an array
           },
         },
       }));
     },
     []
-  ); // Empty dependency array: memoize the function
-
+  );
   const toggleRules = (elementIndex: number) => {
     setShowRules((prevShowRules) => ({
       ...prevShowRules,
@@ -143,6 +167,44 @@ function SegmentGenerator() {
     }));
   };
 
+
+const convertSegmentRuleToJson : any = (obj: any, seen = new WeakSet()) => {
+  if (typeof obj === "object" && obj !== null) {
+    if (seen.has(obj)) {
+      return "[Circular Reference]"; // Or any other placeholder
+    }
+    seen.add(obj);
+
+    if (Array.isArray(obj)) {
+      return obj.map(item => convertSegmentRuleToJson(item, seen));
+    }
+
+    const result: Prisma.JsonObject = {};
+    for (const key in obj) {
+      result[key] = convertSegmentRuleToJson(obj[key], seen);
+    }
+    return result;
+  }
+  return obj; // Return primitive values as-is
+};
+
+const postSegment = async () => {
+  try {
+    await createSegment(
+      segmentData.name,
+      segmentData.template,
+      Number(segmentData.max),
+      segmentData.mandatory,
+      segmentData.isLoop,
+      EDI_Id,
+      convertSegmentRuleToJson(segmentData.rules)
+    );
+
+    console.log("success");
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
   return (
     <div className="flex w-[80%] gap-x-5 justify-center">
       <div className="flex flex-col w-full">
@@ -181,11 +243,12 @@ function SegmentGenerator() {
                 handleSelect={(option: IDropdown) => {
                   setSegmentData((prev) => ({
                     ...prev,
-                    mandatory: option.label,
+                    mandatory: option.label === "M",
                   }));
                 }}
                 selected={optionsUsage.find(
-                  (option) => option.label === segmentData.mandatory
+                  (option) =>
+                    option.label === (segmentData.mandatory ? "M" : "O")
                 )}
               />
             </div>
@@ -217,16 +280,16 @@ function SegmentGenerator() {
             </TableHeader>
 
             <TableBody>
-              {Object.keys(segmentData.segment_rules).length === 0 ? (
+              {Object.keys(segmentData.rules).length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center opacity-40">
                     No elements. Please add elements.
                   </TableCell>
                 </TableRow>
               ) : (
-                Object.keys(segmentData.segment_rules).map((elementIndex) => {
+                Object.keys(segmentData.rules).map((elementIndex) => {
                   const currentElement =
-                    segmentData.segment_rules[Number(elementIndex)];
+                    segmentData.rules[Number(elementIndex)];
                   const allowedRules =
                     additionalRulesByType[currentElement.type]?.allowedRules ||
                     [];
@@ -256,7 +319,7 @@ function SegmentGenerator() {
                         </TableCell>
 
                         <TableCell>
-                          <ComboboxDropdown
+                          {/* <ComboboxDropdown
                             content={optionsUsage}
                             handleSelect={(selectedOption: IDropdown) => {
                               handleRuleChange(
@@ -268,8 +331,26 @@ function SegmentGenerator() {
                             selected={optionsUsage.find(
                               (option) =>
                                 option.label ===
-                                segmentData.segment_rules[Number(elementIndex)]
+                                segmentData.rules[Number(elementIndex)]
                                   .mandatory
+                            )}
+                          /> */}
+                          <ComboboxDropdown
+                            content={optionsUsage}
+                            handleSelect={(selectedOption: IDropdown) => {
+                              handleRuleChange(
+                                Number(elementIndex),
+                                "mandatory",
+                                selectedOption.label === "M" // Convert label to boolean
+                              );
+                            }}
+                            selected={optionsUsage.find(
+                              (option) =>
+                                option.label ===
+                                (segmentData.rules[Number(elementIndex)]
+                                  .mandatory
+                                  ? "M"
+                                  : "O")
                             )}
                           />
                         </TableCell>
@@ -286,8 +367,7 @@ function SegmentGenerator() {
                             selected={optionsType.find(
                               (option) =>
                                 option.label ===
-                                segmentData.segment_rules[Number(elementIndex)]
-                                  .type
+                                segmentData.rules[Number(elementIndex)].type
                             )}
                           />
                         </TableCell>
@@ -381,7 +461,7 @@ function SegmentGenerator() {
                                                   selected={optionsDTFormats.find(
                                                     (option) =>
                                                       option.label ===
-                                                      segmentData.segment_rules[
+                                                      segmentData.rules[
                                                         Number(elementIndex)
                                                       ].dateHasFormat
                                                   )}
@@ -406,7 +486,7 @@ function SegmentGenerator() {
                                                   selected={optionsTMFormats.find(
                                                     (option) =>
                                                       option.label ===
-                                                      segmentData.segment_rules[
+                                                      segmentData.rules[
                                                         Number(elementIndex)
                                                       ].timeHasFormat
                                                   )}
@@ -458,7 +538,7 @@ function SegmentGenerator() {
           <Button
             variant={"default"}
             onClick={() => {
-              alert("no hace nada");
+              postSegment();
             }}
           >
             Save Segment
