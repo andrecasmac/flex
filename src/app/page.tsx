@@ -54,9 +54,6 @@ export default function Home() {
           </div>
         </Card>
       </div>
-      <Button asChild variant="default" size="sm" className="shadow-sm">
-          <a href="/examples">Components</a>
-      </Button>
     </main>
   );
 }
