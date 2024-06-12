@@ -24,7 +24,7 @@ export default function Page({searchParams/*Parameters we receive from Partnerhs
     useEffect(() => {
         const fetchData = async () => {
         try {
-            const data = await getPartnersOfClient(searchParams.id);
+            const data = await getPartnersOfClient("665136131277e5b9ce47e849");
             const filteredData = data.partnerships
             setPartnerships(filteredData);
         } catch (err) {
