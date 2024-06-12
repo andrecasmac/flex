@@ -15,6 +15,7 @@ export default function PartnershipsOnboarding({searchParams/*Parameters we rece
   }
 }) {
 
+  const partnershipId = searchParams.id;
   const [partnerships, setPartnerships] = useState<partnership>();
   const [dataPacket, setDataPacket] = useState<PartnerShipClientTableContent[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -23,7 +24,7 @@ export default function PartnershipsOnboarding({searchParams/*Parameters we rece
   useEffect(() => {
       const fetchData = async () => {
       try {
-          const unfilteredData = await getPartnershipById(searchParams.id);
+          const unfilteredData = await getPartnershipById(partnershipId);
           setPartnerships(unfilteredData);
           const ediDocuments = unfilteredData.partner.EDI_documents;
           const uploadedDocuments = unfilteredData.uploaded_documents;
@@ -32,7 +33,7 @@ export default function PartnershipsOnboarding({searchParams/*Parameters we rece
             return{
               ...ediDoc,
               status: uploadedDoc ? uploadedDoc.status : "Pending",
-              partnershipId: searchParams.id
+              partnershipId: partnershipId
             };
           });
           setDataPacket(filteredData);
@@ -44,7 +45,7 @@ export default function PartnershipsOnboarding({searchParams/*Parameters we rece
       };
 
       fetchData();
-  }, [searchParams.id]);
+  }, [partnershipId]);
 
   if (loading) {
       return <p>Loading...</p>;

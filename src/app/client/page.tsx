@@ -52,7 +52,7 @@ export default function Page({searchParams/*Parameters we receive from Partnerhs
             <ModalContextProvider>
                 <div className="flex w-[80%] justify-end pt-5">
                     {/*This is the Modal that adds partnerships*/}
-                    <ModalAddPartnerships ButtonContent="Add Parternship" clientId={"665136131277e5b9ce47e849"}/>
+                    <ModalAddPartnerships ButtonContent="Add Parternship" clientId={clientId}/>
                 </div>
                 <div className="flex w-[75%] justify-center items-center pt-5">
                     {/*This is where we display the Table with the Partnerships*/}
