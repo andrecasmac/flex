@@ -53,7 +53,7 @@ export const columns: ColumnDef<PartnerShipClientTableContent>[] = [
   }
   },
   {
-    accessorKey: "validated",
+    accessorKey: "status",
     header: "Action",
     cell: ({ row }) => {
       //Variable where we store the status value

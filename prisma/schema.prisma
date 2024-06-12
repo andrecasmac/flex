@@ -43,9 +43,9 @@ model partnership {
 
 model document {
   id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  type          String
+  type          String  @unique
   json_document String
-  status        String @default("pending")
+  status        String @default("Pending")
 
   partnershipId String      @db.ObjectId
   partnership   partnership @relation(fields: [partnershipId], references: [id], onDelete: Cascade)

@@ -88,15 +88,29 @@ export async function updatePartnershipDocuments(id:string, document:any, errors
             },
             data: {
                 uploaded_documents: {
-                    create: {
-                        type: document.type,
-                        json_document: document.json_document,
-                        errors: {
-                            createMany: {
-                                data: errors
-                            }
+                    upsert: {
+                        where: {
+                            type: document.type
                         },
-                        status: document.status
+                        update: {
+                            json_document: document.json_document,
+                            errors: {
+                                createMany: {
+                                    data: errors
+                                }
+                            },
+                            status: document.status
+                        },
+                        create: {
+                            type: document.type,
+                            json_document: document.json_document,
+                            errors: {
+                                createMany: {
+                                    data: errors
+                                }
+                            },
+                            status: document.status
+                        }
                     }
                 },
             },
@@ -117,17 +131,32 @@ export async function updatePartnershipDocuments(id:string, document:any, errors
 //Update partnership document validated
 export async function updatePartnershipDocumentValid(id:string, document:any){
     try{
+        const deletedErrors = await prisma.error.deleteMany({
+            where: {
+                documentId: id
+            }
+        })
         const uploadedPartner = await prisma.partnership.update({
             where: {
                 id:id
             },
             data: {
                 uploaded_documents: {
-                    create: {
-                        type: document.type,
-                        json_document: document.json_document,
-                        errors: {},
-                        status: document.status
+                    upsert: {
+                        where: {
+                            type: document.type
+                        },
+                        update: {
+                            json_document: document.json_document,
+                            errors: {},
+                            status: document.status
+                        },
+                        create: {
+                            type: document.type,
+                            json_document: document.json_document,
+                            errors: {},
+                            status: document.status
+                        }
                     }
                 },
             },
@@ -148,6 +177,11 @@ export async function updatePartnershipDocumentValid(id:string, document:any){
 //Delete partnership
 export async function deletePartnership(id:string){
     try{
+        const deletedErrors = await prisma.error.deleteMany({
+            where: {
+                documentId: id
+            }
+        })
         const deletedPartnership = await prisma.partner.delete({
             where: {
                 id:id
