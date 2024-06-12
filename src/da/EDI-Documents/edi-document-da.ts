@@ -140,6 +140,29 @@ export async function updateEDIdocumentTemplate(id:string, template:boolean) {
     }
 }
 
+
+//Update EDI-document structure
+export async function updateEDIdocumentStructure(id:string, structure: any) {
+    try{
+        const EDI_document = prisma.eDI_Document.update({
+            where: {
+                id: id
+            },
+            data: {
+                structure: structure
+            }
+        });
+        if(!EDI_document){
+            throw new Error("Failed to update EDI_Document");
+        }
+        return EDI_document;
+    } catch(error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+
 //Delete EDI-Document by id
 export async function deleteEDIdocument(id: string){
     try{

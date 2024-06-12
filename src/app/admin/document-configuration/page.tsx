@@ -21,7 +21,7 @@ export default function Page({
 
         if (segmentData && segmentData.structure) {
           const transformedSegments = segmentData.structure.map((seg: any) => {
-            const { EDI_DocumentId, parentLoopId, isLoop, ...filteredSegment } =
+            const {  ...filteredSegment } =
               seg;
             return filteredSegment;
           });
@@ -49,7 +49,7 @@ export default function Page({
       {allSegment ? (
         <>
           <DocConfig EDI_Id={EDI_Id} initialConfig={allSegment} />
-          <pre className="pt-10 texxt-xs flex justify-center">
+          <pre className="pt-10 text-xs flex justify-center">
             {JSON.stringify(allSegment, null, 2)}
           </pre>
         </>

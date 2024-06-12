@@ -109,7 +109,12 @@ export default function RowContainer(props: Props) {
     };
     fetchSegments();
   }, [EDI_Id]); // Fetch segments whenever EDI_Id changes
+  const handleSelectSegment = (option: IDropdown) => {
+    handleSelect(row.id, option, "name");
+    // Update SegmentId based on the selected option's segmentId:
+    handleSelect(row.id, { id: option.id, label:`${option.id}`}, "SegmentId"); 
 
+  };
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -155,11 +160,19 @@ export default function RowContainer(props: Props) {
 
             <div className="flex items-center justify-center w-2/4">
               <div className="w-4/5">
-                <ComboboxDropdown
+                {/* <ComboboxDropdown
                   content={optionsSegments}
                   handleSelect={(option: IDropdown) => {
-                    handleSelect(row.id, option, "name");
+                    handleSelect(row.id, option, "name")
+                    // , handleSelect(row.id, option, "")
                   }}
+                  selected={optionsSegments.find(
+                    (option) => option.label === row.name
+                  )}
+                /> */}
+                <ComboboxDropdown
+                  content={optionsSegments}
+                  handleSelect={handleSelectSegment} // Use the new handler
                   selected={optionsSegments.find(
                     (option) => option.label === row.name
                   )}

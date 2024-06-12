@@ -4,7 +4,7 @@ import { tree } from "next/dist/build/templates/app-page";
 const prisma = new PrismaClient();
 
 //Create segment
-export async function createSegment(name: string, template: boolean, max: number, mandatory: boolean, isLoop: boolean, EDI_Id: string, rules: Prisma.JsonObject) {
+export async function createSegment(name: string, template: boolean, max: number, mandatory: boolean, isLoop: boolean, EDI_Id: string, rules: {}) {
     try {
         const segment = await prisma.segment.create({
             data: {
@@ -127,6 +127,28 @@ export async function readSegmentByEDIDocumentId(EDI_Id: string) {
         throw error;
     }
 }
+
+export async function readRulesSegmentByEDIDocumentId(id: string) {
+    try {
+        const findSegment = await prisma.segment.findMany({
+            where: {
+                id: id
+            },
+            select: {
+                rules: true
+            }
+        });
+
+        if (!findSegment) {
+            throw new Error("Failed to read segment");
+        }
+        return findSegment;
+    } catch (error) {
+        console.log("Error reading segment: ", error);
+        throw error;
+    }
+}
+
 
 
 export async function readSegmentById(id: string) {

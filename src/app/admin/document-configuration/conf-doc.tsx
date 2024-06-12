@@ -23,25 +23,27 @@ import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import RowContainer from "./row-container-base";
 import Link from "next/link";
-
+import { readRulesSegmentByEDIDocumentId } from "@/da/Segments/segment-da";
+import { updateEDIdocumentStructure } from "@/da/EDI-Documents/edi-document-da";
 function convertJsonToRows(jsonRows: any[], parentId?: Id): Row[] {
   return jsonRows.map((jsonRow) => {
     const row: Row = {
-      id: jsonRow.id,
+      id: generateSegmentId(),
+      SegmentId: jsonRow.id, // Set the SegmentId
       name: jsonRow.name, // Convert name back to lowercase
       mandatory: jsonRow.mandatory ? "M" : "O", // Convert boolean back to "M"/"O"
       max: jsonRow.max,
     };
 
-    if (jsonRow.segment_rules) {
+    if (jsonRow.rule) {
       // It's a LoopRow
       const segments: SegmentRow[] = [];
       const internLoops: LoopRow[] = [];
-      jsonRow.segment_rules.forEach((rule: any) => {
-        if (rule.name.toLowerCase() === "loop") {
-          internLoops.push(rule);
+      jsonRow.rule.forEach((rules: any) => {
+        if (rules.name === "LOOP") {
+          internLoops.push(rules);
         } else {
-          segments.push(rule);
+          segments.push(rules);
         }
       });
 
@@ -63,6 +65,12 @@ interface DocConfigProps {
 
 export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
   const [rows, setRows] = useState<Row[]>([]);
+  const [segmentRules, setSegmentRules] = useState<Record<string, any[]>>({});
+
+  const [updateStatus, setUpdateStatus] = useState<
+    "idle" | "updating" | "success" | "error"
+  >("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>();
 
   useEffect(() => {
     // Parse and process initialConfig ONLY if it exists and is not empty
@@ -76,12 +84,42 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
     }
   }, [initialConfig]);
 
+  useEffect(() => {
+    const rowsWithValidSegmentId = rows.filter(
+      (row): row is SegmentRow =>
+        row.SegmentId !== undefined && row.SegmentId !== ""
+    );
+
+    const fetchRules = async () => {
+      // Filter out rows with undefined or empty SegmentId
+      const rulePromises = rowsWithValidSegmentId.map((row) =>
+        fetchRulesForSegment(row.SegmentId)
+      );
+      const rules = await Promise.all(rulePromises);
+
+      setSegmentRules(
+        rowsWithValidSegmentId.reduce((acc, row, index) => {
+          if (row.SegmentId !== null) {
+            acc[row.SegmentId] = rules[index];
+          }
+          return acc;
+        }, {} as Record<string, any[]>)
+      );
+    };
+
+    if (rowsWithValidSegmentId.length > 0) {
+      // Check filtered rows
+      fetchRules();
+    }
+  }, [rows]);
+
   const rowsId = useMemo(() => rows.map((row) => row.id), [rows]);
   const [activeRow, setActiveRow] = useState<Row | null>(null);
 
   function createSegmentRow() {
     const segmentToAdd: Row = {
       id: generateSegmentId(),
+      SegmentId: "",
       name: "segment",
       mandatory: "M",
       max: 1,
@@ -93,6 +131,7 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
     const loopToAdd: Row = {
       id: generateLoopId(),
       name: "loop",
+      SegmentId: "",
       max: 1,
       segments: [],
       internLoops: [],
@@ -138,6 +177,7 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
     const newSegment: SegmentRow = {
       id: `${generateSegmentId()}`, // Incluir parentId en el ID
       LoopId: parentId,
+      SegmentId: "",
       name: "segment loop",
       mandatory: "M",
       max: 1,
@@ -174,7 +214,8 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
     const newLoop: LoopRow = {
       id: `${generateLoopId()}`,
       parentId: parentId,
-      name: "loop",
+      name: "LOOP",
+      SegmentId: "",
       max: 1,
       segments: [],
       internLoops: [],
@@ -306,33 +347,90 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
     })
   );
 
-  function transformRowsToDesiredFormat(
-    rows: Row[],
-    parentId?: string | number
-  ): any[] {
+  async function fetchRulesForSegment(SegmentId: any) {
+    try {
+      const rules = await readRulesSegmentByEDIDocumentId(SegmentId);
+      return rules || []; // Provide an empty array as a default if rules are undefined
+    } catch (err) {
+      console.error("Error fetching rules:", err); // Log the error for debugging
+      return []; // Return an empty array in case of error
+    }
+  }
+
+  function transformRowsToDesiredFormat(rows: Row[], parentId?: Id): any[] {
     return rows.map((row) => {
       const newRow: any = {
-        id: row.id,
+        // id: row.id,
+        id: (row as SegmentRow).SegmentId,
         parentId: parentId,
         name: row.name.toUpperCase(),
         mandatory: row.mandatory === "M",
         max: row.max,
+        template: true,
+        isLoop: false,
+        parentLoopId: null,
+        EDI_DocumentId: EDI_Id,
       };
 
-      if ("segments" in row) {
-        // Combine both segments and internLoops into segment_rules
-        newRow.segment_rules = [
-          ...transformRowsToDesiredFormat(row.segments, row.id),
-          ...transformRowsToDesiredFormat(row.internLoops, row.id),
-        ];
+      if (segmentRules[row.SegmentId]) {
+        const rule = segmentRules[row.SegmentId][0]; // Get the first (and only) rule object
+        if (rule && rule.rules) {
+          newRow.rules = rule.rules; // Extract the nested 'rules' object
+        } else {
+          newRow.rules = {}; // Set to empty object if 'rules' is not present
+        }
+      } else {
+        newRow.rules = {};
+      }
 
-        delete newRow.segments;
-        delete newRow.internLoops;
+      if ("segments" in row) {
+        newRow.segments = transformRowsToDesiredFormat(row.segments, row.id);
+        newRow.loopSegment = transformRowsToDesiredFormat(
+          row.internLoops,
+          row.id
+        );
       }
 
       return newRow;
     });
   }
+
+  const handleSaveSegment = async () => {
+    setUpdateStatus("updating");
+    try {
+      const transformedRows = transformRowsToDesiredFormat(rows);
+      const segmentUpdateData = {
+        update: transformedRows.map((row) => ({
+          where: { id: row.id }, // Use the correct identifier for updates
+          data: {
+            name: row.name,
+            mandatory: row.mandatory,
+            max: row.max,
+            template: row.template,
+            rules: row.rules,
+            isLoop: row.isLoop,
+            // EDI_DocumentId: row.EDI_DocumentId,
+          },
+        })),
+      };
+
+      await updateEDIdocumentStructure(EDI_Id, segmentUpdateData);
+      setUpdateStatus("success");
+    } catch (error: unknown) {
+      // Explicitly type error as unknown
+      setUpdateStatus("error");
+
+      if (error instanceof Error) {
+        // Check if error is an Error object
+        setErrorMessage(error.message);
+        console.error("Error updating EDI document:", error);
+      } else {
+        // Handle non-Error cases (if needed)
+        setErrorMessage("An unexpected error occurred.");
+        console.error("Unknown error updating EDI document:", error);
+      }
+    }
+  };
 
   return (
     <div className="w-[80%] h-[auto] justify-center">
@@ -350,6 +448,15 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
         </Button>
         <Button variant={"default"} onClick={createLoopRow}>
           Add Loop +
+        </Button>
+
+        <Button
+          variant={"default"}
+          onClick={() =>
+            console.log(fetchRulesForSegment("666932f2adc24ac3ddfe14e4"))
+          }
+        >
+          sera?
         </Button>
       </div>
 
@@ -441,12 +548,16 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
       <div className="flex justify-center pt-10">
         <Button
           variant={"default"}
-          onClick={() => {
-            alert("no hace nada");
-          }}
+          onClick={handleSaveSegment} // Call handleSaveSegment
+          disabled={updateStatus === "updating"} // Disable while updating
         >
-          Save Segment
+          {updateStatus === "updating" ? "Saving..." : "Save Segment"}
         </Button>
+
+        {/* Display error message if there was an error */}
+        {updateStatus === "error" && (
+          <p className="text-red-500 mt-2">{errorMessage}</p>
+        )}
       </div>
 
       <pre className="pt-10 texxt-xs flex justify-center">

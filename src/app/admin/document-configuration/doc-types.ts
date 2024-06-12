@@ -1,22 +1,27 @@
 
 export type Id = string | number
 export type Row = SegmentRow | LoopRow
+
 export interface SegmentRow {
     id: Id;
+    SegmentId: Id;
     LoopId?: Id,
     name: string;
     mandatory: string;
     max: number;
+    rules?: []
 }
 
 export interface LoopRow {
     id: Id;
     parentId?: Id,
+    SegmentId: Id;
     name: string;
     max: number;
     segments: SegmentRow[];
     internLoops: LoopRow[];
     mandatory?: string;
+    rules?: []
 }
 export function generateSegmentId() {
     return `semgemt-${String(Math.floor(Math.random() * 10001))}`
