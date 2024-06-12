@@ -57,7 +57,9 @@ export async function getClientById(id:string) {
 export async function getPartnersOfClient(id:string){
   try{
     const client = await prisma.client.findUnique({
-      where: {id: id},
+      where: {
+        id: id
+      },
       include: {
         partnerships: {
           include: {
