@@ -49,9 +49,9 @@ export default function Page({
       {allSegment ? (
         <>
           <DocConfig EDI_Id={EDI_Id} initialConfig={allSegment} />
-          {/* <pre className="pt-10 text-xs flex justify-center">
+          <pre className="pt-10 text-xs flex justify-center">
             {JSON.stringify(allSegment, null, 2)}
-          </pre> */}
+          </pre>
         </>
       ) : (
         <>

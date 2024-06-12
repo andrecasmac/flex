@@ -7,7 +7,8 @@ import { deleteSegmentById } from "@/da/Segments/segment-da";
 
 import Link from "next/link";
 
-export const columnsSegmentTemplate: ColumnDef<Segment>[] = [
+export const columnsSegmentTemplate = (updateData: (id: string) => void): ColumnDef<Segment>[] => [
+
   {
     accessorKey: "name" /*Key*/,
     header: "Segment name" /*Label*/,
@@ -37,7 +38,7 @@ export const columnsSegmentTemplate: ColumnDef<Segment>[] = [
             href={{
               pathname: "./segment-edit",
               query: {
-                segmentId: row.original.id
+                segmentId: row.original.id,
               },
             }}
           >
@@ -53,13 +54,34 @@ export const columnsSegmentTemplate: ColumnDef<Segment>[] = [
   {
     id: "delete" /*Key*/,
     header: "Delete" /*Label*/,
+    // cell: ({ row }) => {
+    //   return (
+    //     <div className="flex justify-center">
+    //       <Button size="icon" variant={"ghost"} onClick={() => deleteSegmentById(row.original.id)}>
+    //         <MinusCircle className="h-7 w-7 text-slate-200 dark:text-slate-900 fill-red-500" />
+    //       </Button>
+    //       {/*Button for the delete function*/}
+    //     </div>
+    //   );
+    // },
+
     cell: ({ row }) => {
+      const { original } = row;
+
+      const handleDelete = async () => {
+        try {
+          await deleteSegmentById(original.id);
+          updateData(original.id);
+        } catch (error) {
+          console.error("Failed to delete segment", error);
+        }
+      };
+
       return (
         <div className="flex justify-center">
-          <Button size="icon" variant={"ghost"} onClick={() => deleteSegmentById(row.original.id)}>
+          <Button size="icon" variant={"ghost"} onClick={handleDelete}>
             <MinusCircle className="h-7 w-7 text-slate-200 dark:text-slate-900 fill-red-500" />
           </Button>
-          {/*Button for the delete function*/}
         </div>
       );
     },

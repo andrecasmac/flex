@@ -25,6 +25,10 @@ import RowContainer from "./row-container-base";
 import Link from "next/link";
 import { readRulesSegmentByEDIDocumentId } from "@/da/Segments/segment-da";
 import { updateEDIdocumentStructure } from "@/da/EDI-Documents/edi-document-da";
+
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+
 function convertJsonToRows(jsonRows: any[], parentId?: Id): Row[] {
   return jsonRows.map((jsonRow) => {
     const row: Row = {
@@ -432,6 +436,8 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
     }
   };
 
+ 
+
   return (
     <div className="w-[80%] h-[auto] justify-center">
       <div className="pb-4 gap-x-2 flex justify-end">
@@ -560,14 +566,14 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
         )}
       </div>
 
-      {/* <pre className="pt-10 texxt-xs flex justify-center">
+      <pre className="pt-10 texxt-xs flex justify-center">
         {JSON.stringify(
           transformRowsToDesiredFormat(rows), // Aplicar la transformación aquí
           // rows,
           null,
           2
         )}
-      </pre> */}
+      </pre>
     </div>
   );
 }

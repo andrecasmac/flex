@@ -2,6 +2,8 @@
 import { PrismaClient, Segment } from "@prisma/client";
 const prisma = new PrismaClient();
 
+const { v4: uuidv4 } = require('uuid');
+
 //Create EDI-Document template
 export async function createEDIdocument(type: string, template: boolean){
     try{
