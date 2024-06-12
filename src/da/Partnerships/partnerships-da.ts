@@ -95,7 +95,8 @@ export async function updatePartnershipDocuments(id:string, document:any, errors
                             createMany: {
                                 data: errors
                             }
-                        }
+                        },
+                        status: document.status
                     }
                 },
             },
@@ -125,7 +126,8 @@ export async function updatePartnershipDocumentValid(id:string, document:any){
                     create: {
                         type: document.type,
                         json_document: document.json_document,
-                        errors: {}
+                        errors: {},
+                        status: document.status
                     }
                 },
             },
