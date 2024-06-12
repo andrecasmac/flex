@@ -1,5 +1,5 @@
 "use server"
-import { PrismaClient,Prisma, Partner, error } from "@prisma/client";
+import { PrismaClient,Prisma } from "@prisma/client";
 import { document } from "@/types/DbTypes";
 const prisma = new PrismaClient();
 
@@ -28,11 +28,7 @@ export async function getAllPartnerships(){
     try{
         const partnerships = await prisma.partnership.findMany({
             include: {
-                uploaded_documents: {
-                    include: {
-                        errors: true
-                    }
-                }
+                uploaded_documents: true
             }
         });
         if(!partnerships){
@@ -53,11 +49,7 @@ export async function getPartnershipById(id:string){
                 id:id
             }, 
             include: {
-                uploaded_documents: {
-                    include: {
-                        errors: true
-                    }
-                },
+                uploaded_documents: true,
                 partner: {
                     include: {
                         EDI_documents:{
@@ -82,11 +74,6 @@ export async function getPartnershipById(id:string){
 //Update partnership uploaded documents
 export async function updatePartnershipDocuments(id:string, document:any, errors:any){
     try{
-        await prisma.error.deleteMany({
-            where: {
-                documentId: id
-            }
-        })
         const uploadedPartner = await prisma.partnership.update({
             where: {
                 id:id
@@ -99,21 +86,13 @@ export async function updatePartnershipDocuments(id:string, document:any, errors
                         },
                         update: {
                             json_document: document.json_document,
-                            errors: {
-                                createMany: {
-                                    data: errors
-                                }
-                            },
+                            errors: errors as Prisma.JsonObject,
                             status: document.status
                         },
                         create: {
                             type: document.type,
                             json_document: document.json_document,
-                            errors: {
-                                createMany: {
-                                    data: errors
-                                }
-                            },
+                            errors: errors as Prisma.JsonObject,
                             status: document.status
                         }
                     }
@@ -136,11 +115,6 @@ export async function updatePartnershipDocuments(id:string, document:any, errors
 //Update partnership document validated
 export async function updatePartnershipDocumentValid(id:string, document:any){
     try{
-        await prisma.error.deleteMany({
-            where: {
-                documentId: id
-            }
-        })
         const uploadedPartner = await prisma.partnership.update({
             where: {
                 id:id
@@ -182,11 +156,6 @@ export async function updatePartnershipDocumentValid(id:string, document:any){
 //Delete partnership
 export async function deletePartnership(id:string){
     try{
-        const deletedErrors = await prisma.error.deleteMany({
-            where: {
-                documentId: id
-            }
-        })
         const deletedPartnership = await prisma.partner.delete({
             where: {
                 id:id

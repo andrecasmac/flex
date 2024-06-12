@@ -29,13 +29,7 @@ export type document = {
     type: string;
     json_document: any;
     status: string;
-    errors: Error[];
-}
-
-export type Error = {
-    id: string;
-    code: string;
-    message: string;
+    errors: any;
 }
 
 export type EDI_Document = {

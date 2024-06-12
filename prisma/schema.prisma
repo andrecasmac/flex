@@ -50,16 +50,7 @@ model document {
   partnershipId String      @db.ObjectId
   partnership   partnership @relation(fields: [partnershipId], references: [id], onDelete: Cascade)
 
-  errors error[]
-}
-
-model error {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  code    String
-  message String
-
-  documentId String   @db.ObjectId
-  document   document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  errors Json @default("{}")
 }
 
 model EDI_Document {
