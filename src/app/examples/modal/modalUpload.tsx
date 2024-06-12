@@ -20,7 +20,6 @@ import { ErrorList } from "../tables/table/colums";
 import { ModalSuccess } from "./modalSuccess";
 
 import { parse_edi, parse_input_structure, validate_segments } from "@/lib/validator"
-import * as edi_schema from "@/lib/855_schema.json"
 import { Description } from "@radix-ui/react-dialog";
 import { updatePartnershipDocuments, getPartnershipById, updatePartnershipDocumentValid } from "@/da/Partnerships/partnerships-da";
 import {error} from "console";
@@ -173,8 +172,6 @@ export function ModalUpload({
                         console.log(err)
                     });
                 }
-
-				
             }
             else {
                 console.log("No Content Found In File")
@@ -233,5 +230,3 @@ export function ModalUpload({
         
     )
 }
-
-export default ModalUpload;

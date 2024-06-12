@@ -66,7 +66,7 @@ export const columns: ColumnDef<PartnerShipClientTableContent>[] = [
             {!validated ? <ModalContextProvider>
               <ErrorContextProvider>
                 <Modals modalUpload={true} partnershipId={row.original.partnershipId} ediType={row.original.type}/>
-                <Modals modalErrorList={true} />
+                <Modals modalErrorList={true} partnershipId={row.original.partnershipId} ediType={row.original.type} />
                 <Modals modalSuccess={true}/>
               </ErrorContextProvider>
             </ModalContextProvider> : (<></>)}
