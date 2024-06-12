@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Toggle from "@/components/ui/toggle";
 import { HiDotsVertical } from "react-icons/hi";
-import { Partner } from "../../../../types/DbTypes";
+import { Partner } from "../../../types/DbTypes";
 import ModalsPartners from ".";
 
 export type PartnerT = {
@@ -95,7 +96,10 @@ export const columns: ColumnDef<Partner>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="border-primary" align="start">
-              <DropdownMenuItem>View</DropdownMenuItem>
+            <DropdownMenuSeparator />
+              <Link href={"admin/document-list"}>
+                <DropdownMenuItem>View</DropdownMenuItem>
+              </Link>
               <DropdownMenuItem>Edit</DropdownMenuItem>
               <ModalsPartners modalDeletePartner={true} selectedItemName={produtct.name} />
             </DropdownMenuContent>

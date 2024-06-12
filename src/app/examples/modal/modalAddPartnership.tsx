@@ -14,19 +14,51 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "../tables/table/data-table";
 import { columnsModal } from "@/app/client/columns";
 import ModalContext from "@/app/context/modalContext";
-import { PartnerShipsClientContent } from "../../../../types/TableTypes";
+import { PartnerShipsClientContent } from "../../../types/TableTypes";
+import { Partner } from "@/types/DbTypes";
+import { useEffect, useState } from "react";
+import { getAllPartnersAvailable } from "@/da/Partners/partner-da";
 
 interface ModalAddPartnerships {
   ButtonContent: string;
-  data: PartnerShipsClientContent[];
+  clientId: string;
 }
 
 export function ModalAddPartnerships({
   ButtonContent,
-  data
+  clientId
 }: ModalAddPartnerships) {
+
+  const [partners, setPartners] = useState<Partner[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
   //Variable that is shared with Modal View Documents
   const { isThisOpen, setisThisOpen } = useContext(ModalContext)
+
+  useEffect(() => {
+      const fetchData = async () => {
+      try {
+          const data = await getAllPartnersAvailable(clientId);
+          setPartners(data);
+      } catch (err) {
+          setError('Failed to fetch data');
+      } finally {
+          setLoading(false);
+      }
+      };
+
+      fetchData();
+  }, [clientId]);
+
+  if (loading) {
+      return <p>Loading...</p>;
+  }
+
+  if (error) {
+      return <p>{error}</p>;
+  }
+
   return (
     <Dialog open={isThisOpen} onOpenChange={setisThisOpen}>
       <DialogTrigger asChild>
@@ -39,8 +71,8 @@ export function ModalAddPartnerships({
           </DialogTitle>
         </DialogHeader>
         <div className="flex items-center justify-center pt-5 w-[85%]">
-          {/*This is where we display the Table with the Partnerships*/}
-          <DataTable columns={columnsModal} data={data} />
+          {/*This is where we display the Table with the partners*/}
+          <DataTable columns={columnsModal} data={partners} />
         </div>
 
         <DialogFooter className="felx items-center justify-center">

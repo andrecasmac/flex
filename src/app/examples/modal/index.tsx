@@ -9,6 +9,11 @@ import { ModalAddDoc } from "./modalAddDoc";
 import { ModalSuccess } from "./modalSuccess";
 
 import { ModalSave } from "./modalSave";
+import ModalsPartners from "../partner-list";
+import { ModalAddPartner } from "./modalAddPartner";
+import { ModalDeletePartner } from "./modalDeletePartner";
+import { ModalDeleteDocument } from "./modalDeleteDocument";
+import { ModalAddPartnerships } from "./modalAddPartnership";
 interface ModalsProps {
   modalPartner?: boolean;
   modalAddDoc?: boolean;
@@ -24,6 +29,16 @@ interface ModalsProps {
   showError?: boolean;
   isOpen?: boolean;
   setIsOpen?: (open: boolean) => void;
+  modalAddPartner?: boolean;
+  modalDeletePartner?: boolean;
+  selectedItemName?: string;
+  selectedItemId?:string;
+  modalDeleteDocument?: boolean;
+  partnerId?: string;
+  clientId?:string;
+  modalAddPartnership?: boolean;
+  partnershipId?: string;
+  ediType?: string;
 }
 
 export default function Modals({
@@ -38,6 +53,16 @@ export default function Modals({
   onSave,
   ErrorData,
   showSuccess,
+  modalAddPartner,
+  modalDeletePartner,
+  selectedItemName,
+  selectedItemId,
+  modalDeleteDocument,
+  partnerId,
+  clientId,
+  modalAddPartnership,
+  partnershipId,
+  ediType
 }: ModalsProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -59,11 +84,12 @@ export default function Modals({
           ButtonContent="Modal"
         />
       )}
-      {modalAddDoc && (
+      {modalAddDoc && partnerId && (
         <ModalAddDoc
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           ButtonContent="Add Document +"
+          partnerId={partnerId}
         />
       )}
       {modalTest && (
@@ -73,15 +99,21 @@ export default function Modals({
           ButtonContent="Modal vacio"
         />
       )}
-      {modalErrorList && (
+      {modalErrorList && partnershipId && ediType && (
         <ModalErrorList
           isOpen={isOpen}
           setIsOpen={setIsOpen}
+		  partnershipId={partnershipId}
+		  ediType={ediType}
           ButtonContent="Modal Lista Error"
         />
       )}
-      {modalUpload && (
+      {modalUpload && partnershipId && ediType && (
         <ModalUpload
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+		  partnershipId={partnershipId}
+		  ediType={ediType}
           ButtonContent="Subir Documento"
         />
       )}
@@ -93,6 +125,37 @@ export default function Modals({
           showError={showError}
           ErrorData={ErrorData}
           showSuccess={showSuccess}
+        />
+      )}
+      {modalAddPartner && (
+        <ModalAddPartner
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          ButtonContent="Add Partner +"
+        />
+      )}
+      {modalDeletePartner && selectedItemName && selectedItemId &&(
+        <ModalDeletePartner
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          ButtonContent="Delete"
+          itemName={selectedItemName}
+          itemId={selectedItemId}
+        />
+      )}
+      {modalDeleteDocument && selectedItemName && selectedItemId &&(
+        <ModalDeleteDocument
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          ButtonContent="Delete"
+          itemName={selectedItemName}
+          itemId={selectedItemId}
+        />
+      )}
+      {modalAddPartnership && clientId && (
+        <ModalAddPartnerships 
+          ButtonContent="Add Partnership +"
+          clientId={clientId}
         />
       )}
     </div>

@@ -1,24 +1,23 @@
 "use client";
-import { useState } from "react";
 import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { PartnerShipsClientContent, ModalViewDocumentsContent } from "../../../types/TableTypes";
+import { ModalViewDocumentsContent } from "../../types/TableTypes";
 import Badge from "@/components/badge";
 import { ModalViewDocuments } from "@/app/examples/modal/modalViewDocuments";
+import { EDI_Document, Partner, partnership } from "@/types/DbTypes";
 
-export const columns: ColumnDef<PartnerShipsClientContent>[] = [
+export const columns: ColumnDef<partnership>[] = [
     {
         accessorKey: "name",
         header: () => <div className="flex w-[100%]">Partnerships</div>,
+        cell: ({ row }) => {
+            return (
+                <div>
+                    {row.original.partner.name}
+                </div>
+            )
+        }
     }
     , {
         accessorKey: "empty",
@@ -45,10 +44,10 @@ export const columns: ColumnDef<PartnerShipsClientContent>[] = [
         cell: ({ row }) => {
             //Variables where we store the content of the row
             const rowID = row.original.id;
-            const rowName = row.original.name;
+            const rowName = row.original.partner.name;
             const rowStatus = row.original.status;
-            const rowEDI = row.original.edi;
-            const rowConnect = row.original.connection;
+            const rowEDI = row.original.partner.edi_version;
+            const rowConnect = row.original.partner.type_of_connection;
             
             return (
                 <div className="flex justify-end">
@@ -67,17 +66,17 @@ export const columns: ColumnDef<PartnerShipsClientContent>[] = [
     },
 ];
 
-export const columnsModal: ColumnDef<PartnerShipsClientContent>[] = [
+export const columnsModal: ColumnDef<Partner>[] = [
     {
         accessorKey: "name",
-        header: () => <div className="flex w-[100%]">Partnerships</div>,
+        header: () => <div className="flex w-[100%]">Partner</div>,
     }
     , {
         accessorKey: "edi",
         header: () => <div className="flex w-[100%] justify-center"> EDI Version</div>,
         cell: ({ row }) => {
             //Variable where we store the EDI of the row
-            const rowEDI = row.original.edi
+            const rowEDI = row.original.edi_version
             return (
                 <div className="flex justify-center">
                     {rowEDI}
@@ -90,7 +89,7 @@ export const columnsModal: ColumnDef<PartnerShipsClientContent>[] = [
         header: () => <div className="flex justify-center">Connection Type</div>,
         cell: ({ row }) => {
             //Variable where we store the connection of the row
-            const rowConnect = row.original.connection
+            const rowConnect = row.original.type_of_connection
             return (
                 <div className="flex justify-center">
                     {rowConnect}
@@ -103,31 +102,36 @@ export const columnsModal: ColumnDef<PartnerShipsClientContent>[] = [
         header: () => <div className="flex justify-center"></div>,
         cell: ({ row }) => {
             //Variable where we store the content of the row
-            const rowContent = row.original
+            const rowContent = row.original;
 
             return (
                 <div className="flex justify-end">
-                    <ModalViewDocuments ButtonContent="View Documents" PartnerShipRowInfo={rowContent} />
+                    <ModalViewDocuments ButtonContent="View Documents" PartnerShipRowInfo={rowContent}/>
                 </div>
             );
         },
     },
 ];
 
-export const columnsViewDocouments: ColumnDef<ModalViewDocumentsContent>[] = [
+export const columnsViewDocouments: ColumnDef<EDI_Document>[] = [
     {
         accessorKey: "name",
         header: () => <div className="flex w-[100%]">Name</div>,
+        cell: ({row}) => {
+            return (
+                <div className="flex">{row.original.type}</div>
+            );
+        }
     }
     , {
         accessorKey: "mandatory",
-        header: () => <div className="flex w-[100%] justify-center"></div>,
+        header: () => <div className="flex w-[100%] justify-center">Type</div>,
         cell: ({ row }) => {
             const rowMandatory = row.original.mandatory
             return (
                 <div className="flex justify-center">
                     {/*Badge that reflects if the document is mandatory*/}
-                    <Badge label={rowMandatory} />
+                    <Badge label={rowMandatory ? "Mandatory" : "Optional"} />
                 </div>
             );
         }

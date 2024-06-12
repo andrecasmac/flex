@@ -26,20 +26,24 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import { deleteEDIdocument } from "@/da/EDI-Documents/edi-document-da";
 
-interface ModalDeletePartnerProps {
+
+interface ModalDeleteDocumentProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   ButtonContent: string;
   itemName: string;
+  itemId: string;
 }
 
-export function ModalDeletePartner({
+export function ModalDeleteDocument({
     isOpen,
     setIsOpen,
     ButtonContent,
     itemName,
-  }: ModalDeletePartnerProps) {
+    itemId
+  }: ModalDeleteDocumentProps) {
     const itemNameSize = itemName.length
 
     const formSchema = z.object({
@@ -54,9 +58,18 @@ export function ModalDeletePartner({
         name: "",
       },
     });
+
+    const handleDelete = async (id:string) => {
+        try {
+            const data = await deleteEDIdocument(id);
+        } catch (err) {
+            throw err;
+        }
+    }
   
     function onSubmit(values: z.infer<typeof formSchema>) {
       console.log(values);
+      handleDelete(itemId);
       setIsOpen(false);
     }
 
@@ -75,7 +88,7 @@ export function ModalDeletePartner({
           <div className="px-10 pt-10">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="mx-7">
-                <p className="text-gray-500 mb-5">Please type partner name exactly as shown below to confirm deletion.</p>
+                <p className="text-gray-500 mb-5">Please type document name exactly as shown below to confirm deletion.</p>
                 <div className="flex items-center justify-center p-4 border border-primary rounded-lg">
                   <p className="text-primary text-2xl font-bold">{itemName}</p>
                 </div>

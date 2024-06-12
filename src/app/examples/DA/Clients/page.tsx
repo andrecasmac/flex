@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { getAllClients } from '../../../../da/Clients/client-da'; 
-import { Client } from '../../../../../types/DbTypes';
+import { Client } from '../../../../types/DbTypes';
 
 const ClientsList: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);

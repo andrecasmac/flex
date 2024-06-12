@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { columns } from "./colums";
 import { DataTable } from "./data-table-partner-list";
 import { getAllPartners } from "@/da/Partners/partner-da";
-import { Partner } from "../../../../types/DbTypes";
+import { Partner } from "../../../types/DbTypes";
 import ModalsPartners from ".";
 import { useEffect, useState } from "react";
 

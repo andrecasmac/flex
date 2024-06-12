@@ -1,3 +1,4 @@
+'use client'
 import { PageTitle } from "@/components/page-title";
 
 import SegmentGenerator from "./create-segment";
