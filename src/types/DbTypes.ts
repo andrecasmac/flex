@@ -1,3 +1,4 @@
+
 export type Partner = {
     id: string;
     name: string;
@@ -13,12 +14,13 @@ export type Partner = {
 export type Client = {
     id: string;
     name: string;
-    partnerships: AssociatedPartner[];
+    partnerships: partnership[];
 };
   
-export type AssociatedPartner = {
+export type partnership = {
     id: string;
-    partner: Partner | null;
+    partner: Partner;
+    status: string;
     uploaded_documents: document[];
 };
 
@@ -40,6 +42,7 @@ export type EDI_Document = {
     type: string;
     template: boolean;
     structure: Segment[];
+    mandatory: boolean;
 };
 
 export type Segment = {
@@ -47,4 +50,6 @@ export type Segment = {
     name: string;
     template: boolean;
     rules: any;
+    mandatory: boolean;
+    max: number;
 }

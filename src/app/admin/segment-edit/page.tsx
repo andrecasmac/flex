@@ -5,7 +5,8 @@ import SegmentEdit from "./edit-segment";
 
 import examplejson from "./exmaple-segment.json";
 import { readSegmentById } from "@/da/Segments/segment-da";
-import { SegmentData } from "../../../../types/segmentTypes";
+
+import { SegmentData } from "@/types/segmentTypes";
 
 function filterKeys(data: any) {
   const { EDI_DocumentId, parentLoopId, ...filteredData } = data;

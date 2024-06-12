@@ -1,16 +1,17 @@
 "use client"
 
 import { useState } from "react";
-import { ModalAddPartner } from "./modalAddPartner";
-import { ModalDeletePartner } from "./modalDeletePartner";
+import { ModalAddPartner } from "../modal/modalAddPartner";
+import { ModalDeletePartner } from "../modal/modalDeletePartner";
 
 interface ModalsPartnersProps {
   modalAddPartner?: boolean;
   modalDeletePartner?: boolean;
   selectedItemName?: string;
+  itemId?: string;
 }
 
-export default function ModalsPartners({ modalAddPartner, modalDeletePartner, selectedItemName }: ModalsPartnersProps) {
+export default function ModalsPartners({ modalAddPartner, modalDeletePartner, selectedItemName, itemId }: ModalsPartnersProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -22,12 +23,13 @@ export default function ModalsPartners({ modalAddPartner, modalDeletePartner, se
           ButtonContent="Add Partner +"
         />
       )}
-      {modalDeletePartner && selectedItemName &&(
+      {modalDeletePartner && selectedItemName && itemId &&(
         <ModalDeletePartner
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           ButtonContent="Delete"
           itemName={selectedItemName}
+          itemId={itemId}
         />
       )}
     </div>

@@ -44,7 +44,7 @@ model partnership {
 model document {
   id            String @id @default(auto()) @map("_id") @db.ObjectId
   type          String
-  json_document String
+  json_document Json
   status        String @default("pending")
 
   partnershipId String      @unique @db.ObjectId

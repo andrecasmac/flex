@@ -2,6 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter } from "@/components/ui/card";
 
+import Link from "next/link";
+
 import { AdminIcon, ClientIcon } from "../assets/clientsIcons";
 
 
@@ -42,7 +44,9 @@ export default function Home() {
                     size="sm"
                     className="shadow-sm"
                   >
-                    <a href="/client">Select</a>
+                    <Link href={{pathname: "/client", query: {
+                      id:"665136131277e5b9ce47e849"
+                    }}}>Select</Link>
                   </Button>
                 </div>
               </Card>

@@ -17,8 +17,8 @@ export async function createSegment(name: string, template: boolean, max: number
                 max: max,
                 mandatory: mandatory,
                 template: template,
-                isLoop: isLoop,
-                rules: rules
+                rules: {},
+                isLoop: isLoop
             }
         });
         if (!segment) {
@@ -46,18 +46,18 @@ export async function readAllSegments() {
 };
 
 //Read segment templates
-export async function readAllSegmentsTemplates(template: boolean) {
-    try {
+export async function getAllSegmentsTemplates(template:boolean){
+    try{
         const segments = await prisma.segment.findMany({
             where: {
                 template: template
             }
         });
-        if (!segments) {
+        if(!segments){
             throw new Error("Failed to fetch segments");
         }
         return segments
-    } catch (error) {
+    } catch(error) {
         console.log("Error fetching segments: ", error);
         throw error;
     }

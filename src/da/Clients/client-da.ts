@@ -53,6 +53,42 @@ export async function getClientById(id:string) {
   }
 }
 
+//Get partners from client
+export async function getPartnersOfClient(id:string){
+  try{
+    const client = await prisma.client.findUnique({
+      where: {id: id},
+      include: {
+        partnerships: {
+          include: {
+            partner: {
+              include: {
+                EDI_documents: {
+                  include: {
+                    structure: true
+                  }
+                }
+              }
+            },
+            uploaded_documents: {
+              include: {
+                errors: true
+              }
+            }
+          }
+        }
+      }
+    })
+    if(!client){
+      throw new Error("Failed to fetch client");
+    }
+    return client;
+  } catch(error) {
+    console.log("Error fetching client: ", error);
+    throw error;
+  }
+}
+
 //Create client with just the name
 export async function createClient(name:string) {
   try{

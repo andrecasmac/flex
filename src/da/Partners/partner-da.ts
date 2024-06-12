@@ -1,9 +1,10 @@
 "use server"
+import { EDI_Document } from "@/types/DbTypes";
 import { PrismaClient, Prisma } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //Create partner
-export async function createPartner(name:string, edi_version:string, delimiters:string, EOL:string, type_of_connection:string, PO_Test:JSON){
+export async function createPartner(name:string, edi_version:string, delimiters:string, EOL:string, type_of_connection:string, PO_Test:JSON, hidden: boolean){
     try{
         const partner = await prisma.partner.create({
             data: {
@@ -13,7 +14,7 @@ export async function createPartner(name:string, edi_version:string, delimiters:
                 EOL: EOL,
                 type_of_connection: type_of_connection,
                 PO_Test: JSON.stringify(PO_Test),
-                partnerships: {}
+                hidden: hidden
             }
         });
         if(!partner){
@@ -48,11 +49,69 @@ export async function getAllPartners(){
       };
 }
 
+//Read all partners
+export async function getAllPartnersAvailable(clientId:string){
+    try {
+        const allPartners = await prisma.partner.findMany({
+            where: {
+                hidden: true
+            },
+            include: {
+                EDI_documents: {
+                    include: {
+                        structure: true
+                    }
+                }
+            }
+        });
+
+        if (!allPartners) {
+            throw new Error("Failed to fetch data");
+          }
+
+        const clientPartners = await prisma.client.findUnique({
+            where: {
+                id: clientId
+            },
+            include: {
+                partnerships: {
+                    select: {
+                        partnerId: true
+                    }
+                }
+            }
+        })
+
+        if (!clientPartners) {
+            throw new Error("Failed to fetch data");
+          }
+
+        const clientPartnersIds = clientPartners.partnerships.map(partnership => partnership.partnerId);
+
+        const partners = allPartners.filter(partner => !clientPartnersIds.includes(partner.id));
+
+        if (!partners) {
+          throw new Error("Failed to fetch data");
+        }
+        return partners;
+      } catch (error) {
+        console.error('Error fetching clients:', error);
+        throw error; 
+      };
+}
+
 //Read partner by id
 export async function getPartnerById(id:string){
     try{
         const partner = await prisma.partner.findUnique({
-            where: {id: id}
+            where: {id: id},
+            include: {
+                EDI_documents: {
+                    include: {
+                        structure: true
+                    }
+                }
+              }
         });
         if(!partner){
             throw new Error("Failed to fetch partner");
@@ -81,6 +140,48 @@ export async function updatePartner(id:string, name:string){
         return updatedPartner;
     } catch(error) {
         console.log("Error updating partner's name: ",error);
+        throw error;
+    }
+}
+
+//Create or connect edi document
+export async function updatePartnerDocuments(id:string, EdiDocument: any){
+    try {
+        const updatedPartner = await prisma.partner.update({
+            where: {
+                id: id
+            },
+            data: {
+                EDI_documents: {
+                    create: {
+                        type: EdiDocument.type,
+                        template: false,
+                        mandatory: EdiDocument.mandatory,
+                        structure: EdiDocument.structure?.length > 0 ? {
+                            create: EdiDocument.structure.map((segment: { name: any; mandatory: any; max: any; template: any; rules: any; }) => ({
+                                name: segment.name,
+                                mandatory: segment.mandatory,
+                                max: segment.max,
+                                template: segment.template,
+                                rules: segment.rules
+                            }))
+                        } : {},
+                    }
+                }
+            },
+            include: {
+                EDI_documents: {
+                    include: {
+                        structure: true
+                    }
+                }
+            }
+        })
+        if(!updatedPartner){
+            throw new Error("Failed to add edi document");
+        }
+    } catch(error) {
+        console.log("Error adding EDI_Document: ", error);
         throw error;
     }
 }

@@ -31,9 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import Link from "next/link";
-
 import { readSegmentByEDIDocumentId } from "@/da/Segments/segment-da";
-import { queryObjects } from "v8";
 
 interface Props {
   row: Row;

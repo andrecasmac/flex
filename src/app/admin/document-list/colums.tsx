@@ -16,16 +16,13 @@ import React from "react";
 import { FaGear } from "react-icons/fa6";
 import { HiDotsVertical } from "react-icons/hi";
 import Link from "next/link";
+import { EDI_Document } from "@/types/DbTypes";
+import { ModalDeleteDocument } from "@/app/examples/modal/modalDeleteDocument";
+import Modals from "@/app/examples/modal";
 
-export type ProductsT = {
-  id: string;
-  name: string;
-  toggle: boolean;
-};
-
-export const columns: ColumnDef<ProductsT>[] = [
+export const columns: ColumnDef<EDI_Document>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "type",
     header: "Documents",
   },
   {
@@ -37,10 +34,13 @@ export const columns: ColumnDef<ProductsT>[] = [
         </div>
       );
     },
-    cell() {
+    cell({ row }) {
       return (
         <div className="flex justify-center">
-          <Link href={"./document-configuration"}>
+          <Link href={{pathname: "/admin/document-configuration", query: {
+            id: row.original.id,
+            name: row.original.type
+          }}}>
             <Button className="w-auto h-auto p-0 border-0 bg-inherit text-primary hover:bg-inherit hover:text-primary">
               <FaGear className="w-8 h-8" />
             </Button>
@@ -71,7 +71,7 @@ export const columns: ColumnDef<ProductsT>[] = [
       // Allows to visualize the Toggle of each row
       return (
         <div className="flex justify-center">
-          <Toggle actionToggle={row.original.toggle} onChange={handleToggleCell} />
+          <Toggle actionToggle={row.original.mandatory} onChange={handleToggleCell} />
         </div>
       );
     },
@@ -86,7 +86,7 @@ export const columns: ColumnDef<ProductsT>[] = [
       );
     },
     cell: ({ row }) => {
-      const produtct = row.original;
+      const edi_document = row.original;
 
       return (
         <div className="flex justify-center">
@@ -98,16 +98,16 @@ export const columns: ColumnDef<ProductsT>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-              <DropdownMenuItem
-                onClick={() =>
-                  navigator.clipboard.writeText(String(produtct.id))
-                }
-              >
-                Copy payment ID
-              </DropdownMenuItem>
+              <Link href={{pathname: "/admin/document-configuration", query: {
+                id: edi_document.id,
+                name: edi_document.type
+              }}}>
+                <DropdownMenuItem>
+                  View
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
+              <Modals modalDeleteDocument={true} selectedItemName={edi_document.type} selectedItemId={edi_document.id}/>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
