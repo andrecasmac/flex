@@ -560,15 +560,14 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
         )}
       </div>
 
-      <pre className="pt-10 texxt-xs flex justify-center">
-        {/* {JSON.stringify(rows, null, 2)} */}
+      {/* <pre className="pt-10 texxt-xs flex justify-center">
         {JSON.stringify(
           transformRowsToDesiredFormat(rows), // Aplicar la transformación aquí
           // rows,
           null,
           2
         )}
-      </pre>
+      </pre> */}
     </div>
   );
 }
