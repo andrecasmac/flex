@@ -80,61 +80,13 @@ export async function updatePartnershipDocuments(id:string, document:any, errors
             },
             data: {
                 uploaded_documents: {
-                    upsert: {
-                        where: {
-                            type: document.type
-                        },
-                        update: {
-                            json_document: document.json_document,
-                            errors: errors as Prisma.JsonObject,
-                            status: document.status
-                        },
-                        create: {
-                            type: document.type,
-                            json_document: document.json_document,
-                            errors: errors as Prisma.JsonObject,
-                            status: document.status
-                        }
-                    }
-                },
-            },
-            include: {
-                uploaded_documents: true
-            }
-        })
-        if(!uploadedPartner){
-            throw new Error("Failed to update partnership document");
-        }
-        return uploadedPartner;
-    } catch(error) {
-        console.log("Error updating partnership document: ", error);
-        throw error;
-    }
-}
-
-//Update partnership document validated
-export async function updatePartnershipDocumentValid(id:string, document:any){
-    try{
-        const uploadedPartner = await prisma.partnership.update({
-            where: {
-                id:id
-            },
-            data: {
-                uploaded_documents: {
-                    upsert: {
-                        where: {
-                            type: document.type
-                        },
-                        update: {
-                            json_document: document.json_document,
-                            errors: {},
-                            status: document.status
-                        },
-                        create: {
-                            type: document.type,
-                            json_document: document.json_document,
-                            errors: {},
-                            status: document.status
+                    create: {
+                        type: document.type,
+                        json_document: document.json_document,
+                        errors: {
+                            createMany: {
+                                data: errors
+                            }
                         }
                     }
                 },
@@ -165,7 +117,8 @@ export async function updatePartnershipDocumentValid(id:string, document:any){
                     create: {
                         type: document.type,
                         json_document: document.json_document,
-                        errors: {}
+                        errors: {},
+                        status: document.status
                     }
                 },
             },
