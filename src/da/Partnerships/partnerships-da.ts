@@ -1,5 +1,6 @@
 "use server"
-import { document, PrismaClient,Prisma, Partner } from "@prisma/client";
+import { PrismaClient,Prisma } from "@prisma/client";
+import { document } from "@/types/DbTypes";
 const prisma = new PrismaClient();
 
 //Create partnership
@@ -15,7 +16,7 @@ export async function createPartnership(partnerId:string, clientId: string){
         if(!partnership){
             throw new Error("Failed to create partnership")
         }
-        return partnership
+        return partnership;
     } catch(error) {
         console.log("Error creating partnership: ",error);
         throw error;
@@ -27,11 +28,7 @@ export async function getAllPartnerships(){
     try{
         const partnerships = await prisma.partnership.findMany({
             include: {
-                uploaded_documents: {
-                    include: {
-                        errors: true
-                    }
-                }
+                uploaded_documents: true
             }
         });
         if(!partnerships){
@@ -52,11 +49,7 @@ export async function getPartnershipById(id:string){
                 id:id
             }, 
             include: {
-                uploaded_documents: {
-                    include: {
-                        errors: true
-                    }
-                },
+                uploaded_documents: true,
                 partner: {
                     include: {
                         EDI_documents:{
@@ -79,7 +72,7 @@ export async function getPartnershipById(id:string){
 }
 
 //Update partnership uploaded documents
-export async function updatePartnershipDocuments(id:string, document:document){
+export async function updatePartnershipDocuments(id:string, document:any, errors:any){
     try{
         const uploadedPartner = await prisma.partnership.update({
             where: {
@@ -87,10 +80,62 @@ export async function updatePartnershipDocuments(id:string, document:document){
             },
             data: {
                 uploaded_documents: {
-                    create: {
-                        type: document.type,
-                        // json_document: document.json_document as Prisma.JsonObject,
-                        json_document: document.json_document
+                    upsert: {
+                        where: {
+                            type: document.type
+                        },
+                        update: {
+                            json_document: document.json_document,
+                            errors: errors as Prisma.JsonObject,
+                            status: document.status
+                        },
+                        create: {
+                            type: document.type,
+                            json_document: document.json_document,
+                            errors: errors as Prisma.JsonObject,
+                            status: document.status
+                        }
+                    }
+                },
+            },
+            include: {
+                uploaded_documents: true
+            }
+        })
+        if(!uploadedPartner){
+            throw new Error("Failed to update partnership document");
+        }
+        return uploadedPartner;
+    } catch(error) {
+        console.log("Error updating partnership document: ", error);
+        throw error;
+    }
+}
+
+//Update partnership document validated
+export async function updatePartnershipDocumentValid(id:string, document:any){
+    try{
+        const uploadedPartner = await prisma.partnership.update({
+            where: {
+                id:id
+            },
+            data: {
+                uploaded_documents: {
+                    upsert: {
+                        where: {
+                            type: document.type
+                        },
+                        update: {
+                            json_document: document.json_document,
+                            errors: {},
+                            status: document.status
+                        },
+                        create: {
+                            type: document.type,
+                            json_document: document.json_document,
+                            errors: {},
+                            status: document.status
+                        }
                     }
                 },
             },

@@ -43,23 +43,14 @@ model partnership {
 
 model document {
   id            String @id @default(auto()) @map("_id") @db.ObjectId
-  type          String
-  json_document Json
-  status        String @default("pending")
+  type          String @unique
+  json_document String
+  status        String @default("Pending")
 
-  partnershipId String      @unique @db.ObjectId
+  partnershipId String      @db.ObjectId
   partnership   partnership @relation(fields: [partnershipId], references: [id], onDelete: Cascade)
 
-  errors error[]
-}
-
-model error {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  code    String
-  message String
-
-  documentId String   @db.ObjectId
-  document   document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  errors Json @default("{}")
 }
 
 model EDI_Document {
