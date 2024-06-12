@@ -24,7 +24,7 @@ export default function Page({searchParams/*Parameters we receive from Partnerhs
     useEffect(() => {
         const fetchData = async () => {
         try {
-            const data = await getPartnersOfClient(searchParams.id);
+            const data = await getPartnersOfClient("665136131277e5b9ce47e849");
             const filteredData = data.partnerships
             setPartnerships(filteredData);
         } catch (err) {
@@ -51,7 +51,7 @@ export default function Page({searchParams/*Parameters we receive from Partnerhs
             <ModalContextProvider>
                 <div className="flex w-[80%] justify-end pt-5">
                     {/*This is the Modal that adds partnerships*/}
-                    <ModalAddPartnerships ButtonContent="Add Parternship" clientId={searchParams.id}/>
+                    <ModalAddPartnerships ButtonContent="Add Parternship" clientId={"665136131277e5b9ce47e849"}/>
                 </div>
                 <div className="flex w-[75%] justify-center items-center pt-5">
                     {/*This is where we display the Table with the Partnerships*/}
