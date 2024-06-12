@@ -14,6 +14,8 @@ const Badge: React.FC<BadgeProps> = ({ label }) => {
         return { backgroundColor: 'bg-yellow-100', textColor: 'text-yellow-800' };
       case 'Complete':
         return { backgroundColor: 'bg-green-100', textColor: 'text-green-800' };
+      case 'Validated':
+        return { backgroundColor: 'bg-green-100', textColor: 'text-green-800' }
       case 'Mandatory':
       case 'Cancelled':
         return { backgroundColor: 'bg-red-100', textColor: 'text-red-800' };
