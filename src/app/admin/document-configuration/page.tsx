@@ -9,11 +9,12 @@ export default function Page({searchParams/*Parameters we receive from Partnerhs
   name: string
   }
 }) {
+  const documentId = searchParams.id;
   return (
     <div className="flex flex-col justify-center items-center w-full">
       <PageTitle title={"Document Configuration "+ searchParams.name} />
       <div className="flex w-screen justify-center pb-20">
-        <DocConfig documentId={searchParams.id}/>
+        <DocConfig documentId={documentId}/>
       </div>
     </div>
   );
