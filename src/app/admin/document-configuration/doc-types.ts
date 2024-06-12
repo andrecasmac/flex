@@ -31,6 +31,13 @@ export function generateLoopId() {
     return `loop-${String(Math.floor(Math.random() * 10001))}`
 }
 
+export var mongoObjectId = function () {
+    var timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+    return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function() {
+        return (Math.random() * 16 | 0).toString(16);
+    }).toLowerCase();
+};
+
 const exampleSegment = [
     { name: "ISA" },
     { name: "DMT" },
@@ -41,6 +48,7 @@ const exampleSegment = [
 const exmapleLoops = [
     { name: "LOOP" },
 ];
+
 
 
 export interface IDropdown {

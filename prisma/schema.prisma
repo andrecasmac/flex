@@ -78,8 +78,8 @@ model Segment {
   parentLoop   Segment?  @relation("LoopSegments", fields: [parentLoopId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   loopSegment  Segment[] @relation("LoopSegments")
 
-  EDI_DocumentId String       @db.ObjectId
-  EDI_Document   EDI_Document @relation(fields: [EDI_DocumentId], references: [id], onDelete: Cascade)
+  EDI_DocumentId String?       @db.ObjectId
+  EDI_Document   EDI_Document? @relation(fields: [EDI_DocumentId], references: [id], onDelete: Cascade)
 }
 
 // model EDI_Document {

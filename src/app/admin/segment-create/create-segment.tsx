@@ -53,6 +53,8 @@ function SegmentGenerator({ EDI_Id }: SegmentGenerator) {
     "idle" | "updating" | "success" | "error"
   >("idle");
 
+  const MAX_ELEMENTS = 25; // Constant for maximum elements
+
   const [errorMessage, setErrorMessage] = useState<string | null>();
 
   const [numElements, setNumElements] = useState(0);
@@ -89,6 +91,15 @@ function SegmentGenerator({ EDI_Id }: SegmentGenerator) {
       ...prevData,
       rules: newSegmentRules,
     }));
+  };
+
+  const handleAddElement = () => {
+    const newNumElements = Math.min(
+      numElements + (parseInt(inputValue) || 0),
+      MAX_ELEMENTS
+    );
+    handleNumElementsChange(newNumElements.toString());
+    setInputValue(""); // Clear input field after adding
   };
 
   const handleInputChangeMT = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -282,6 +293,12 @@ function SegmentGenerator({ EDI_Id }: SegmentGenerator) {
               value={segmentData.max}
               onChange={handleInputChangeMT}
             />
+          </Label>
+
+          <Label>
+            <Button variant="default" onClick={handleAddElement}>
+              Add Elements
+            </Button>
           </Label>
         </div>
 
@@ -569,9 +586,9 @@ function SegmentGenerator({ EDI_Id }: SegmentGenerator) {
           )}
         </div>
 
-        <pre className="pt-10 text-xs flex justify-center">
+        {/* <pre className="pt-10 text-xs flex justify-center">
           {JSON.stringify(segmentData, null, 2)}
-        </pre>
+        </pre> */}
       </div>
     </div>
   );

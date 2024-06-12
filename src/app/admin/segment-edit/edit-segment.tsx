@@ -5,7 +5,7 @@ import { ComboboxDropdown } from "@/components/ui/combobox";
 import MultipleTagsInput from "@/components/multiple-tags";
 
 import { IDropdown, optionsUsage } from "../../../types/segmentTypes";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, MinusCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,6 +61,17 @@ function SegmentEdit({ initialSegmentData, segmentId }: SegmentEditProps) {
   >("idle");
 
   const [errorMessage, setErrorMessage] = useState<string | null>();
+
+  const MAX_ELEMENTS = 25; // Constant for maximum elements
+  const handleAddElement = () => {
+    const newNumElements = Math.min(
+      numElements + (parseInt(inputValue) || 0),
+      MAX_ELEMENTS
+    );
+    handleNumElementsChange(newNumElements.toString());
+    setInputValue(""); // Clear input field after adding
+  };
+
 
   useEffect(() => {
     setNumElements(Object.keys(segmentData.rules).length);
@@ -239,6 +250,12 @@ function SegmentEdit({ initialSegmentData, segmentId }: SegmentEditProps) {
               />
             </Label>
           </div>
+
+          <Label>
+            <Button variant="default" onClick={handleAddElement}>
+              Add Elements
+            </Button>
+          </Label>
         </div>
         <div className="overflow-auto border rounded-xl">
           <Table className="p-2 ">
@@ -347,6 +364,15 @@ function SegmentEdit({ initialSegmentData, segmentId }: SegmentEditProps) {
                             )
                           }
                         />
+                      </TableCell>
+
+                      <TableCell>
+                        <Button
+                          size="icon"
+                          variant={"ghost"}
+                        >
+                          <MinusCircle className="h-7 w-7 text-slate-200 dark:text-slate-900 fill-red-500" />
+                        </Button>
                       </TableCell>
                     </TableRow>
 
@@ -502,9 +528,9 @@ function SegmentEdit({ initialSegmentData, segmentId }: SegmentEditProps) {
             <p className="text-red-500 mt-2">{errorMessage}</p>
           )}
         </div>
-        <pre className="pt-10 text-xs flex justify-center">
+        {/* <pre className="pt-10 text-xs flex justify-center">
           {JSON.stringify(segmentData, null, 2)}
-        </pre>
+        </pre> */}
       </div>
     </div>
   );
