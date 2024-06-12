@@ -18,11 +18,7 @@ export async function getAllClients() {
                     }
                   }
                 },
-                uploaded_documents: {
-                  include: {
-                    errors: true
-                  }
-                }
+                uploaded_documents: true
               }
             }
           }
@@ -72,11 +68,7 @@ export async function getPartnersOfClient(id:string){
                 }
               }
             },
-            uploaded_documents: {
-              include: {
-                errors: true
-              }
-            }
+            uploaded_documents: true
           }
         }
       }
