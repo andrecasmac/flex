@@ -80,13 +80,20 @@ export async function updatePartnershipDocuments(id:string, document:any, errors
             },
             data: {
                 uploaded_documents: {
-                    create: {
-                        type: document.type,
-                        json_document: document.json_document,
-                        errors: {
-                            createMany: {
-                                data: errors
-                            }
+                    upsert: {
+                        where: {
+                            type: document.type
+                        },
+                        update: {
+                            json_document: document.json_document,
+                            errors: errors as Prisma.JsonObject,
+                            status: document.status
+                        },
+                        create: {
+                            type: document.type,
+                            json_document: document.json_document,
+                            errors: errors as Prisma.JsonObject,
+                            status: document.status
                         }
                     }
                 },
@@ -114,11 +121,21 @@ export async function updatePartnershipDocumentValid(id:string, document:any){
             },
             data: {
                 uploaded_documents: {
-                    create: {
-                        type: document.type,
-                        json_document: document.json_document,
-                        errors: {},
-                        status: document.status
+                    upsert: {
+                        where: {
+                            type: document.type
+                        },
+                        update: {
+                            json_document: document.json_document,
+                            errors: {},
+                            status: document.status
+                        },
+                        create: {
+                            type: document.type,
+                            json_document: document.json_document,
+                            errors: {},
+                            status: document.status
+                        }
                     }
                 },
             },
