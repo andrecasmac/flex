@@ -28,7 +28,7 @@ export default function Page({searchParams/*Parameters we receive from Partnerhs
             const filteredData = data.partnerships
             setPartnerships(filteredData);
         } catch (err) {
-            setError('Failed to fetch data');
+            setError('Failed to fetch data: '+err);
         } finally {
             setLoading(false);
         }
