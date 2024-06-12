@@ -450,14 +450,14 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
           Add Loop +
         </Button>
 
-        <Button
+        {/* <Button
           variant={"default"}
           onClick={() =>
             console.log(fetchRulesForSegment("666932f2adc24ac3ddfe14e4"))
           }
         >
           sera?
-        </Button>
+        </Button> */}
       </div>
 
       <div className="w-full overflow-auto rounded-t-md">
