@@ -99,10 +99,12 @@ export default function Modals({
           ButtonContent="Modal vacio"
         />
       )}
-      {modalErrorList && (
+      {modalErrorList && partnershipId && ediType && (
         <ModalErrorList
           isOpen={isOpen}
           setIsOpen={setIsOpen}
+		  partnershipId={partnershipId}
+		  ediType={ediType}
           ButtonContent="Modal Lista Error"
         />
       )}
@@ -110,8 +112,8 @@ export default function Modals({
         <ModalUpload
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-		      partnershipId={partnershipId}
-		      ediType={ediType}
+		  partnershipId={partnershipId}
+		  ediType={ediType}
           ButtonContent="Subir Documento"
         />
       )}
