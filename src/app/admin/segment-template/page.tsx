@@ -12,20 +12,8 @@ import { getAllSegmentsTemplates } from "@/da/Segments/segment-da";
 
 import { Segment } from "@/types/DbTypes";
 
-/*List where the data for Segment Templates is stored*/
-const data: SegmentTemplatesContent[] = [
-  {
-    name: "DTM - Date/Time Reference",
-    max: 1,
-  },
-  {
-    name: "ORG - Organization Name",
-    max: 1,
-  },
-];
-
 export default function PagePage({
-  searchParams /*Parameters we receive from Partnerhsips Page*/,
+  searchParams,
 }: {
   searchParams: {
     EDI_Id: string;
@@ -35,6 +23,7 @@ export default function PagePage({
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const EDI_Id = searchParams.EDI_Id;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -50,6 +39,12 @@ export default function PagePage({
     fetchData();
   }, []);
 
+  const updateData = (id: string) => {
+    setSegments((prevSegments) =>
+      prevSegments.filter((segment) => segment.id !== id)
+    );
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -63,7 +58,6 @@ export default function PagePage({
       <PageTitle title="Segment Templates" />
       <div className="flex flex-col w-[80%]">
         <div className="flex justify-end w-full ">
-          {/*Button to create a new segment*/}
           <Link
             href={{ pathname: "./segment-create", query: { EDI_Id: EDI_Id } }}
           >
@@ -74,8 +68,10 @@ export default function PagePage({
           </Link>
         </div>
         <div className="flex justify-center items-center pt-5">
-          {/*Table where the Segment Templates are displayed*/}
-          <DataTable columns={columnsSegmentTemplate} data={segments} />
+          <DataTable
+            columns={columnsSegmentTemplate(updateData)}
+            data={segments}
+          />
         </div>
       </div>
     </div>

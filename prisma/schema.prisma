@@ -42,8 +42,8 @@ model partnership {
 }
 
 model document {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  type          String  @unique
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  type          String @unique
   json_document String
   status        String @default("Pending")
 
@@ -78,6 +78,33 @@ model Segment {
   parentLoop   Segment?  @relation("LoopSegments", fields: [parentLoopId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   loopSegment  Segment[] @relation("LoopSegments")
 
-  EDI_DocumentId String       @db.ObjectId
-  EDI_Document   EDI_Document @relation(fields: [EDI_DocumentId], references: [id], onDelete: Cascade)
+  EDI_DocumentId String?       @db.ObjectId
+  EDI_Document   EDI_Document? @relation(fields: [EDI_DocumentId], references: [id], onDelete: Cascade)
 }
+
+// model EDI_Document {
+//   id        String  @id @default(auto()) @map("_id") @db.ObjectId
+//   type      String
+//   template  Boolean @default(true)
+//   mandatory Boolean @default(true)
+
+//   structure StructureItem[]
+
+//   partnerId String    @db.ObjectId
+//   partner   Partner   @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+//   Segment   Segment[]
+// }
+
+// type StructureItem {
+//   id        String
+//   name      String
+//   mandatory Boolean @default(true)
+//   max       Int
+//   template  Boolean @default(true)
+//   rules     Json    @default("{}")
+
+//   isLoop       Boolean
+//   parentLoopId String? @db.ObjectId
+//   // parentLoop   Segment?  @relation("LoopSegments", fields: [parentLoopId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+//   // loopSegment  Segment[] @relation("LoopSegments")
+// }

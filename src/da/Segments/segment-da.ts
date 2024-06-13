@@ -46,18 +46,18 @@ export async function readAllSegments() {
 };
 
 //Read segment templates
-export async function getAllSegmentsTemplates(template:boolean){
-    try{
+export async function getAllSegmentsTemplates(template: boolean) {
+    try {
         const segments = await prisma.segment.findMany({
             where: {
                 template: template
             }
         });
-        if(!segments){
+        if (!segments) {
             throw new Error("Failed to fetch segments");
         }
         return segments
-    } catch(error) {
+    } catch (error) {
         console.log("Error fetching segments: ", error);
         throw error;
     }
@@ -85,13 +85,14 @@ export async function updateSegmentName(id: string, name: string) {
 }
 
 //Update segment rules
-export async function updateSegmentRule(id: string, rule: Prisma.JsonObject) {
+export async function updateSegmentRule(id: string, rule: Prisma.JsonObject, name: string) {
     try {
         const segment = await prisma.segment.update({
             where: {
                 id: id
             },
             data: {
+                name: name,
                 rules: rule
             }
         });

@@ -49,6 +49,14 @@ function SegmentGenerator({ EDI_Id }: SegmentGenerator) {
     rules: {},
   });
 
+  const [updateStatus, setUpdateStatus] = useState<
+    "idle" | "updating" | "success" | "error"
+  >("idle");
+
+  const MAX_ELEMENTS = 25; // Constant for maximum elements
+
+  const [errorMessage, setErrorMessage] = useState<string | null>();
+
   const [numElements, setNumElements] = useState(0);
   const [showRules, setShowRules] = useState<{ [key: number]: boolean }>({});
   const [inputValue, setInputValue] = useState(""); // New state for input value
@@ -83,6 +91,15 @@ function SegmentGenerator({ EDI_Id }: SegmentGenerator) {
       ...prevData,
       rules: newSegmentRules,
     }));
+  };
+
+  const handleAddElement = () => {
+    const newNumElements = Math.min(
+      numElements + (parseInt(inputValue) || 0),
+      MAX_ELEMENTS
+    );
+    handleNumElementsChange(newNumElements.toString());
+    setInputValue(""); // Clear input field after adding
   };
 
   const handleInputChangeMT = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -167,44 +184,58 @@ function SegmentGenerator({ EDI_Id }: SegmentGenerator) {
     }));
   };
 
+  const convertSegmentRuleToJson: any = (obj: any, seen = new WeakSet()) => {
+    if (typeof obj === "object" && obj !== null) {
+      if (seen.has(obj)) {
+        return "[Circular Reference]"; // Or any other placeholder
+      }
+      seen.add(obj);
 
-const convertSegmentRuleToJson : any = (obj: any, seen = new WeakSet()) => {
-  if (typeof obj === "object" && obj !== null) {
-    if (seen.has(obj)) {
-      return "[Circular Reference]"; // Or any other placeholder
+      if (Array.isArray(obj)) {
+        return obj.map((item) => convertSegmentRuleToJson(item, seen));
+      }
+
+      const result: Prisma.JsonObject = {};
+      for (const key in obj) {
+        result[key] = convertSegmentRuleToJson(obj[key], seen);
+      }
+      return result;
     }
-    seen.add(obj);
+    return obj; // Return primitive values as-is
+  };
 
-    if (Array.isArray(obj)) {
-      return obj.map(item => convertSegmentRuleToJson(item, seen));
+  const postSegment = async () => {
+    setUpdateStatus("updating");
+
+    try {
+      await createSegment(
+        segmentData.name,
+        segmentData.template,
+        Number(segmentData.max),
+        segmentData.mandatory,
+        segmentData.isLoop,
+        EDI_Id,
+        convertSegmentRuleToJson(segmentData.rules)
+      );
+
+      setUpdateStatus("success");
+
+      // console.log("success");
+    } catch (error: unknown) {
+      // Explicitly type error as unknown
+      setUpdateStatus("error");
+
+      if (error instanceof Error) {
+        // Check if error is an Error object
+        setErrorMessage(error.message);
+        console.error("Error creating segment:", error);
+      } else {
+        // Handle non-Error cases (if needed)
+        setErrorMessage("An unexpected error occurred.");
+        console.error("Unknown error creating segment:", error);
+      }
     }
-
-    const result: Prisma.JsonObject = {};
-    for (const key in obj) {
-      result[key] = convertSegmentRuleToJson(obj[key], seen);
-    }
-    return result;
-  }
-  return obj; // Return primitive values as-is
-};
-
-const postSegment = async () => {
-  try {
-    await createSegment(
-      segmentData.name,
-      segmentData.template,
-      Number(segmentData.max),
-      segmentData.mandatory,
-      segmentData.isLoop,
-      EDI_Id,
-      convertSegmentRuleToJson(segmentData.rules)
-    );
-
-    console.log("success");
-  } catch (error) {
-    console.log("Error", error);
-  }
-};
+  };
   return (
     <div className="flex w-[80%] gap-x-5 justify-center">
       <div className="flex flex-col w-full">
@@ -262,6 +293,12 @@ const postSegment = async () => {
               value={segmentData.max}
               onChange={handleInputChangeMT}
             />
+          </Label>
+
+          <Label>
+            <Button variant="default" onClick={handleAddElement}>
+              Add Elements
+            </Button>
           </Label>
         </div>
 
@@ -540,14 +577,18 @@ const postSegment = async () => {
             onClick={() => {
               postSegment();
             }}
+            disabled={updateStatus === "updating"} // Disable while updating
           >
-            Save Segment
+            {updateStatus === "updating" ? "Saving..." : "Save Segment"}
           </Button>
+          {updateStatus === "error" && (
+            <p className="text-red-500 mt-2">{errorMessage}</p>
+          )}
         </div>
 
-        <pre className="pt-10 text-xs flex justify-center">
+        {/* <pre className="pt-10 text-xs flex justify-center">
           {JSON.stringify(segmentData, null, 2)}
-        </pre>
+        </pre> */}
       </div>
     </div>
   );

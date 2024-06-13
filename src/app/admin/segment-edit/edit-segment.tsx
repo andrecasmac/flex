@@ -5,10 +5,11 @@ import { ComboboxDropdown } from "@/components/ui/combobox";
 import MultipleTagsInput from "@/components/multiple-tags";
 
 import { IDropdown, optionsUsage } from "../../../types/segmentTypes";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, MinusCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 import {
   Table,
@@ -27,6 +28,7 @@ import {
   ruleNamesMap,
   optionsDTFormats,
   optionsTMFormats,
+  SegmentRule,
 } from "../../../types/segmentTypes";
 
 import { updateSegmentRule } from "@/da/Segments/segment-da";
@@ -51,6 +53,25 @@ function SegmentEdit({ initialSegmentData, segmentId }: SegmentEditProps) {
     });
     return initialShowRules;
   });
+
+  const [inputValue, setInputValue] = useState(""); // New state for input value
+
+  const [updateStatus, setUpdateStatus] = useState<
+    "idle" | "updating" | "success" | "error"
+  >("idle");
+
+  const [errorMessage, setErrorMessage] = useState<string | null>();
+
+  const MAX_ELEMENTS = 25; // Constant for maximum elements
+  const handleAddElement = () => {
+    const newNumElements = Math.min(
+      numElements + (parseInt(inputValue) || 0),
+      MAX_ELEMENTS
+    );
+    handleNumElementsChange(newNumElements.toString());
+    setInputValue(""); // Clear input field after adding
+  };
+
 
   useEffect(() => {
     setNumElements(Object.keys(segmentData.rules).length);
@@ -78,6 +99,44 @@ function SegmentEdit({ initialSegmentData, segmentId }: SegmentEditProps) {
     }));
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleNumElementsChange(inputValue); // Use the stored inputValue
+    }
+  };
+
+  const handleNumElementsChange = (value: string) => {
+    const num = parseInt(value, 10) || 0;
+
+    // Ensure num is within bounds (0 to some maximum, if applicable)
+    const clampedNum = Math.max(0, Math.min(num, 25)); // Example max of 10
+
+    const newSegmentRules: { [key: number]: SegmentRule } = {};
+    for (let i = 1; i <= clampedNum; i++) {
+      // Start at 1, not 0
+      newSegmentRules[i] = segmentData.rules[i] || {
+        ...initialRuleByType,
+        type: "",
+      };
+    }
+
+    setNumElements(clampedNum);
+    setSegmentData((prevData) => ({
+      ...prevData,
+      rules: newSegmentRules,
+    }));
+  };
+  const handleInputChangeMT = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setSegmentData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
   const handleTypeChange = (elementIndex: number, newType: string) => {
     setSegmentData((prevData) => ({
       ...prevData,
@@ -121,6 +180,8 @@ function SegmentEdit({ initialSegmentData, segmentId }: SegmentEditProps) {
   };
 
   const handleSaveSegment = async () => {
+    setUpdateStatus("updating");
+
     try {
       const updatedRules: any = segmentData.rules;
 
@@ -135,15 +196,21 @@ function SegmentEdit({ initialSegmentData, segmentId }: SegmentEditProps) {
       }
 
       // Update the segment rules in the database
-      const response = await updateSegmentRule(segmentId, updatedRules);
+      const response = await updateSegmentRule(
+        segmentId,
+        updatedRules,
+        segmentData.name
+      );
 
       if (response) {
         // Success - you could show a confirmation message to the user here
-        console.log("Segment updated successfully:", response);
-        alert("Segment updated successfully");
+        // console.log("Segment updated successfully:", response);
+        // alert("Segment updated successfully");
+        setUpdateStatus("success");
       } else {
         // Handle the error from the controller (if any)
         console.error("Failed to update segment.");
+        setUpdateStatus("error");
       }
     } catch (error) {
       // Handle any network or other errors that occur during the request
@@ -155,6 +222,41 @@ function SegmentEdit({ initialSegmentData, segmentId }: SegmentEditProps) {
   return (
     <div className="flex w-[80%] gap-x-5 justify-center">
       <div className="flex flex-col w-full">
+        <div className="flex items-center justify-around px-2 w-full mb-8 gap-x-5">
+          <div className="w-[25%]">
+            <Label>
+              Segment Code
+              <Input
+                type="text"
+                name="name"
+                value={segmentData.name}
+                onChange={handleInputChangeMT}
+                className="mt-2"
+              />
+            </Label>
+          </div>
+
+          <div className="w-[25%]">
+            <Label>
+              N. Elements
+              <Input
+                type="number"
+                name="numElements"
+                placeholder="Number of Elements"
+                value={inputValue} // Bind input value to state
+                onChange={handleInputChange}
+                onKeyDown={handleInputKeyDown}
+                className="mt-2"
+              />
+            </Label>
+          </div>
+
+          <Label>
+            <Button variant="default" onClick={handleAddElement}>
+              Add Elements
+            </Button>
+          </Label>
+        </div>
         <div className="overflow-auto border rounded-xl">
           <Table className="p-2 ">
             <TableHeader className="bg-turquoise dark:bg-cyan-950">
@@ -262,6 +364,15 @@ function SegmentEdit({ initialSegmentData, segmentId }: SegmentEditProps) {
                             )
                           }
                         />
+                      </TableCell>
+
+                      <TableCell>
+                        <Button
+                          size="icon"
+                          variant={"ghost"}
+                        >
+                          <MinusCircle className="h-7 w-7 text-slate-200 dark:text-slate-900 fill-red-500" />
+                        </Button>
                       </TableCell>
                     </TableRow>
 
@@ -409,13 +520,17 @@ function SegmentEdit({ initialSegmentData, segmentId }: SegmentEditProps) {
             onClick={() => {
               handleSaveSegment();
             }} // Call the handler on button click
+            disabled={updateStatus === "updating"} // Disable while updating
           >
-            Save Segment
+            {updateStatus === "updating" ? "Saving..." : "Save Segment"}
           </Button>
+          {updateStatus === "error" && (
+            <p className="text-red-500 mt-2">{errorMessage}</p>
+          )}
         </div>
-        <pre className="pt-10 text-xs flex justify-center">
+        {/* <pre className="pt-10 text-xs flex justify-center">
           {JSON.stringify(segmentData, null, 2)}
-        </pre>
+        </pre> */}
       </div>
     </div>
   );

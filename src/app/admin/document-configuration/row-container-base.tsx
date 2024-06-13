@@ -10,6 +10,7 @@ import {
   Id,
   IDropdown,
   optionsUsage,
+  generateSegmentId,
 } from "./doc-types";
 
 import {
@@ -112,8 +113,7 @@ export default function RowContainer(props: Props) {
   const handleSelectSegment = (option: IDropdown) => {
     handleSelect(row.id, option, "name");
     // Update SegmentId based on the selected option's segmentId:
-    handleSelect(row.id, { id: option.id, label:`${option.id}`}, "SegmentId"); 
-
+    handleSelect(row.id, { id: option.id, label: `${option.id}` }, "SegmentId");
   };
   const style = {
     transform: CSS.Transform.toString(transform),

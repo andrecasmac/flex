@@ -9,6 +9,7 @@ import {
   Id,
   Row,
   IDropdown,
+  mongoObjectId,
 } from "./doc-types";
 import {
   DndContext,
@@ -25,10 +26,16 @@ import RowContainer from "./row-container-base";
 import Link from "next/link";
 import { readRulesSegmentByEDIDocumentId } from "@/da/Segments/segment-da";
 import { updateEDIdocumentStructure } from "@/da/EDI-Documents/edi-document-da";
+
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+
+const { v4: uuidv4 } = require("uuid");
+
 function convertJsonToRows(jsonRows: any[], parentId?: Id): Row[] {
   return jsonRows.map((jsonRow) => {
     const row: Row = {
-      id: generateSegmentId(),
+      id: mongoObjectId(),
       SegmentId: jsonRow.id, // Set the SegmentId
       name: jsonRow.name, // Convert name back to lowercase
       mandatory: jsonRow.mandatory ? "M" : "O", // Convert boolean back to "M"/"O"
@@ -118,7 +125,7 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
 
   function createSegmentRow() {
     const segmentToAdd: Row = {
-      id: generateSegmentId(),
+      id: mongoObjectId(),
       SegmentId: "",
       name: "segment",
       mandatory: "M",
@@ -129,7 +136,7 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
 
   function createLoopRow() {
     const loopToAdd: Row = {
-      id: generateLoopId(),
+      id: mongoObjectId(),
       name: "loop",
       SegmentId: "",
       max: 1,
@@ -175,7 +182,7 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
 
   function addSegmentToLoop(parentId: Id) {
     const newSegment: SegmentRow = {
-      id: `${generateSegmentId()}`, // Incluir parentId en el ID
+      id: `${mongoObjectId()}`, // Incluir parentId en el ID
       LoopId: parentId,
       SegmentId: "",
       name: "segment loop",
@@ -212,7 +219,7 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
 
   function addLoopToLoop(parentId: Id) {
     const newLoop: LoopRow = {
-      id: `${generateLoopId()}`,
+      id: `${mongoObjectId()}`,
       parentId: parentId,
       name: "LOOP",
       SegmentId: "",
@@ -356,6 +363,16 @@ export default function DocConfig({ initialConfig, EDI_Id }: DocConfigProps) {
       return []; // Return an empty array in case of error
     }
   }
+
+  // const fetchRulesForSegment = async (segmentId: any) => {
+  //   try {
+  //     const rules = await readRulesSegmentByEDIDocumentId(segmentId);
+  //     return rules;
+  //   } catch (error) {
+  //     console.error(`Error fetching rules for segment ${segmentId}:`, error);
+  //     return [];
+  //   }
+  // };
 
   function transformRowsToDesiredFormat(rows: Row[], parentId?: Id): any[] {
     return rows.map((row) => {
