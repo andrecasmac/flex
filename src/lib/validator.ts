@@ -1,10 +1,3 @@
-// import * as fs from 'fs';
-// import * as edi_schema from "./855-segments.json";
-
-// const input_file = './855.edi';
-
-// these are to be variable if the trading partners
-// choose different delimeters
 const el_delim = '*';
 const sg_delim = '~';
 
@@ -439,6 +432,16 @@ function validate_type(element_schema: any, string: string): boolean {
 	}
 }
 
+
+function validate_equality(element_schema: any, element: string): boolean {
+	if (element != element_schema.isEqualTo) {
+		return false;
+	}
+
+	return true;
+}
+
+
 // validates an individual element by a series of calls to each validator function,
 // if one fails the function throws an error since element is wrong
 function validate_element(element_schema: any, element: string, index: number) {
@@ -479,6 +482,12 @@ function validate_element(element_schema: any, element: string, index: number) {
 		}
 
 		throw new Error(`bad type at ${index} '${element}': type should be ${element_schema.type}`); 
+	}
+
+	if ("isEqualTo" in element_schema) {
+		if (!validate_equality(element_schema, element)) {
+			throw new Error(`bad value at ${index} '${element}': value should be equal to ${element_schema.isEqualTo}`); 
+		}
 	}
 
 }
@@ -700,26 +709,3 @@ export function parse_input_structure(parsed_edi: any, schema: any, segment_inde
 		return [structure, errors];
 	}
 }
-
-
-// const edi_source = fs.readFileSync(input_file).toString()
-
-// // parse input EDI
-// let [parsed_edi, parse_errors] = parse_edi(edi_source);
-
-// // parse/validate structure of input edi according to the respective EDI schema
-// let [structure, structure_errors]: any[] = parse_input_structure(parsed_edi, edi_schema);
-
-// // validate each segment's structure along with its elements that was
-// // successfully placed in its position according to the EDI schema
-// let segment_errors: any[] = validate_segments(structure, edi_schema);
-
-// let errors  = {
-// 	parse_errors: parse_errors,
-// 	structure_errors: structure_errors,
-// 	segment_errors: segment_errors
-// }
-
-// // console.log(parsed_edi);
-// console.log(structure);
-// console.log(errors);
